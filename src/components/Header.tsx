@@ -10,9 +10,12 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-background border-b">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="flex items-center space-x-2">
-            <Building2 className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-primary">Liventy</span>
+          <Link to="/" className="flex items-center">
+            <img 
+              src="/lovable-uploads/b51f868e-b127-4cf7-b964-791ea9a67498.png" 
+              alt="Liventy Gestión" 
+              className="h-10 w-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
