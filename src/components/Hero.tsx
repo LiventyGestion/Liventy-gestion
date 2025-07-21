@@ -13,7 +13,7 @@ const Hero = () => {
             <span className="text-primary block">Propiedades de Alquiler</span>
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Maximiza la rentabilidad de tus propiedades con nuestra plataforma profesional. 
+            Maximiza la rentabilidad de tus propiedades. 
             Gestión completa, transparencia total y tecnología avanzada.
           </p>
 

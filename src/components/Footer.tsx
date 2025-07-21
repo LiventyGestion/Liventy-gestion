@@ -12,12 +12,12 @@ const Footer = () => {
               <img 
                 src="/lovable-uploads/8a8330ce-f5ff-4c18-9ac4-2d21db8b4d79.png" 
                 alt="Liventy Gestión" 
-                className="h-12 w-auto"
+                className="h-20 w-auto"
               />
             </div>
             <p className="text-muted-foreground mb-4">
-              Gestión integral de propiedades de alquiler. Maximizamos tu rentabilidad 
-              con transparencia y tecnología avanzada.
+              Maximiza la rentabilidad de tus propiedades. 
+              Gestión completa, transparencia total y tecnología avanzada.
             </p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
