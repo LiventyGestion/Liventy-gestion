@@ -8,9 +8,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
-            <div className="flex items-center space-x-2 mb-4">
-              <Building2 className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-primary">Liventy</span>
+            <div className="flex items-center mb-4">
+              <img 
+                src="/lovable-uploads/8a8330ce-f5ff-4c18-9ac4-2d21db8b4d79.png" 
+                alt="Liventy Gestión" 
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-muted-foreground mb-4">
               Gestión integral de propiedades de alquiler. Maximizamos tu rentabilidad 
@@ -19,15 +22,11 @@ const Footer = () => {
             <div className="space-y-2 text-sm">
               <div className="flex items-center space-x-2">
                 <Phone className="h-4 w-4 text-primary" />
-                <span>+34 900 123 456</span>
+                <span>610 835 611</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-primary" />
-                <span>info@liventygestion.com</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="h-4 w-4 text-primary" />
-                <span>Calle Principal, 123, Madrid</span>
+                <span>liventygestion@gmail.com</span>
               </div>
             </div>
           </div>
@@ -84,7 +83,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t mt-8 pt-8 text-center text-muted-foreground">
-          <p>&copy; 2024 Liventy Gestión. Todos los derechos reservados.</p>
+          <p>&copy; 2025 Liventy Gestión. Todos los derechos reservados.</p>
         </div>
       </div>
     </footer>

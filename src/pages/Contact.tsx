@@ -42,22 +42,10 @@ const Contact = () => {
               <Card>
                 <CardContent className="p-6">
                   <div className="flex items-center space-x-4">
-                    <MapPin className="h-6 w-6 text-primary" />
-                    <div>
-                      <h3 className="font-semibold">Dirección</h3>
-                      <p className="text-muted-foreground">Calle Principal, 123<br />28001 Madrid, España</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
                     <Phone className="h-6 w-6 text-primary" />
                     <div>
                       <h3 className="font-semibold">Teléfono</h3>
-                      <p className="text-muted-foreground">+34 900 123 456</p>
+                      <p className="text-muted-foreground">610 835 611</p>
                     </div>
                   </div>
                 </CardContent>
@@ -69,7 +57,7 @@ const Contact = () => {
                     <Mail className="h-6 w-6 text-primary" />
                     <div>
                       <h3 className="font-semibold">Email</h3>
-                      <p className="text-muted-foreground">info@liventygestion.com</p>
+                      <p className="text-muted-foreground">liventygestion@gmail.com</p>
                     </div>
                   </div>
                 </CardContent>
@@ -89,6 +77,7 @@ const Contact = () => {
                   </div>
                 </CardContent>
               </Card>
+
             </div>
           </div>
         </div>
