@@ -24,28 +24,28 @@ const testimonials = [
   ];
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
+    <section className="py-16 sm:py-20">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Lo Que Dicen Nuestros Clientes</h2>
-          <p className="text-muted-foreground text-lg">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Lo Que Dicen Nuestros Clientes</h2>
+          <p className="text-muted-foreground text-base sm:text-lg">
             Opiniones reales próximamente. Estos son testimonios de ejemplo.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="text-center">
+            <Card key={index} className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-6">
-                <div className="flex justify-center mb-4">
+                <div className="flex justify-center mb-4" role="img" aria-label={`${testimonial.rating} estrellas de 5`}>
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                    <Star key={i} className="h-5 w-5 fill-warning text-warning" aria-hidden="true" />
                   ))}
                 </div>
-                <p className="text-muted-foreground mb-4">"{testimonial.text}"</p>
+                <p className="text-muted-foreground mb-4 text-sm sm:text-base leading-relaxed">"{testimonial.text}"</p>
                 <div>
-                  <div className="font-semibold">{testimonial.name}</div>
-                  <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                  <div className="font-semibold text-sm sm:text-base">{testimonial.name}</div>
+                  <div className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</div>
                 </div>
               </CardContent>
             </Card>

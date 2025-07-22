@@ -21,21 +21,21 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <section className="py-16 bg-background">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
+    <section className="py-12 sm:py-16 bg-background">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
+              <CardContent className="p-6 sm:p-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
-                  <service.icon className="h-8 w-8 text-primary" />
+                  <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
                 </div>
-                <h3 className="text-xl font-semibold mb-4">{service.title}</h3>
-                <p className="text-muted-foreground">{service.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-4">{service.title}</h3>
+                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">{service.description}</p>
               </CardContent>
             </Card>
           ))}

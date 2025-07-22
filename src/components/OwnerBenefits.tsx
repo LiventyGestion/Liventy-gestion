@@ -31,28 +31,28 @@ const OwnerBenefits = () => {
   ];
 
   return (
-    <section className="py-16 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Beneficios para Propietarios</h2>
-          <p className="text-muted-foreground text-lg">
+    <section className="py-12 sm:py-16 bg-muted/30">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Beneficios para Propietarios</h2>
+          <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
             Descubre las ventajas de confiar tu propiedad a Liventy Gestión
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
           {benefits.map((benefit, index) => (
             <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-start space-x-4">
                   <div className="flex-shrink-0">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg">
-                      <benefit.icon className="h-6 w-6 text-primary" />
+                      <benefit.icon className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
-                    <p className="text-muted-foreground text-sm">{benefit.description}</p>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-semibold text-base sm:text-lg mb-2 leading-tight">{benefit.title}</h3>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{benefit.description}</p>
                   </div>
                 </div>
               </CardContent>

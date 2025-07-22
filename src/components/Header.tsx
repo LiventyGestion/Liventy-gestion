@@ -13,8 +13,8 @@ const Header = () => {
           <Link to="/" className="flex items-center">
             <img 
               src="/lovable-uploads/8a8330ce-f5ff-4c18-9ac4-2d21db8b4d79.png" 
-              alt="Liventy Gestión" 
-              className="h-32 w-auto"
+              alt="Liventy Gestión - Volver al inicio" 
+              className="h-12 sm:h-16 lg:h-20 w-auto"
             />
           </Link>
 
@@ -39,30 +39,52 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden"
+            className="md:hidden p-2 rounded-md hover:bg-muted transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Menú de navegación"
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
           >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {isMenuOpen ? 
+              <X className="h-6 w-6" aria-hidden="true" /> : 
+              <Menu className="h-6 w-6" aria-hidden="true" />
+            }
           </button>
         </div>
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t">
+          <div className="md:hidden mt-4 pb-4 border-t" id="mobile-menu">
             <div className="flex flex-col space-y-4 pt-4">
-              <Link to="/" className="text-foreground hover:text-primary transition-colors">
+              <Link 
+                to="/" 
+                className="text-foreground hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Inicio
               </Link>
-              <Link to="/about" className="text-foreground hover:text-primary transition-colors">
+              <Link 
+                to="/about" 
+                className="text-foreground hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Sobre Nosotros
               </Link>
-              <Link to="/blog" className="text-foreground hover:text-primary transition-colors">
+              <Link 
+                to="/blog" 
+                className="text-foreground hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Liventy Insights
               </Link>
-              <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
+              <Link 
+                to="/contact" 
+                className="text-foreground hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+                onClick={() => setIsMenuOpen(false)}
+              >
                 Contacto
               </Link>
-              <Link to="/login">
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                 <Button className="w-full">Área de Clientes</Button>
               </Link>
             </div>

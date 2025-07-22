@@ -6,16 +6,16 @@ const FinalCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
-      <div className="container mx-auto px-4">
+    <section className="py-16 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
             Confía tu alquiler a profesionales.
           </h2>
-          <h3 className="text-2xl lg:text-3xl font-semibold mb-8">
+          <h3 className="text-xl sm:text-2xl lg:text-3xl font-semibold mb-8">
             Empieza ahora.
           </h3>
-          <p className="text-xl text-primary-foreground/90 mb-10 max-w-2xl mx-auto">
+          <p className="text-lg sm:text-xl text-primary-foreground/90 mb-10 max-w-2xl mx-auto leading-relaxed">
             Únete a cientos de propietarios que ya disfrutan de una gestión sin complicaciones 
             y una rentabilidad optimizada.
           </p>
@@ -23,11 +23,12 @@ const FinalCTA = () => {
           <Button 
             size="lg" 
             variant="secondary"
-            className="text-lg px-8 py-4"
+            className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
             onClick={() => navigate('/contact')}
+            aria-label="Contactar con Liventy para empezar"
           >
             Contactar con Liventy
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
       </div>

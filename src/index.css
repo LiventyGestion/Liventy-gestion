@@ -33,6 +33,10 @@ All colors MUST be HSL.
     /* Orange accent colors */
     --accent: 25 90% 65%;
     --accent-foreground: 0 0% 9%;
+    
+    /* Warning/Rating color for stars */
+    --warning: 43 96% 56%;
+    --warning-foreground: 25 26% 11%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
@@ -89,6 +93,10 @@ All colors MUST be HSL.
 
     --accent: 25 90% 65%;
     --accent-foreground: 0 0% 9%;
+    
+    /* Warning/Rating color for stars */
+    --warning: 43 96% 56%;
+    --warning-foreground: 25 26% 11%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
