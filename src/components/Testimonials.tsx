@@ -2,24 +2,24 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
 
 const Testimonials = () => {
-  const testimonials = [
+const testimonials = [
     {
       name: "María González",
-      role: "Propietaria",
+      role: "Propietaria en Bilbao",
       rating: 5,
-      text: "Liventy ha transformado la gestión de mis propiedades. Rentabilidad excelente y total transparencia."
+      text: "Desde que confié mi apartamento a Liventy, no he tenido que preocuparme por nada. La rentabilidad ha aumentado un 20% y el trato es excepcional."
     },
     {
-      name: "Carlos Ruiz", 
-      role: "Inquilino",
+      name: "Carlos Martín", 
+      role: "Propietario en Madrid",
       rating: 5,
-      text: "Servicio impecable. El proceso de alquiler fue rápido y el soporte es excepcional."
+      text: "Profesionales de verdad. En menos de un mes encontraron inquilinos perfectos y todo el proceso fue transparente y eficiente."
     },
     {
-      name: "Ana López",
-      role: "Propietaria",
+      name: "Ana Fernández",
+      role: "Propietaria en Barcelona",
       rating: 5,
-      text: "Mis propiedades nunca estuvieron mejor gestionadas. Recomiendo Liventy sin dudarlo."
+      text: "El mejor servicio de gestión que he probado. Cobro puntualmente todos los meses y ellos se encargan de todo. ¡Recomendable 100%!"
     }
   ];
 
@@ -28,7 +28,9 @@ const Testimonials = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Lo Que Dicen Nuestros Clientes</h2>
-          <p className="text-muted-foreground text-lg">Testimonios reales de propietarios e inquilinos satisfechos</p>
+          <p className="text-muted-foreground text-lg">
+            Opiniones reales próximamente. Estos son testimonios de ejemplo.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
