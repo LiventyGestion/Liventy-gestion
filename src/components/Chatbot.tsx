@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send, Phone, Mail } from "lucide-react";
+import { MessageCircle, X, Send, Calendar } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -19,11 +19,18 @@ interface UserData {
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [hasAutoOpened, setHasAutoOpened] = useState(() => {
+    return sessionStorage.getItem('chatbot-auto-opened') === 'true';
+  });
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const saved = sessionStorage.getItem('chatbot-messages');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [inputText, setInputText] = useState("");
   const [isCollectingData, setIsCollectingData] = useState(false);
   const [userData, setUserData] = useState<UserData>({ name: "", phone: "", userType: "" });
   const [dataStep, setDataStep] = useState(0); // 0: name, 1: phone, 2: userType
+  const [isCalendarMode, setIsCalendarMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -58,9 +65,22 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
+  // Auto-open chatbot after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!hasAutoOpened) {
+        setIsOpen(true);
+        setHasAutoOpened(true);
+        sessionStorage.setItem('chatbot-auto-opened', 'true');
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [hasAutoOpened]);
+
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      addBotMessage("¡Hola! Soy el asistente virtual de Liventy Gestión. Estoy aquí 24/7 para ayudarte con cualquier duda sobre nuestros servicios de gestión de alquileres. ¿En qué puedo ayudarte?");
+      addBotMessage("👋 Hola, soy Ana, tu asistente personal de Liventy Gestión. ¿En qué puedo ayudarte?");
     }
   }, [isOpen]);
 
@@ -71,7 +91,11 @@ const Chatbot = () => {
       isBot,
       timestamp: new Date()
     };
-    setMessages(prev => [...prev, newMessage]);
+    setMessages(prev => {
+      const updated = [...prev, newMessage];
+      sessionStorage.setItem('chatbot-messages', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   const addBotMessage = (text: string) => {
@@ -158,16 +182,48 @@ const Chatbot = () => {
       return;
     }
 
-    // Detectar intención de contratación
+    // Detectar intención de contratación o ser cliente
     if (userMessage.toLowerCase().includes('empezar') || userMessage.toLowerCase().includes('contratar') || 
-        userMessage.toLowerCase().includes('interesa') || userMessage.toLowerCase().includes('quiero')) {
-      addBotMessage("¡Excelente! Me alegra saber que estás interesado en nuestros servicios. Para ofrecerte la mejor atención personalizada, necesito algunos datos básicos.");
+        userMessage.toLowerCase().includes('interesa') || userMessage.toLowerCase().includes('quiero') ||
+        userMessage.toLowerCase().includes('cliente') || userMessage.toLowerCase().includes('servicio')) {
+      addBotMessage("¡Genial! Puedes empezar ahora rellenando un formulario rápido en este enlace: /contact");
       setTimeout(() => {
-        addBotMessage("¿Cuál es tu nombre?");
+        addBotMessage("O si prefieres, puedo ayudarte aquí mismo. ¿Cuál es tu nombre?");
         setIsCollectingData(true);
         setDataStep(0);
       }, 1000);
       return;
+    }
+
+    // Detectar solicitud de cita o reunión
+    if (userMessage.toLowerCase().includes('cita') || userMessage.toLowerCase().includes('reunión') ||
+        userMessage.toLowerCase().includes('agendar') || userMessage.toLowerCase().includes('agenda')) {
+      setIsCalendarMode(true);
+      addBotMessage("Perfecto, puedo ayudarte a agendar una reunión. Aquí tienes 3 horarios disponibles esta semana:");
+      setTimeout(() => {
+        const today = new Date();
+        const option1 = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
+        const option2 = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
+        const option3 = new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000);
+        
+        addBotMessage(`📅 Opciones disponibles:\n\n1️⃣ ${option1.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 10:00\n2️⃣ ${option2.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 16:00\n3️⃣ ${option3.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 11:30\n\nEscribe el número de tu opción preferida o dime otra fecha/hora que te convenga.`);
+      }, 1000);
+      return;
+    }
+
+    // Manejar selección de cita si estamos en modo calendario
+    if (isCalendarMode) {
+      if (userMessage === "1" || userMessage === "2" || userMessage === "3") {
+        addBotMessage(`¡Perfecto! He reservado esa cita para ti. Te enviaremos una confirmación por email con todos los detalles y el enlace de la reunión.`);
+        toast({ title: "Cita agendada", description: "Recibirás una confirmación por email." });
+        setIsCalendarMode(false);
+        return;
+      } else {
+        addBotMessage(`Entiendo que prefieres otra fecha/hora. He anotado tu preferencia: "${userMessage}". Nuestro equipo revisará la disponibilidad y te contactará para confirmar esta cita alternativa.`);
+        toast({ title: "Solicitud de cita", description: "Te contactaremos para confirmar la fecha." });
+        setIsCalendarMode(false);
+        return;
+      }
     }
 
     // Detectar tipo de usuario y orientar
@@ -226,7 +282,17 @@ const Chatbot = () => {
       {isOpen && (
         <div className="fixed bottom-24 right-6 w-80 h-96 bg-background border rounded-lg shadow-xl z-50 flex flex-col">
           <div className="flex items-center justify-between p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
-            <h3 className="font-semibold">Asistente Virtual 24/7</h3>
+            <div className="flex items-center gap-3">
+              <img 
+                src="/lovable-uploads/b318efa7-5156-4395-9675-30db60a6edc6.png" 
+                alt="Ana - Asistente Virtual" 
+                className="w-10 h-10 rounded-full object-cover border-2 border-primary-foreground/20"
+              />
+              <div>
+                <h3 className="font-semibold">Ana</h3>
+                <p className="text-xs opacity-90">Asistente Virtual 24/7</p>
+              </div>
+            </div>
             <Button 
               variant="ghost" 
               size="icon" 
