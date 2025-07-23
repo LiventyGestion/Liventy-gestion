@@ -19,11 +19,11 @@ const Hero = () => {
 
           <Button 
             size="lg" 
-            className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4"
+            className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px]"
             onClick={() => navigate('/contact')}
-            aria-label="Contactar para empezar ahora"
+            aria-label="Contactar para gestionar mi alquiler"
           >
-            Empieza ahora
+            Quiero gestionar mi alquiler
             <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
           </Button>
         </div>
