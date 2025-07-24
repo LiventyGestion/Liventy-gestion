@@ -10,7 +10,6 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
 import Chatbot from "@/components/Chatbot";
-import VideoTestimonial from "@/components/VideoTestimonial";
 import SecondaryCTAs from "@/components/SecondaryCTAs";
 
 const Index = () => {
@@ -24,7 +23,6 @@ const Index = () => {
       <HowItWorks />
       <PropertySlider />
       <Stats />
-      <VideoTestimonial />
       <Testimonials />
       <FAQ />
       <FinalCTA />
