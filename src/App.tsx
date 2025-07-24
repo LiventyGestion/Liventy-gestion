@@ -10,6 +10,8 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import TenantDashboard from "./pages/TenantDashboard";
+import RentalSimulatorPage from "./pages/RentalSimulatorPage";
+import LeadMagnetPage from "./pages/LeadMagnetPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +30,8 @@ const App = () => (
           <Route path="/login" element={<Login />} />
           <Route path="/owner-dashboard" element={<OwnerDashboard />} />
           <Route path="/tenant-dashboard" element={<TenantDashboard />} />
+          <Route path="/simulador" element={<RentalSimulatorPage />} />
+          <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

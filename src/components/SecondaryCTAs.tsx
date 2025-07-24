@@ -5,19 +5,6 @@ import { useNavigate } from "react-router-dom";
 const SecondaryCTAs = () => {
   const navigate = useNavigate();
 
-  const scrollToSimulator = () => {
-    const simulatorSection = document.getElementById('rental-simulator');
-    if (simulatorSection) {
-      simulatorSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  const scrollToLeadMagnet = () => {
-    const leadMagnetSection = document.getElementById('lead-magnet');
-    if (leadMagnetSection) {
-      leadMagnetSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <section className="py-16 sm:py-20">
@@ -33,7 +20,7 @@ const SecondaryCTAs = () => {
             </p>
             <Button 
               variant="outline" 
-              onClick={scrollToSimulator}
+              onClick={() => navigate('/simulador')}
               className="h-11"
             >
               Simula tu alquiler
@@ -67,7 +54,7 @@ const SecondaryCTAs = () => {
             </p>
             <Button 
               variant="outline" 
-              onClick={scrollToLeadMagnet}
+              onClick={() => navigate('/guia-gratuita')}
               className="h-11"
             >
               Descarga gratuita
