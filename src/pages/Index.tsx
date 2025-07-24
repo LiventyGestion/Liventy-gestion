@@ -10,6 +10,10 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
 import Chatbot from "@/components/Chatbot";
+import LeadMagnet from "@/components/LeadMagnet";
+import RentalSimulator from "@/components/RentalSimulator";
+import VideoTestimonial from "@/components/VideoTestimonial";
+import SecondaryCTAs from "@/components/SecondaryCTAs";
 
 const Index = () => {
   return (
@@ -18,10 +22,18 @@ const Index = () => {
       <Hero />
       <WhatWeDo />
       <OwnerBenefits />
+      <SecondaryCTAs />
       <HowItWorks />
       <PropertySlider />
+      <div id="rental-simulator">
+        <RentalSimulator />
+      </div>
       <Stats />
+      <VideoTestimonial />
       <Testimonials />
+      <div id="lead-magnet">
+        <LeadMagnet />
+      </div>
       <FAQ />
       <FinalCTA />
       <Footer />
