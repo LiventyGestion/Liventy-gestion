@@ -1,13 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import heroBackground from "@/assets/hero-background.jpg";
 
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="relative bg-gradient-to-br from-primary/10 via-background to-accent/20 py-16 sm:py-20 lg:py-32">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="relative bg-gradient-to-br from-primary/10 via-background to-accent/20 py-16 sm:py-20 lg:py-32 overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={heroBackground} 
+          alt="" 
+          className="w-full h-full object-cover opacity-10"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/80 to-background/90"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-6 leading-tight">
             Gestión completa de tu alquiler,

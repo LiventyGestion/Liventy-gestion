@@ -1,13 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import professionalService from "@/assets/professional-service.jpg";
 
 const FinalCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="py-16 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={professionalService} 
+          alt="" 
+          className="w-full h-full object-cover opacity-10"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
             Confía tu alquiler a profesionales.

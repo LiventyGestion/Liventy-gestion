@@ -1,10 +1,21 @@
 import { Link } from "react-router-dom";
 import { Building2, Mail, Phone, MapPin } from "lucide-react";
+import teamTrust from "@/assets/team-trust.jpg";
 
 const Footer = () => {
   return (
-    <footer className="bg-muted mt-16">
-      <div className="container mx-auto px-4 sm:px-6 py-12">
+    <footer className="bg-muted mt-16 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={teamTrust} 
+          alt="" 
+          className="w-full h-full object-cover opacity-5"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-muted/95"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 py-12 relative z-10">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="sm:col-span-2 lg:col-span-1">

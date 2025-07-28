@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
+import dataAnalytics from "@/assets/data-analytics.jpg";
 
 // Custom hook for animated counter
 const useAnimatedCounter = (end: number, duration: number = 2000, isVisible: boolean = false) => {
@@ -142,8 +143,18 @@ const Stats = () => {
     <div className="bg-background">
       {/* Main Stats Section */}
       <section ref={sectionRef} className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img 
+            src={dataAnalytics} 
+            alt="" 
+            className="w-full h-full object-cover opacity-5"
+            aria-hidden="true"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-50/90 via-white/80 to-orange-50/90"></div>
+        </div>
         {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-5 z-0">
           <div className="absolute inset-0" style={{
             backgroundImage: `radial-gradient(circle at 20% 80%, hsl(var(--primary)) 1px, transparent 1px)`,
             backgroundSize: '40px 40px'

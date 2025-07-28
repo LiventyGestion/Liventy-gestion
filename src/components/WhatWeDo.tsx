@@ -1,5 +1,6 @@
 import { Search, Shield, Settings } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import digitalManagement from "@/assets/digital-management.jpg";
 
 const WhatWeDo = () => {
   const services = [
@@ -21,8 +22,17 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-background">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="py-12 sm:py-16 bg-background relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={digitalManagement} 
+          alt="" 
+          className="w-full h-full object-cover opacity-5"
+          aria-hidden="true"
+        />
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
         </div>
