@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import propertyGuide from "@/assets/property-guide.jpg";
 
 const LeadMagnet = () => {
   const [name, setName] = useState("");
@@ -49,8 +50,18 @@ const LeadMagnet = () => {
   }
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-r from-accent/5 to-primary/5">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="py-16 sm:py-20 bg-gradient-to-r from-accent/5 to-primary/5 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 opacity-10">
+        <img 
+          src={propertyGuide} 
+          alt="Property guide" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <Card className="max-w-2xl mx-auto border-primary/20">
           <CardHeader className="text-center">
             <div className="flex justify-center mb-4">

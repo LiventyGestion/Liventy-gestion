@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Play, Star } from "lucide-react";
+import clientTestimonial from "@/assets/client-testimonial.jpg";
 
 const Testimonials = () => {
   const testimonials = [
@@ -41,8 +42,15 @@ const Testimonials = () => {
         <div className="max-w-4xl mx-auto mb-16">
           <Card className="overflow-hidden">
             <CardContent className="p-0">
-              <div className="relative aspect-video bg-gradient-to-br from-primary/10 to-accent/20 flex items-center justify-center">
-                <div className="text-center">
+              <div 
+                className="relative aspect-video bg-gradient-to-br from-primary/10 to-accent/20 flex items-center justify-center"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${clientTestimonial})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
+              >
+                <div className="text-center text-white">
                   <div className="mb-6">
                     <Button 
                       size="lg" 

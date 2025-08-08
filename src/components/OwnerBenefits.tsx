@@ -1,5 +1,6 @@
 import { CheckCircle, TrendingUp, Wrench, UserCheck, Monitor } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import happyHomeowner from "@/assets/happy-homeowner.jpg";
 
 const OwnerBenefits = () => {
   const benefits = [
@@ -31,10 +32,20 @@ const OwnerBenefits = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-muted/30">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="py-12 sm:py-16 bg-muted/30 relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 opacity-10">
+        <img 
+          src={happyHomeowner} 
+          alt="Happy homeowner" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background"></div>
+      </div>
+      
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Beneficios para Propietarios</h2>
+          <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Porqué los propietarios nos eligen?</h2>
           <p className="text-muted-foreground text-base sm:text-lg leading-relaxed">
             Descubre las ventajas de confiar tu propiedad a Liventy Gestión
           </p>

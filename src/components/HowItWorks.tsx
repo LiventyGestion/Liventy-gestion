@@ -1,5 +1,6 @@
 import { Phone, UserSearch, Banknote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import propertyConsultation from "@/assets/property-consultation.jpg";
 
 const HowItWorks = () => {
   const steps = [
@@ -24,8 +25,17 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-16 bg-background">
-      <div className="container mx-auto px-4">
+    <section className="py-16 bg-background relative overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute right-0 top-0 w-1/2 h-full opacity-5">
+        <img 
+          src={propertyConsultation} 
+          alt="Property consultation" 
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">¿Cómo funciona?</h2>
           <p className="text-muted-foreground text-lg">
