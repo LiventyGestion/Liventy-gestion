@@ -5,8 +5,8 @@ import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import dataAnalytics from "@/assets/data-analytics.jpg";
 
-// Custom hook for animated counter
-const useAnimatedCounter = (end: number, duration: number = 2000, isVisible: boolean = false) => {
+// Optimized custom hook for animated counter
+const useAnimatedCounter = (end: number, duration: number = 1500, isVisible: boolean = false) => {
   const [count, setCount] = useState(0);
   
   useEffect(() => {
@@ -19,10 +19,13 @@ const useAnimatedCounter = (end: number, duration: number = 2000, isVisible: boo
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
       
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.floor(start + (end - start) * easeOutQuart));
+      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+      setCount(Math.floor(start + (end - start) * easeOutCubic));
       
-      if (progress >= 1) clearInterval(timer);
+      if (progress >= 1) {
+        clearInterval(timer);
+        setCount(end); // Ensure final value is exact
+      }
     }, 16);
     
     return () => clearInterval(timer);
@@ -46,7 +49,7 @@ const CircularProgress = ({ percentage, size = 140, strokeWidth = 10, isVisible 
     
     const timer = setTimeout(() => {
       setAnimatedPercentage(percentage);
-    }, 800);
+    }, 200);
     
     return () => clearTimeout(timer);
   }, [percentage, isVisible]);
@@ -77,7 +80,7 @@ const CircularProgress = ({ percentage, size = 140, strokeWidth = 10, isVisible 
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
           strokeLinecap="round"
-          className={`transition-all duration-3000 ease-out ${color}`}
+          className={`transition-all duration-1500 ease-out ${color}`}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -118,10 +121,10 @@ const Stats = () => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setShowImpactPhrase(true);
-          setTimeout(() => setIsVisible(true), 800);
+          setTimeout(() => setIsVisible(true), 300);
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.2, rootMargin: '50px' }
     );
 
     if (sectionRef.current) {
@@ -131,13 +134,13 @@ const Stats = () => {
     return () => observer.disconnect();
   }, []);
 
-  // Animated counters
-  const occupancyRate = useAnimatedCounter(87, 2000, isVisible);
-  const satisfactionRate = useAnimatedCounter(98, 2500, isVisible);
-  const profitabilityRate = useAnimatedCounter(15, 2200, isVisible);
-  const propertiesCount = useAnimatedCounter(500, 2800, isVisible);
-  const clientsCount = useAnimatedCounter(1200, 3000, isVisible);
-  const revenueCount = useAnimatedCounter(25, 2600, isVisible);
+  // Optimized animated counters with faster duration
+  const occupancyRate = useAnimatedCounter(87, 1500, isVisible);
+  const satisfactionRate = useAnimatedCounter(98, 1600, isVisible);
+  const profitabilityRate = useAnimatedCounter(15, 1400, isVisible);
+  const propertiesCount = useAnimatedCounter(500, 1800, isVisible);
+  const clientsCount = useAnimatedCounter(1200, 1900, isVisible);
+  const revenueCount = useAnimatedCounter(25, 1700, isVisible);
 
   return (
     <div className="bg-background">
@@ -150,6 +153,7 @@ const Stats = () => {
             alt="" 
             className="w-full h-full object-cover opacity-5"
             aria-hidden="true"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-orange-50/90 via-white/80 to-orange-50/90"></div>
         </div>
