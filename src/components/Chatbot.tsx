@@ -272,11 +272,15 @@ const Chatbot = () => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg z-50 bg-primary hover:bg-primary/90"
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg z-50 bg-primary hover:bg-primary/90 p-0 overflow-hidden"
         size="icon"
         aria-label="Abrir chat de asistencia"
       >
-        <MessageCircle className="h-6 w-6" />
+        <img 
+          src="/lovable-uploads/b318efa7-5156-4395-9675-30db60a6edc6.png" 
+          alt="Ana - Asistente Virtual" 
+          className="w-full h-full object-cover"
+        />
       </Button>
 
       {isOpen && (
