@@ -104,11 +104,18 @@ const Footer = () => {
           {/* Legal */}
           <div>
             <h3 className="font-semibold mb-4 text-sm sm:text-base">Legal</h3>
-            <ul className="space-y-2 text-muted-foreground text-sm">
-              <li>Política de Privacidad</li>
-              <li>Términos y Condiciones</li>
-              <li>Cookies</li>
-              <li>Aviso Legal</li>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link 
+                  to="/politica-privacidad" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Política de Privacidad
+                </Link>
+              </li>
+              <li className="text-muted-foreground">Términos y Condiciones</li>
+              <li className="text-muted-foreground">Cookies</li>
+              <li className="text-muted-foreground">Aviso Legal</li>
             </ul>
           </div>
         </div>
