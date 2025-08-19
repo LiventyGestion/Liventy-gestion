@@ -13,6 +13,7 @@ import TenantDashboard from "./pages/TenantDashboard";
 import RentalSimulatorPage from "./pages/RentalSimulatorPage";
 import LeadMagnetPage from "./pages/LeadMagnetPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
           <Route path="/simulador" element={<RentalSimulatorPage />} />
           <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
           <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
+          <Route path="/politica-cookies" element={<CookiePolicy />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
