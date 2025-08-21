@@ -13,7 +13,7 @@ const Hero = () => {
         <img 
           src={heroBackground} 
           alt="" 
-          className="w-full h-full object-cover opacity-40"
+          className="w-full h-full object-cover opacity-60"
           aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/80 via-background/70 to-background/85"></div>
