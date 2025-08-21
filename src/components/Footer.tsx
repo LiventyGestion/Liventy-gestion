@@ -12,6 +12,7 @@ const Footer = () => {
           alt="" 
           className="w-full h-full object-cover opacity-5"
           aria-hidden="true"
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-muted/95"></div>
       </div>
@@ -46,6 +47,12 @@ const Footer = () => {
                 >
                   liventygestion@gmail.com
                 </a>
+              </div>
+              <div className="flex items-center space-x-2">
+                <MapPin className="h-4 w-4 text-primary" aria-hidden="true" />
+                <span className="text-muted-foreground">
+                  Bizkaia, País Vasco
+                </span>
               </div>
             </div>
           </div>

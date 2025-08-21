@@ -81,8 +81,9 @@ const PropertySlider = () => {
                 <div className="relative">
                   <img 
                     src={property.image} 
-                    alt={property.title}
+                    alt={`${property.title} - Propiedad en ${property.location}`}
                     className="w-full h-48 object-cover"
+                    loading="lazy"
                   />
                   <Badge className="absolute top-4 left-4">
                     {property.type}
