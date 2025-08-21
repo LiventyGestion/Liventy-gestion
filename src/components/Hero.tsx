@@ -30,7 +30,7 @@ const Hero = () => {
           
           <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
             Alquileres residenciales gestionados de principio a fin en Bizkaia. 
-            <span className="block mt-2 text-primary font-semibold">100% digital. 100% personalizado.</span>
+            <span className="block mt-2 text-primary font-semibold">100% digital y personalizado.</span>
           </p>
 
           <Button 
