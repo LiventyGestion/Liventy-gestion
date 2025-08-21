@@ -14,7 +14,7 @@ const Header = () => {
             <img 
               src="/lovable-uploads/8a8330ce-f5ff-4c18-9ac4-2d21db8b4d79.png" 
               alt="Liventy Gestión - Volver al inicio" 
-              className="h-12 sm:h-16 lg:h-20 w-auto"
+              className="h-16 sm:h-20 lg:h-24 w-auto"
             />
           </Link>
 
