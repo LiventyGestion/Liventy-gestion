@@ -22,8 +22,10 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/20 dark:to-orange-900/30">
-      <div className="container mx-auto px-4 sm:px-6">
+    <section className="py-12 sm:py-16 bg-gradient-to-br from-orange-50/60 via-orange-100/40 to-orange-50/80 dark:from-orange-950/10 dark:to-orange-900/20 relative overflow-hidden">
+      {/* Subtle diffused overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-100/20 to-transparent blur-3xl"></div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
         </div>
