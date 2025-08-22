@@ -1,6 +1,6 @@
 import { Search, Shield, Settings } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import professionalService from "@/assets/professional-service.jpg";
+import digitalManagement from "@/assets/digital-management.jpg";
 
 const WhatWeDo = () => {
   const services = [
@@ -23,18 +23,8 @@ const WhatWeDo = () => {
 
   return (
     <section className="py-12 sm:py-16 bg-gradient-to-br from-orange-50/60 via-orange-100/40 to-orange-50/80 dark:from-orange-950/10 dark:to-orange-900/20 relative overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={professionalService} 
-          alt="Oficina moderna" 
-          className="w-full h-full object-cover opacity-30"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-50/70 via-orange-100/60 to-orange-50/80 dark:from-orange-950/60 dark:to-orange-900/70"></div>
-      </div>
       {/* Subtle diffused overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-100/20 to-transparent blur-3xl z-5"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-100/20 to-transparent blur-3xl"></div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
