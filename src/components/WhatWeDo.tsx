@@ -22,15 +22,16 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-background relative overflow-hidden">
+    <section className="py-12 sm:py-16 bg-gradient-to-br from-background via-accent/10 to-primary/10 relative overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
           src={digitalManagement} 
           alt="" 
-          className="w-full h-full object-cover opacity-5"
+          className="w-full h-full object-cover opacity-20"
           aria-hidden="true"
         />
+        <div className="absolute inset-0 bg-gradient-to-br from-background/85 via-background/80 to-background/90"></div>
       </div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">

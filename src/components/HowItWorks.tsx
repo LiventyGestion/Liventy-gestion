@@ -25,14 +25,15 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-16 bg-background relative overflow-hidden">
+    <section className="py-16 bg-gradient-to-bl from-background via-primary/5 to-accent/10 relative overflow-hidden">
       {/* Background Image */}
-      <div className="absolute right-0 top-0 w-1/2 h-full opacity-5">
+      <div className="absolute inset-0 z-0">
         <img 
           src={propertyConsultation} 
           alt="Property consultation" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover opacity-15"
         />
+        <div className="absolute inset-0 bg-gradient-to-bl from-background/90 via-background/85 to-background/80"></div>
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
