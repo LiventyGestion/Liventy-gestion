@@ -31,7 +31,7 @@ const HowItWorks = () => {
         <img 
           src={propertyConsultation} 
           alt="Property consultation" 
-          className="w-full h-full object-cover opacity-15"
+          className="w-full h-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-bl from-background/90 via-background/85 to-background/80"></div>
       </div>
