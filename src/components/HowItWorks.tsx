@@ -1,6 +1,6 @@
 import { Phone, UserSearch, Banknote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import propertyConsultation from "@/assets/property-consultation.jpg";
+import happyHomeowner from "@/assets/happy-homeowner.jpg";
 
 const HowItWorks = () => {
   const steps = [
@@ -29,8 +29,8 @@ const HowItWorks = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <img 
-          src={propertyConsultation} 
-          alt="Property consultation" 
+          src={happyHomeowner} 
+          alt="Interior de vivienda" 
           className="w-full h-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-bl from-background/90 via-background/85 to-background/80"></div>

@@ -22,25 +22,15 @@ const WhatWeDo = () => {
   ];
 
   return (
-    <section className="py-12 sm:py-16 bg-gradient-to-br from-background via-accent/10 to-primary/10 relative overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={digitalManagement} 
-          alt="" 
-          className="w-full h-full object-cover opacity-60"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-background/85 via-background/80 to-background/90"></div>
-      </div>
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+    <section className="py-12 sm:py-16 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/20 dark:to-orange-900/30">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-8 sm:mb-12">
           <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow">
+            <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
               <CardContent className="p-6 sm:p-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
                   <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
