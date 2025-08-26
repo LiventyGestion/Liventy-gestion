@@ -32,7 +32,7 @@ const WhatWeDo = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-gray-900/90 dark:bg-gray-800/90 backdrop-blur-sm border-gray-700/50">
+            <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-gray-700/80 dark:bg-gray-700/80 backdrop-blur-sm border-gray-600/50">
               <CardContent className="p-6 sm:p-8">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-full mb-6">
                   <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
