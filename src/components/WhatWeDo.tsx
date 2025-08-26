@@ -32,13 +32,13 @@ const WhatWeDo = () => {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
           {services.map((service, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+            <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-gray-900/90 dark:bg-gray-800/90 backdrop-blur-sm border-gray-700/50">
               <CardContent className="p-6 sm:p-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-full mb-6">
                   <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-4">{service.title}</h3>
-                <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">{service.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 text-white">{service.title}</h3>
+                <p className="text-gray-200 text-sm sm:text-base leading-relaxed">{service.description}</p>
               </CardContent>
             </Card>
           ))}
