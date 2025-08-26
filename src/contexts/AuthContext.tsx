@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 
 export type UserRole = 'propietario' | 'inquilino' | 'admin';
 
@@ -11,75 +13,140 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string, role: UserRole) => Promise<boolean>;
-  logout: () => void;
+  session: Session | null;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  signUp: (email: string, password: string, name: string, role: UserRole) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
   isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Usuarios simulados para demostración
-const mockUsers: User[] = [
-  {
-    id: '1',
-    email: 'propietario@ejemplo.com',
-    name: 'Juan García',
-    role: 'propietario'
-  },
-  {
-    id: '2',
-    email: 'inquilino@ejemplo.com',
-    name: 'María López',
-    role: 'inquilino'
-  },
-  {
-    id: '3',
-    email: 'admin@liventy.com',
-    name: 'Admin Liventy',
-    role: 'admin'
-  }
-];
-
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check for saved user in localStorage
-    const savedUser = localStorage.getItem('liventy_user');
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
+    // Set up auth state listener FIRST
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        setSession(session);
+        if (session?.user) {
+          // Defer fetching user profile to avoid deadlock
+          setTimeout(() => {
+            fetchUserProfile(session.user.id);
+          }, 0);
+        } else {
+          setUser(null);
+          setIsLoading(false);
+        }
+      }
+    );
+
+    // THEN check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session?.user) {
+        fetchUserProfile(session.user.id);
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
-  const login = async (email: string, password: string, role: UserRole): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // Find user by email and role
-    const foundUser = mockUsers.find(u => u.email === email && u.role === role);
-    
-    if (foundUser && password === '123456') { // Simple password check for demo
-      setUser(foundUser);
-      localStorage.setItem('liventy_user', JSON.stringify(foundUser));
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from('Usuarios')
+        .select('*')
+        .eq('id', userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching user profile:', error);
+        setUser(null);
+      } else if (data) {
+        setUser({
+          id: data.id,
+          email: data.email || '',
+          name: data.nombre || '',
+          role: data.rol as UserRole || 'inquilino'
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      setUser(null);
+    } finally {
       setIsLoading(false);
-      return true;
     }
-    
-    setIsLoading(false);
-    return false;
   };
 
-  const logout = () => {
+  const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    setIsLoading(true);
+    
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        setIsLoading(false);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error) {
+      setIsLoading(false);
+      return { success: false, error: 'Error inesperado durante el login' };
+    }
+  };
+
+  const signUp = async (email: string, password: string, name: string, role: UserRole): Promise<{ success: boolean; error?: string }> => {
+    setIsLoading(true);
+    
+    try {
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            name,
+            role
+          }
+        }
+      });
+
+      if (error) {
+        setIsLoading(false);
+        return { success: false, error: error.message };
+      }
+
+      setIsLoading(false);
+      return { success: true };
+    } catch (error) {
+      setIsLoading(false);
+      return { success: false, error: 'Error inesperado durante el registro' };
+    }
+  };
+
+  const logout = async (): Promise<void> => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error during logout:', error);
+    }
     setUser(null);
-    localStorage.removeItem('liventy_user');
+    setSession(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={{ user, session, login, signUp, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

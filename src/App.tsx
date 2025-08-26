@@ -10,6 +10,7 @@ import About from "./pages/About";
 import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
+import Auth from "./pages/Auth";
 import OwnerDashboard from "./pages/OwnerDashboard";
 import TenantDashboard from "./pages/TenantDashboard";
 import RentalSimulatorPage from "./pages/RentalSimulatorPage";
@@ -32,7 +33,8 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/auth" element={<Auth />} />
             <Route 
               path="/owner-dashboard" 
               element={

@@ -103,7 +103,7 @@ const OwnerDashboard = () => {
 
   useEffect(() => {
     if (!user || user.role !== 'propietario') {
-      navigate('/login');
+      navigate('/auth');
     }
   }, [user, navigate]);
 

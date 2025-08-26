@@ -37,18 +37,20 @@ const Login = () => {
       return;
     }
 
-    const success = await login(email, password, activeTab);
+    const result = await login(email, password);
     
-    if (success) {
+    if (result.success) {
       toast({
         title: "Acceso correcto",
         description: "Bienvenido a tu área personal",
       });
-      
-      // Navigate based on role
-      navigate(activeTab === 'propietario' ? '/owner-dashboard' : '/tenant-dashboard');
     } else {
-      setError("Credenciales incorrectas. Intenta con: propietario@ejemplo.com / inquilino@ejemplo.com (contraseña: 123456)");
+      setError(result.error || "Error al iniciar sesión");
+      toast({
+        title: "Error",
+        description: result.error || "Error al iniciar sesión",
+        variant: "destructive",
+      });
     }
   };
 

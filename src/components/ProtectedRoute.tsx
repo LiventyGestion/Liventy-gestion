@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
   useEffect(() => {
     if (!isLoading) {
       if (!user) {
-        navigate('/login');
+        navigate('/auth');
       } else if (!allowedRoles.includes(user.role)) {
         // Redirect to appropriate dashboard based on user role
         if (user.role === 'propietario') {
@@ -22,7 +22,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
         } else if (user.role === 'inquilino') {
           navigate('/tenant-dashboard');
         } else {
-          navigate('/login');
+          navigate('/auth');
         }
       }
     }

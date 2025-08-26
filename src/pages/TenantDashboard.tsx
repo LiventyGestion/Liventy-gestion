@@ -75,7 +75,7 @@ const TenantDashboard = () => {
 
   useEffect(() => {
     if (!user || user.role !== 'inquilino') {
-      navigate('/login');
+      navigate('/auth');
     }
   }, [user, navigate]);
 
