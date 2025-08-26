@@ -14,13 +14,237 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      Contratos: {
+        Row: {
+          estado: string | null
+          fecha_fin: string | null
+          fecha_inicio: string | null
+          id: string
+          pdf_url: string | null
+          propiedad_id: string
+        }
+        Insert: {
+          estado?: string | null
+          fecha_fin?: string | null
+          fecha_inicio?: string | null
+          id?: string
+          pdf_url?: string | null
+          propiedad_id: string
+        }
+        Update: {
+          estado?: string | null
+          fecha_fin?: string | null
+          fecha_inicio?: string | null
+          id?: string
+          pdf_url?: string | null
+          propiedad_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contratos_propiedad_id_fkey"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_contratos_propiedad"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Documentos: {
+        Row: {
+          fecha_subida: string | null
+          id: string
+          nombre_archivo: string | null
+          propiedad_id: string
+          tipo: string | null
+          url: string | null
+        }
+        Insert: {
+          fecha_subida?: string | null
+          id?: string
+          nombre_archivo?: string | null
+          propiedad_id: string
+          tipo?: string | null
+          url?: string | null
+        }
+        Update: {
+          fecha_subida?: string | null
+          id?: string
+          nombre_archivo?: string | null
+          propiedad_id?: string
+          tipo?: string | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Documentos_propiedad_id_fkey"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_documentos_propiedad"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Incidencias: {
+        Row: {
+          descripcion: string | null
+          estado: string | null
+          fecha_creacion: string | null
+          fecha_resolucion: string | null
+          id: string
+          propiedad_id: string
+        }
+        Insert: {
+          descripcion?: string | null
+          estado?: string | null
+          fecha_creacion?: string | null
+          fecha_resolucion?: string | null
+          id?: string
+          propiedad_id: string
+        }
+        Update: {
+          descripcion?: string | null
+          estado?: string | null
+          fecha_creacion?: string | null
+          fecha_resolucion?: string | null
+          id?: string
+          propiedad_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_incidencias_propiedad"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "incidencias_propiedad_id_fkey"
+            columns: ["propiedad_id"]
+            isOneToOne: false
+            referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Pagos: {
+        Row: {
+          contrato_id: string
+          estado: string | null
+          fecha_pago: string | null
+          id: string
+          importe: number | null
+        }
+        Insert: {
+          contrato_id: string
+          estado?: string | null
+          fecha_pago?: string | null
+          id?: string
+          importe?: number | null
+        }
+        Update: {
+          contrato_id?: string
+          estado?: string | null
+          fecha_pago?: string | null
+          id?: string
+          importe?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_pagos_contrato"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "Contratos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pagos_contrato_id_fkey"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "Contratos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Propiedades: {
+        Row: {
+          descripcion: string | null
+          direccion: string | null
+          foto_url: string | null
+          id: string
+          usuario_id: string
+        }
+        Insert: {
+          descripcion?: string | null
+          direccion?: string | null
+          foto_url?: string | null
+          id?: string
+          usuario_id: string
+        }
+        Update: {
+          descripcion?: string | null
+          direccion?: string | null
+          foto_url?: string | null
+          id?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "propiedades_usuario_id_fkey"
+            columns: ["usuario_id"]
+            isOneToOne: false
+            referencedRelation: "Usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      Usuarios: {
+        Row: {
+          email: string | null
+          id: string
+          nombre: string | null
+          rol: string | null
+        }
+        Insert: {
+          email?: string | null
+          id?: string
+          nombre?: string | null
+          rol?: string | null
+        }
+        Update: {
+          email?: string | null
+          id?: string
+          nombre?: string | null
+          rol?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      user_owns_property: {
+        Args: { property_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never
