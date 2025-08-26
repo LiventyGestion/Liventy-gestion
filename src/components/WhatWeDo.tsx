@@ -34,11 +34,11 @@ const WhatWeDo = () => {
           {services.map((service, index) => (
             <Card key={index} className="text-center hover:shadow-lg transition-shadow bg-gray-700/80 dark:bg-gray-700/80 backdrop-blur-sm border-gray-600/50">
               <CardContent className="p-6 sm:p-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/20 rounded-full mb-6">
-                  <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/30 rounded-full mb-6">
+                  <service.icon className="h-8 w-8 text-primary-foreground" aria-hidden="true" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-4 text-white">{service.title}</h3>
-                <p className="text-gray-200 text-sm sm:text-base leading-relaxed">{service.description}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-4 text-white font-bold">{service.title}</h3>
+                <p className="text-gray-100 text-sm sm:text-base leading-relaxed font-medium">{service.description}</p>
               </CardContent>
             </Card>
           ))}
