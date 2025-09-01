@@ -20,6 +20,8 @@ export default {
 		extend: {
 			fontFamily: {
 				'raleway': ['Raleway', 'sans-serif'],
+				'montserrat': ['Montserrat', 'sans-serif'],
+				'lato': ['Lato', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
