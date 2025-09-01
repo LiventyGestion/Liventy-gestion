@@ -32,7 +32,7 @@ const Hero = () => {
         <img 
           src={heroBackground} 
           alt="" 
-          className="w-full h-full object-cover opacity-20"
+          className="w-full h-full object-cover opacity-60"
           aria-hidden="true"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/85 to-background/90"></div>
@@ -48,7 +48,7 @@ const Hero = () => {
           </h1>
           
           <p className="font-lato text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-10 max-w-4xl mx-auto leading-relaxed">
-            Tu vivienda, más rentable y sin preocupaciones. Selección de inquilinos, contratos, incidencias y seguimiento digital.
+            Tu vivienda, más rentable y sin preocupaciones.
           </p>
 
           {/* Benefits List */}
