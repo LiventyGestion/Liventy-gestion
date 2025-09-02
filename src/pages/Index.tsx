@@ -9,6 +9,7 @@ import Stats from "@/components/Stats";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import FinalCTA from "@/components/FinalCTA";
+import ContactFormSection from "@/components/ContactForm";
 import Chatbot from "@/components/Chatbot";
 import SecondaryCTAs from "@/components/SecondaryCTAs";
 
@@ -25,6 +26,7 @@ const Index = () => {
       <Stats />
       <Testimonials />
       <FAQ />
+      <ContactFormSection />
       <FinalCTA />
       <Footer />
       <Chatbot />

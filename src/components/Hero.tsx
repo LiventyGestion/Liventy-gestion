@@ -1,10 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, FileText, Wrench, BarChart3 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import heroBackground from "@/assets/hero-modern-property.jpg";
 
 const Hero = () => {
-  const navigate = useNavigate();
+  const handleCTAClick = (location: string, label: string, dest: string) => {
+    // GA4 tracking
+    if (typeof (window as any).gtag !== 'undefined') {
+      (window as any).gtag('event', 'cta_click', {
+        location,
+        label,
+        dest
+      });
+    }
+    
+    // Handle navigation
+    if (dest.startsWith('#')) {
+      const element = document.querySelector(dest);
+      if (element) {
+        element.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    } else {
+      window.location.href = dest;
+    }
+  };
 
   const benefits = [
     {
@@ -66,8 +87,9 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => navigate('/propietarios#form')}
-              aria-label="Empezar proceso de gestión de alquiler"
+              onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '#contacto')}
+              role="button"
+              aria-label="Empezar ahora – ir al formulario de contacto"
             >
               Empezar ahora
               <ArrowRight className="ml-3 h-6 w-6" aria-hidden="true" />
@@ -77,8 +99,8 @@ const Hero = () => {
               variant="outline" 
               size="lg"
               className="text-lg px-8 py-6 h-auto border-primary text-primary hover:bg-primary/5 transition-all duration-300"
-              onClick={() => navigate('/herramientas')}
-              aria-label="Valorar piso gratuitamente"
+              onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas#precio')}
+              aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
             >
               Valora gratis mi piso
             </Button>

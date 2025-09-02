@@ -1,10 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import professionalService from "@/assets/professional-service.jpg";
 
 const FinalCTA = () => {
-  const navigate = useNavigate();
+  const handleCTAClick = () => {
+    // GA4 tracking
+    if (typeof (window as any).gtag !== 'undefined') {
+      (window as any).gtag('event', 'cta_click', {
+        location: 'home_band',
+        label: 'gestionar_alquiler',
+        dest: '#contacto'
+      });
+    }
+    
+    // Smooth scroll to contact form
+    const element = document.querySelector('#contacto');
+    if (element) {
+      element.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
   return (
     <section className="py-16 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground relative overflow-hidden">
@@ -35,7 +52,7 @@ const FinalCTA = () => {
             size="lg" 
             variant="secondary"
             className="text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 min-h-[44px]"
-            onClick={() => navigate('/contact')}
+            onClick={handleCTAClick}
             aria-label="Quiero gestionar mi alquiler"
           >
             Quiero gestionar mi alquiler
