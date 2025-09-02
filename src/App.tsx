@@ -15,6 +15,7 @@ import OwnerDashboard from "./pages/OwnerDashboard";
 import TenantDashboard from "./pages/TenantDashboard";
 import RentalSimulatorPage from "./pages/RentalSimulatorPage";
 import LeadMagnetPage from "./pages/LeadMagnetPage";
+import Herramientas from "./pages/Herramientas";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
@@ -52,6 +53,7 @@ const App = () => (
               } 
             />
             <Route path="/simulador" element={<RentalSimulatorPage />} />
+            <Route path="/herramientas" element={<Herramientas />} />
             <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
