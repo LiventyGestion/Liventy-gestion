@@ -99,8 +99,9 @@ const Hero = () => {
               variant="outline" 
               size="lg"
               className="text-lg px-8 py-6 h-auto border-primary text-primary hover:bg-primary/5 transition-all duration-300"
-              onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas#precio')}
+              onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
               aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
+              role="button"
             >
               Valora gratis mi piso
             </Button>

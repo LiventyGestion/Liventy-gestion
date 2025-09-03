@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -51,6 +51,7 @@ type ComparadorForm = z.infer<typeof comparadorSchema>;
 
 const Herramientas = () => {
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   
   // Estado único para controlar qué calculadora está abierta
   const [openCalc, setOpenCalc] = useState<"precio" | "rentabilidad" | "comparador" | null>(null);
@@ -59,6 +60,14 @@ const Herramientas = () => {
   const toggleCalculator = (calcType: "precio" | "rentabilidad" | "comparador") => {
     setOpenCalc(prev => prev === calcType ? null : calcType);
   };
+
+  // Efecto para abrir calculadora automáticamente basado en query params
+  useEffect(() => {
+    const calcParam = searchParams.get('calc');
+    if (calcParam && (calcParam === 'precio' || calcParam === 'rentabilidad' || calcParam === 'comparador')) {
+      setOpenCalc(calcParam);
+    }
+  }, [searchParams]);
   
   // Estados para cada calculadora
   const [precioResult, setPrecioResult] = useState<{ min: number; max: number; recomendado: number } | null>(null);
