@@ -37,7 +37,7 @@ const SecondaryCTAs = () => {
             </p>
             <Button 
               variant="outline" 
-              onClick={() => navigate('/auth')}
+              onClick={() => navigate('/login')}
               className="h-11"
             >
               Acceder al área

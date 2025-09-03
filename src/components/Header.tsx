@@ -35,7 +35,7 @@ const Header = () => {
             <Link to="/contact" className="text-foreground hover:text-primary transition-colors">
               Contacto
             </Link>
-            <Link to="/auth">
+            <Link to="/login">
               <Button>Área de Clientes</Button>
             </Link>
           </div>
@@ -94,7 +94,7 @@ const Header = () => {
               >
                 Contacto
               </Link>
-              <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                 <Button className="w-full">Área de Clientes</Button>
               </Link>
             </div>
