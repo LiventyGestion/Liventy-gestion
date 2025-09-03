@@ -11,6 +11,7 @@ import FAQ from "@/components/FAQ";
 import ContactFormSection from "@/components/ContactForm";
 import Chatbot from "@/components/Chatbot";
 import SecondaryCTAs from "@/components/SecondaryCTAs";
+import SellCTA from "@/components/SellCTA";
 
 const Index = () => {
   return (
@@ -26,6 +27,7 @@ const Index = () => {
       <Testimonials />
       <FAQ />
       <ContactFormSection />
+      <SellCTA />
       <Footer />
       <Chatbot />
     </div>
