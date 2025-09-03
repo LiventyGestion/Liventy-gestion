@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,445 +11,770 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Calculator, TrendingUp, MapPin, Home, Euro, CheckCircle2, AlertCircle } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import { Calculator, TrendingUp, BarChart3, Home, Euro, CheckCircle2, AlertCircle, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
-const valuationSchema = z.object({
-  address: z.string().min(5, "La dirección debe tener al menos 5 caracteres"),
-  propertyType: z.string().min(1, "Selecciona el tipo de propiedad"),
-  bedrooms: z.string().min(1, "Selecciona el número de habitaciones"),
-  bathrooms: z.string().min(1, "Selecciona el número de baños"),
-  size: z.string().min(1, "El tamaño debe ser mayor a 0"),
-  condition: z.string().min(1, "Selecciona el estado de la propiedad"),
-  amenities: z.array(z.string()).optional(),
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Por favor, introduce un email válido"),
-  phone: z.string().min(9, "El teléfono debe tener al menos 9 dígitos")
+// Schemas for each calculator
+const precioSchema = z.object({
+  barrio: z.string().min(2, "Introduce el barrio"),
+  metros: z.string().min(1, "Introduce los metros cuadrados"),
+  habitaciones: z.string().min(1, "Selecciona las habitaciones"),
+  banos: z.string().min(1, "Selecciona los baños"),
+  estado: z.string().min(1, "Selecciona el estado"),
+  email: z.string().email("Email inválido").optional().or(z.literal(""))
 });
 
-type ValuationForm = z.infer<typeof valuationSchema>;
+const rentabilidadSchema = z.object({
+  ingresosMensuales: z.string().min(1, "Introduce los ingresos mensuales"),
+  gastosMensuales: z.string().min(1, "Introduce los gastos mensuales"),
+  comision: z.string().min(1, "Introduce la comisión"),
+  diasVacios: z.string().min(1, "Introduce días vacíos anuales"),
+  email: z.string().email("Email inválido").optional().or(z.literal(""))
+});
+
+const comparadorSchema = z.object({
+  precioCompra: z.string().min(1, "Introduce el precio de compra"),
+  alquilerLargo: z.string().min(1, "Introduce alquiler largo plazo"),
+  alquilerTemporal: z.string().min(1, "Introduce alquiler temporal"),
+  ocupacionTemporal: z.string().min(1, "Introduce ocupación temporal"),
+  gastosLargo: z.string().min(1, "Introduce gastos largo plazo"),
+  gastosTemporal: z.string().min(1, "Introduce gastos temporal"),
+  email: z.string().email("Email inválido").optional().or(z.literal(""))
+});
+
+type PrecioForm = z.infer<typeof precioSchema>;
+type RentabilidadForm = z.infer<typeof rentabilidadSchema>;
+type ComparadorForm = z.infer<typeof comparadorSchema>;
 
 const Herramientas = () => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [estimatedPrice, setEstimatedPrice] = useState<number | null>(null);
   const { toast } = useToast();
   
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
-    reset,
-    setValue,
-    watch
-  } = useForm<ValuationForm>({
-    resolver: zodResolver(valuationSchema),
+  // Estados para cada calculadora
+  const [precioResult, setPrecioResult] = useState<{ min: number; max: number; recomendado: number } | null>(null);
+  const [rentabilidadResult, setRentabilidadResult] = useState<{ cashflow: number; rentabilidad: number } | null>(null);
+  const [comparadorResult, setComparadorResult] = useState<{ largo: number; temporal: number; recomendacion: string } | null>(null);
+
+  // Forms para cada calculadora
+  const precioForm = useForm<PrecioForm>({
+    resolver: zodResolver(precioSchema),
     mode: "onBlur"
   });
 
-  const onSubmit = async (data: ValuationForm) => {
+  const rentabilidadForm = useForm<RentabilidadForm>({
+    resolver: zodResolver(rentabilidadSchema),
+    mode: "onBlur"
+  });
+
+  const comparadorForm = useForm<ComparadorForm>({
+    resolver: zodResolver(comparadorSchema),
+    mode: "onBlur"
+  });
+
+  // Función para guardar en base de datos
+  const saveCalculatorResult = async (toolType: string, inputs: any, outputs: any, email?: string) => {
     try {
-      // Simulate valuation calculation
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Basic price estimation based on form data
-      const basePrice = data.propertyType === 'piso' ? 800 : 
-                       data.propertyType === 'casa' ? 1200 : 600;
-      const bedroomMultiplier = parseInt(data.bedrooms) * 150;
-      const sizeMultiplier = parseInt(data.size) * 8;
-      const conditionMultiplier = data.condition === 'excelente' ? 1.2 : 
-                                 data.condition === 'bueno' ? 1.0 : 0.8;
-      
-      const estimated = Math.round((basePrice + bedroomMultiplier + sizeMultiplier) * conditionMultiplier);
-      
-      setEstimatedPrice(estimated);
-      setIsSubmitted(true);
-      
-      // GA4 tracking
-      if (typeof (window as any).gtag !== 'undefined') {
-        (window as any).gtag('event', 'form_submit', {
-          location: 'herramientas',
-          label: 'valoracion_gratuita',
-          form_name: 'property_valuation'
+      // Guardar resultado usando el client genérico
+      const { error: calcError } = await supabase
+        .from('calculadora_resultados' as any)
+        .insert({
+          tool_type: toolType,
+          inputs,
+          outputs,
+          email: email || null,
+          user_id: null // Anonymous for now
         });
+
+      if (calcError) {
+        console.error('Error saving calculator result:', calcError);
       }
+
+      // Si hay email, crear/actualizar lead
+      if (email) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sourceTag = urlParams.get('origen') || `herramientas_${toolType}`;
+        
+        const { error: leadError } = await supabase
+          .from('leads' as any)
+          .upsert({
+            email,
+            service_interest: toolType,
+            source_tag: sourceTag,
+            utm_source: urlParams.get('utm_source'),
+            utm_medium: urlParams.get('utm_medium'),
+            utm_campaign: urlParams.get('utm_campaign'),
+            utm_term: urlParams.get('utm_term'),
+            utm_content: urlParams.get('utm_content')
+          }, { onConflict: 'email' });
+
+        if (leadError) {
+          console.error('Error saving lead:', leadError);
+        }
+      }
+    } catch (error) {
+      console.error('Error saving calculator result:', error);
+    }
+  };
+
+  // Submit handlers
+  const onSubmitPrecio = async (data: PrecioForm) => {
+    try {
+      // Simular cálculo
+      const metros = parseInt(data.metros);
+      const base = metros * 12;
+      const habitacionesMultiplier = parseInt(data.habitaciones) * 50;
+      const estadoMultiplier = data.estado === 'excelente' ? 1.2 : data.estado === 'bueno' ? 1.0 : 0.8;
       
+      const recomendado = Math.round((base + habitacionesMultiplier) * estadoMultiplier);
+      const min = Math.round(recomendado * 0.85);
+      const max = Math.round(recomendado * 1.15);
+
+      const result = { min, max, recomendado };
+      setPrecioResult(result);
+
+      // Guardar en BD
+      await saveCalculatorResult('precio', data, result, data.email);
+
+      // GA4
+      if (typeof (window as any).gtag !== 'undefined') {
+        (window as any).gtag('event', 'calc_submit', { tool: 'precio' });
+      }
+
       toast({
-        title: "¡Valoración completada!",
-        description: "Hemos calculado el precio estimado de tu propiedad.",
+        title: "¡Cálculo completado!",
+        description: "Hemos calculado el precio recomendado para tu propiedad."
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
-        variant: "destructive",
+        description: "Ha ocurrido un error. Inténtalo de nuevo.",
+        variant: "destructive"
       });
     }
   };
 
-  const getFieldState = (fieldName: keyof ValuationForm) => {
-    const hasError = !!errors[fieldName];
-    const isTouched = touchedFields[fieldName];
-    const isValid = isTouched && !hasError;
-    
-    return { hasError, isValid, isTouched };
+  const onSubmitRentabilidad = async (data: RentabilidadForm) => {
+    try {
+      const ingresos = parseFloat(data.ingresosMensuales);
+      const gastos = parseFloat(data.gastosMensuales);
+      const comision = parseFloat(data.comision) / 100;
+      const diasVacios = parseInt(data.diasVacios);
+      
+      const ingresosAnuales = (ingresos * 12) * (1 - diasVacios / 365);
+      const gastosAnuales = gastos * 12;
+      const comisionAnual = ingresosAnuales * comision;
+      
+      const cashflow = Math.round((ingresosAnuales - gastosAnuales - comisionAnual) / 12);
+      const rentabilidad = Math.round(((ingresosAnuales - gastosAnuales - comisionAnual) / (ingresos * 12)) * 100);
+
+      const result = { cashflow, rentabilidad };
+      setRentabilidadResult(result);
+
+      await saveCalculatorResult('rentabilidad', data, result, data.email);
+
+      if (typeof (window as any).gtag !== 'undefined') {
+        (window as any).gtag('event', 'calc_submit', { tool: 'rentabilidad' });
+      }
+
+      toast({
+        title: "¡Análisis completado!",
+        description: "Hemos calculado la rentabilidad de tu inversión."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Ha ocurrido un error. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const onSubmitComparador = async (data: ComparadorForm) => {
+    try {
+      const precioCompra = parseFloat(data.precioCompra);
+      const alquilerLargo = parseFloat(data.alquilerLargo);
+      const alquilerTemporal = parseFloat(data.alquilerTemporal);
+      const ocupacion = parseFloat(data.ocupacionTemporal) / 100;
+      const gastosLargo = parseFloat(data.gastosLargo);
+      const gastosTemporal = parseFloat(data.gastosTemporal);
+
+      const ingresoLargo = (alquilerLargo - gastosLargo) * 12;
+      const ingresoTemporal = (alquilerTemporal * ocupacion - gastosTemporal) * 12;
+      
+      const rentabilidadLargo = (ingresoLargo / precioCompra) * 100;
+      const rentabilidadTemporal = (ingresoTemporal / precioCompra) * 100;
+
+      const recomendacion = rentabilidadTemporal > rentabilidadLargo 
+        ? "Te conviene más el alquiler temporal" 
+        : "Te conviene más el alquiler de larga duración";
+
+      const result = { 
+        largo: Math.round(rentabilidadLargo), 
+        temporal: Math.round(rentabilidadTemporal), 
+        recomendacion 
+      };
+      setComparadorResult(result);
+
+      await saveCalculatorResult('comparador', data, result, data.email);
+
+      if (typeof (window as any).gtag !== 'undefined') {
+        (window as any).gtag('event', 'calc_submit', { tool: 'comparador' });
+      }
+
+      toast({
+        title: "¡Comparación completada!",
+        description: "Hemos analizado qué modalidad te conviene más."
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Ha ocurrido un error. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto px-4 sm:px-6 py-16">
-        <div className="max-w-6xl mx-auto">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-              Herramientas Gratuitas para Propietarios
+      
+      <main className="container mx-auto px-4 sm:px-6 py-8">
+        {/* Breadcrumb */}
+        <nav aria-label="breadcrumb" className="mb-8">
+          <ol className="flex items-center space-x-2 text-sm text-muted-foreground">
+            <li><Link to="/" className="hover:text-foreground">Inicio</Link></li>
+            <li><ChevronDown className="h-4 w-4 rotate-[-90deg]" /></li>
+            <li aria-current="page" className="text-foreground">Herramientas</li>
+          </ol>
+        </nav>
+
+        {/* Hero Section */}
+        <section className="text-center mb-16">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex justify-center mb-6">
+              <Calculator className="h-16 w-16 text-primary" />
+            </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 font-['Montserrat']">
+              Herramientas para propietarios
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Descubre el potencial de tu propiedad con nuestras herramientas profesionales
+            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed font-['Lato']">
+              Decide con datos en 2 minutos: precio, rentabilidad y la modalidad que más te conviene.
             </p>
           </div>
+        </section>
 
-          {/* Tools Grid */}
-          <div className="grid lg:grid-cols-3 gap-8 mb-16">
-            <Card className="text-center">
-              <CardContent className="p-6">
-                <Calculator className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Calculadora de Precio</h3>
-                <p className="text-muted-foreground">
-                  Obtén una valoración precisa del precio de alquiler de tu propiedad
+        {/* Grid de 3 tarjetas */}
+        <section className="mb-20">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-8">
+                <Euro className="h-12 w-12 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Precio recomendado</h3>
+                <p className="text-muted-foreground mb-6 font-['Lato']">
+                  Rango óptimo de publicación
                 </p>
+                <Button asChild className="w-full">
+                  <a href="#precio">Calcular ahora</a>
+                </Button>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
-              <CardContent className="p-6">
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-8">
                 <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Análisis de Rentabilidad</h3>
-                <p className="text-muted-foreground">
-                  Descubre el potencial de ingresos de tu inversión inmobiliaria
+                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Rentabilidad neta</h3>
+                <p className="text-muted-foreground mb-6 font-['Lato']">
+                  Cashflow y yield anual
                 </p>
+                <Button asChild className="w-full">
+                  <a href="#rentabilidad">Calcular ahora</a>
+                </Button>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
-              <CardContent className="p-6">
-                <MapPin className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Análisis de Zona</h3>
-                <p className="text-muted-foreground">
-                  Información detallada sobre el mercado inmobiliario local
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-8">
+                <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Larga vs. Temporal</h3>
+                <p className="text-muted-foreground mb-6 font-['Lato']">
+                  Qué te conviene más
                 </p>
+                <Button asChild className="w-full">
+                  <a href="#comparador">Comparar ahora</a>
+                </Button>
               </CardContent>
             </Card>
           </div>
+        </section>
 
-          {/* Property Valuation Section */}
-          <section id="precio" className="scroll-mt-24">
+        {/* Sección #precio */}
+        <section id="precio" className="scroll-mt-24 mb-20">
+          <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-                Valoración Gratuita de tu Propiedad
-              </h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Completa el formulario y recibe una estimación profesional del precio de alquiler
+              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Precio</h2>
+              <p className="text-lg text-muted-foreground font-['Lato']">
+                Obtén el rango óptimo de precio para publicar tu propiedad
               </p>
             </div>
 
-            <Card className="max-w-4xl mx-auto">
-              <CardHeader>
-                <CardTitle className="text-2xl flex items-center gap-2">
-                  <Home className="h-6 w-6 text-primary" />
-                  Datos de tu Propiedad
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                {isSubmitted && estimatedPrice ? (
-                  <div className="text-center py-12">
+            <Card>
+              <CardContent className="p-8">
+                {precioResult ? (
+                  <div className="text-center">
                     <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold mb-4">¡Valoración Completada!</h3>
+                    <h3 className="text-2xl font-bold mb-6">¡Resultado calculado!</h3>
                     
-                    <div className="bg-primary/5 rounded-lg p-8 mb-6">
-                      <div className="flex items-center justify-center gap-2 mb-2">
-                        <Euro className="h-8 w-8 text-primary" />
-                        <span className="text-4xl font-bold text-primary">
-                          {estimatedPrice}€
-                        </span>
-                        <span className="text-2xl text-muted-foreground">/mes</span>
+                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                      <div className="grid md:grid-cols-3 gap-6 text-center">
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-1">Mínimo</div>
+                          <div className="text-2xl font-bold text-primary">{precioResult.min}€</div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-1">Recomendado</div>
+                          <div className="text-3xl font-bold text-primary">{precioResult.recomendado}€</div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-1">Máximo</div>
+                          <div className="text-2xl font-bold text-primary">{precioResult.max}€</div>
+                        </div>
                       </div>
-                      <p className="text-muted-foreground">
-                        Precio estimado de alquiler mensual
-                      </p>
                     </div>
 
-                    <div className="space-y-4 text-left bg-card/50 rounded-lg p-6">
-                      <h4 className="font-semibold text-lg">¿Qué incluye este precio?</h4>
-                      <ul className="space-y-2 text-muted-foreground">
-                        <li className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
-                          Análisis comparativo del mercado local
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
-                          Valoración basada en características de la propiedad
-                        </li>
-                        <li className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
-                          Ajustes por estado y ubicación
-                        </li>
-                      </ul>
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Button asChild>
+                        <Link to="/propietarios#form">Publicad mi piso</Link>
+                      </Button>
+                      <Button variant="outline" asChild>
+                        <Link to="/propietarios#form?tipo=valoracion">Quiero una valoración completa</Link>
+                      </Button>
                     </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                      <Button 
-                        onClick={() => {
-                          setIsSubmitted(false);
-                          setEstimatedPrice(null);
-                          reset();
-                        }}
-                        variant="outline"
-                        className="min-h-[44px]"
-                      >
-                        Hacer otra valoración
-                      </Button>
-                      <Button 
-                        onClick={() => {
-                          const element = document.querySelector('#contacto');
-                          if (element) {
-                            element.scrollIntoView({ behavior: 'smooth' });
-                          } else {
-                            window.location.href = '/#contacto';
-                          }
-                        }}
-                        className="min-h-[44px]"
-                      >
-                        Contactar para gestión completa
-                      </Button>
-                    </div>
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setPrecioResult(null)}
+                      className="mt-4"
+                    >
+                      Calcular otra propiedad
+                    </Button>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                    {/* Property Details */}
-                    <div className="space-y-6">
-                      <h3 className="text-lg font-semibold">Información de la Propiedad</h3>
-                      
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="address">Dirección *</Label>
-                          <Input
-                            id="address"
-                            {...register("address")}
-                            placeholder="Calle, número, ciudad..."
-                            className={cn(
-                              "min-h-[44px]",
-                              getFieldState("address").hasError && "border-destructive",
-                              getFieldState("address").isValid && "border-green-500"
-                            )}
-                          />
-                          {errors.address && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.address.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="propertyType">Tipo de Propiedad *</Label>
-                          <Select onValueChange={(value) => setValue("propertyType", value)}>
-                            <SelectTrigger className="min-h-[44px]">
-                              <SelectValue placeholder="Selecciona el tipo" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="piso">Piso</SelectItem>
-                              <SelectItem value="casa">Casa</SelectItem>
-                              <SelectItem value="estudio">Estudio</SelectItem>
-                              <SelectItem value="atico">Ático</SelectItem>
-                              <SelectItem value="duplex">Dúplex</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {errors.propertyType && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.propertyType.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="bedrooms">Habitaciones *</Label>
-                          <Select onValueChange={(value) => setValue("bedrooms", value)}>
-                            <SelectTrigger className="min-h-[44px]">
-                              <SelectValue placeholder="Número de habitaciones" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1">1 habitación</SelectItem>
-                              <SelectItem value="2">2 habitaciones</SelectItem>
-                              <SelectItem value="3">3 habitaciones</SelectItem>
-                              <SelectItem value="4">4 habitaciones</SelectItem>
-                              <SelectItem value="5">5+ habitaciones</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {errors.bedrooms && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.bedrooms.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="bathrooms">Baños *</Label>
-                          <Select onValueChange={(value) => setValue("bathrooms", value)}>
-                            <SelectTrigger className="min-h-[44px]">
-                              <SelectValue placeholder="Número de baños" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1">1 baño</SelectItem>
-                              <SelectItem value="2">2 baños</SelectItem>
-                              <SelectItem value="3">3 baños</SelectItem>
-                              <SelectItem value="4">4+ baños</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {errors.bathrooms && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.bathrooms.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="size">Superficie (m²) *</Label>
-                          <Input
-                            id="size"
-                            type="number"
-                            {...register("size")}
-                            placeholder="Ej: 75"
-                            className={cn(
-                              "min-h-[44px]",
-                              getFieldState("size").hasError && "border-destructive",
-                              getFieldState("size").isValid && "border-green-500"
-                            )}
-                          />
-                          {errors.size && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.size.message}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="condition">Estado de la Propiedad *</Label>
-                          <Select onValueChange={(value) => setValue("condition", value)}>
-                            <SelectTrigger className="min-h-[44px]">
-                              <SelectValue placeholder="Estado actual" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="excelente">Excelente</SelectItem>
-                              <SelectItem value="bueno">Bueno</SelectItem>
-                              <SelectItem value="regular">Regular</SelectItem>
-                              <SelectItem value="necesita-reforma">Necesita reforma</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          {errors.condition && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.condition.message}
-                            </p>
-                          )}
-                        </div>
+                  <form onSubmit={precioForm.handleSubmit(onSubmitPrecio)} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="barrio">Barrio *</Label>
+                        <Input
+                          id="barrio"
+                          {...precioForm.register("barrio")}
+                          placeholder="Ej: Malasaña, Gràcia..."
+                        />
+                        {precioForm.formState.errors.barrio && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.barrio.message}</p>
+                        )}
                       </div>
-                    </div>
 
-                    <Separator />
+                      <div className="space-y-2">
+                        <Label htmlFor="metros">Metros cuadrados *</Label>
+                        <Input
+                          id="metros"
+                          type="number"
+                          {...precioForm.register("metros")}
+                          placeholder="Ej: 75"
+                        />
+                        {precioForm.formState.errors.metros && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.metros.message}</p>
+                        )}
+                      </div>
 
-                    {/* Contact Information */}
-                    <div className="space-y-6">
-                      <h3 className="text-lg font-semibold">Información de Contacto</h3>
-                      
-                      <div className="grid md:grid-cols-3 gap-6">
-                        <div className="space-y-2">
-                          <Label htmlFor="name">Nombre *</Label>
-                          <Input
-                            id="name"
-                            {...register("name")}
-                            placeholder="Tu nombre completo"
-                            className={cn(
-                              "min-h-[44px]",
-                              getFieldState("name").hasError && "border-destructive",
-                              getFieldState("name").isValid && "border-green-500"
-                            )}
-                          />
-                          {errors.name && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.name.message}
-                            </p>
-                          )}
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="habitaciones">Habitaciones *</Label>
+                        <Select onValueChange={(value) => precioForm.setValue("habitaciones", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1</SelectItem>
+                            <SelectItem value="2">2</SelectItem>
+                            <SelectItem value="3">3</SelectItem>
+                            <SelectItem value="4">4+</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {precioForm.formState.errors.habitaciones && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.habitaciones.message}</p>
+                        )}
+                      </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="email">Email *</Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            {...register("email")}
-                            placeholder="tu@email.com"
-                            className={cn(
-                              "min-h-[44px]",
-                              getFieldState("email").hasError && "border-destructive",
-                              getFieldState("email").isValid && "border-green-500"
-                            )}
-                          />
-                          {errors.email && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.email.message}
-                            </p>
-                          )}
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="banos">Baños *</Label>
+                        <Select onValueChange={(value) => precioForm.setValue("banos", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="1">1</SelectItem>
+                            <SelectItem value="2">2</SelectItem>
+                            <SelectItem value="3">3+</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {precioForm.formState.errors.banos && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.banos.message}</p>
+                        )}
+                      </div>
 
-                        <div className="space-y-2">
-                          <Label htmlFor="phone">Teléfono *</Label>
-                          <Input
-                            id="phone"
-                            type="tel"
-                            {...register("phone")}
-                            placeholder="600 000 000"
-                            className={cn(
-                              "min-h-[44px]",
-                              getFieldState("phone").hasError && "border-destructive",
-                              getFieldState("phone").isValid && "border-green-500"
-                            )}
-                          />
-                          {errors.phone && (
-                            <p className="text-sm text-destructive flex items-center gap-1">
-                              <AlertCircle className="h-3 w-3" />
-                              {errors.phone.message}
-                            </p>
-                          )}
-                        </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="estado">Estado *</Label>
+                        <Select onValueChange={(value) => precioForm.setValue("estado", value)}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Selecciona" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="excelente">Excelente</SelectItem>
+                            <SelectItem value="bueno">Bueno</SelectItem>
+                            <SelectItem value="regular">Regular</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        {precioForm.formState.errors.estado && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.estado.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="email-precio">Email (opcional)</Label>
+                        <Input
+                          id="email-precio"
+                          type="email"
+                          {...precioForm.register("email")}
+                          placeholder="Para enviarte el resultado"
+                        />
+                        {precioForm.formState.errors.email && (
+                          <p className="text-sm text-destructive">{precioForm.formState.errors.email.message}</p>
+                        )}
                       </div>
                     </div>
 
                     <Button 
                       type="submit" 
-                      className="w-full min-h-[44px] text-lg font-medium"
-                      disabled={isSubmitting}
+                      className="w-full" 
+                      disabled={precioForm.formState.isSubmitting}
                     >
-                      {isSubmitting ? "Calculando valoración..." : "Obtener Valoración Gratuita"}
+                      {precioForm.formState.isSubmitting ? "Calculando..." : "Calcular precio"}
                     </Button>
-                    
-                    <p className="text-sm text-muted-foreground text-center">
-                      * Campos obligatorios - La valoración es completamente gratuita y sin compromiso
-                    </p>
                   </form>
                 )}
               </CardContent>
             </Card>
-          </section>
-        </div>
+          </div>
+        </section>
+
+        {/* Sección #rentabilidad */}
+        <section id="rentabilidad" className="scroll-mt-24 mb-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Rentabilidad</h2>
+              <p className="text-lg text-muted-foreground font-['Lato']">
+                Analiza el cashflow mensual y yield anual de tu inversión
+              </p>
+            </div>
+
+            <Card>
+              <CardContent className="p-8">
+                {rentabilidadResult ? (
+                  <div className="text-center">
+                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                    <h3 className="text-2xl font-bold mb-6">¡Análisis completado!</h3>
+                    
+                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                      <div className="grid md:grid-cols-2 gap-8">
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground mb-2">Cashflow mensual</div>
+                          <div className="text-4xl font-bold text-primary">{rentabilidadResult.cashflow}€</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground mb-2">Rentabilidad anual</div>
+                          <div className="text-4xl font-bold text-primary">{rentabilidadResult.rentabilidad}%</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                      <Button asChild>
+                        <Link to="/propietarios#form">Quiero que gestionéis mi piso</Link>
+                      </Button>
+                      <Button variant="outline" asChild>
+                        <Link to="/propietarios#form?tipo=asesoria">Habla 15' con un asesor</Link>
+                      </Button>
+                    </div>
+
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setRentabilidadResult(null)}
+                      className="mt-4"
+                    >
+                      Calcular otra propiedad
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={rentabilidadForm.handleSubmit(onSubmitRentabilidad)} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="ingresosMensuales">Ingresos mensuales (€) *</Label>
+                        <Input
+                          id="ingresosMensuales"
+                          type="number"
+                          {...rentabilidadForm.register("ingresosMensuales")}
+                          placeholder="Ej: 1200"
+                        />
+                        {rentabilidadForm.formState.errors.ingresosMensuales && (
+                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.ingresosMensuales.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="gastosMensuales">Gastos mensuales (€) *</Label>
+                        <Input
+                          id="gastosMensuales"
+                          type="number"
+                          {...rentabilidadForm.register("gastosMensuales")}
+                          placeholder="Ej: 300"
+                        />
+                        {rentabilidadForm.formState.errors.gastosMensuales && (
+                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.gastosMensuales.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="comision">Comisión gestión (%) *</Label>
+                        <Input
+                          id="comision"
+                          type="number"
+                          {...rentabilidadForm.register("comision")}
+                          placeholder="Ej: 10"
+                        />
+                        {rentabilidadForm.formState.errors.comision && (
+                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.comision.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="diasVacios">Días vacíos anuales *</Label>
+                        <Input
+                          id="diasVacios"
+                          type="number"
+                          {...rentabilidadForm.register("diasVacios")}
+                          placeholder="Ej: 30"
+                        />
+                        {rentabilidadForm.formState.errors.diasVacios && (
+                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.diasVacios.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor="email-rentabilidad">Email (opcional)</Label>
+                        <Input
+                          id="email-rentabilidad"
+                          type="email"
+                          {...rentabilidadForm.register("email")}
+                          placeholder="Para enviarte el resultado"
+                        />
+                        {rentabilidadForm.formState.errors.email && (
+                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.email.message}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={rentabilidadForm.formState.isSubmitting}
+                    >
+                      {rentabilidadForm.formState.isSubmitting ? "Calculando..." : "Calcular rentabilidad"}
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Sección #comparador */}
+        <section id="comparador" className="scroll-mt-24 mb-20">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Comparador: Larga vs. Temporal</h2>
+              <p className="text-lg text-muted-foreground font-['Lato']">
+                Descubre qué modalidad de alquiler te conviene más
+              </p>
+            </div>
+
+            <Card>
+              <CardContent className="p-8">
+                {comparadorResult ? (
+                  <div className="text-center">
+                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                    <h3 className="text-2xl font-bold mb-6">¡Comparación completada!</h3>
+                    
+                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                      <div className="grid md:grid-cols-2 gap-8 mb-6">
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground mb-2">Alquiler largo plazo</div>
+                          <div className="text-3xl font-bold text-primary">{comparadorResult.largo}%</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-sm text-muted-foreground mb-2">Alquiler temporal</div>
+                          <div className="text-3xl font-bold text-primary">{comparadorResult.temporal}%</div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-accent/20 rounded-lg p-4">
+                        <div className="text-sm text-muted-foreground mb-1">Recomendación</div>
+                        <div className="text-lg font-semibold text-accent-foreground">
+                          {comparadorResult.recomendacion}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center">
+                      <Button asChild size="lg">
+                        <Link to="/propietarios#form?tipo=plan">Implementad el plan recomendado</Link>
+                      </Button>
+                    </div>
+
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => setComparadorResult(null)}
+                      className="mt-4"
+                    >
+                      Hacer otra comparación
+                    </Button>
+                  </div>
+                ) : (
+                  <form onSubmit={comparadorForm.handleSubmit(onSubmitComparador)} className="space-y-6">
+                    <div className="grid md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="precioCompra">Precio de compra (€) *</Label>
+                        <Input
+                          id="precioCompra"
+                          type="number"
+                          {...comparadorForm.register("precioCompra")}
+                          placeholder="Ej: 300000"
+                        />
+                        {comparadorForm.formState.errors.precioCompra && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.precioCompra.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="alquilerLargo">Alquiler largo plazo (€/mes) *</Label>
+                        <Input
+                          id="alquilerLargo"
+                          type="number"
+                          {...comparadorForm.register("alquilerLargo")}
+                          placeholder="Ej: 1200"
+                        />
+                        {comparadorForm.formState.errors.alquilerLargo && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerLargo.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="alquilerTemporal">Alquiler temporal (€/mes) *</Label>
+                        <Input
+                          id="alquilerTemporal"
+                          type="number"
+                          {...comparadorForm.register("alquilerTemporal")}
+                          placeholder="Ej: 1800"
+                        />
+                        {comparadorForm.formState.errors.alquilerTemporal && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerTemporal.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="ocupacionTemporal">Ocupación temporal (%) *</Label>
+                        <Input
+                          id="ocupacionTemporal"
+                          type="number"
+                          {...comparadorForm.register("ocupacionTemporal")}
+                          placeholder="Ej: 75"
+                        />
+                        {comparadorForm.formState.errors.ocupacionTemporal && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.ocupacionTemporal.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="gastosLargo">Gastos largo plazo (€/mes) *</Label>
+                        <Input
+                          id="gastosLargo"
+                          type="number"
+                          {...comparadorForm.register("gastosLargo")}
+                          placeholder="Ej: 200"
+                        />
+                        {comparadorForm.formState.errors.gastosLargo && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosLargo.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="gastosTemporal">Gastos temporal (€/mes) *</Label>
+                        <Input
+                          id="gastosTemporal"
+                          type="number"
+                          {...comparadorForm.register("gastosTemporal")}
+                          placeholder="Ej: 300"
+                        />
+                        {comparadorForm.formState.errors.gastosTemporal && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosTemporal.message}</p>
+                        )}
+                      </div>
+
+                      <div className="space-y-2 md:col-span-2">
+                        <Label htmlFor="email-comparador">Email (opcional)</Label>
+                        <Input
+                          id="email-comparador"
+                          type="email"
+                          {...comparadorForm.register("email")}
+                          placeholder="Para enviarte el resultado"
+                        />
+                        {comparadorForm.formState.errors.email && (
+                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.email.message}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      disabled={comparadorForm.formState.isSubmitting}
+                    >
+                      {comparadorForm.formState.isSubmitting ? "Comparando..." : "Comparar modalidades"}
+                    </Button>
+                  </form>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Enlaces internos */}
+        <section className="text-center mb-12">
+          <h3 className="text-2xl font-bold mb-6 font-['Montserrat']">¿Necesitas más información?</h3>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button variant="outline" asChild>
+              <Link to="/propietarios">Servicios para propietarios</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/faq">Preguntas frecuentes</Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link to="/legal">Información legal</Link>
+            </Button>
+          </div>
+        </section>
       </main>
+      
       <Footer />
     </div>
   );
