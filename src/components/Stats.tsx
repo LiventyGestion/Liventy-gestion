@@ -81,46 +81,24 @@ const Tooltip = ({
     </div>;
 };
 const Stats = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [showImpactPhrase, setShowImpactPhrase] = useState(false);
-  const sectionRef = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setShowImpactPhrase(true);
-        setTimeout(() => setIsVisible(true), 300);
-      }
-    }, {
-      threshold: 0.2,
-      rootMargin: '50px'
-    });
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    return () => observer.disconnect();
-  }, []);
-
-  // Optimized animated counters with faster duration
-  const occupancyRate = useAnimatedCounter(87, 1500, isVisible);
-  const satisfactionRate = useAnimatedCounter(98, 1600, isVisible);
-  const profitabilityRate = useAnimatedCounter(15, 1400, isVisible);
-  const propertiesCount = useAnimatedCounter(500, 1800, isVisible);
-  const clientsCount = useAnimatedCounter(1200, 1900, isVisible);
-  const revenueCount = useAnimatedCounter(25, 1700, isVisible);
+  // Static values without animations
+  const occupancyRate = 87;
+  const satisfactionRate = 98;
+  const profitabilityRate = 15;
+  const propertiesCount = 500;
+  const clientsCount = 1200;
+  const revenueCount = 25;
   return <div className="bg-background">
       {/* Main Stats Section */}
-      <section ref={sectionRef} className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img src={dataAnalytics} alt="" className="w-full h-full object-cover opacity-5" aria-hidden="true" loading="lazy" />
-          
         </div>
-        {/* Subtle background pattern */}
-        
         
         <div className="container mx-auto px-4 relative z-10">
           {/* Impact phrase */}
-          <div className={`text-center mb-16 transition-all duration-1000 ${showImpactPhrase ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+          <div className="text-center mb-16">
             <div className="inline-block px-6 py-2 bg-primary/10 rounded-full mb-6">
               <p className="text-sm font-medium text-primary">
                 ✨ Comprometidos con la rentabilidad y tranquilidad de nuestros clientes
@@ -129,35 +107,13 @@ const Stats = () => {
             <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-foreground">
               Resultados que Hablan por Sí Solos
             </h2>
-            
-          </div>
-
-          {/* 1-3-9 Structure */}
-          
-          {/* 1 KPI Estrella */}
-          <div className={`flex justify-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-          animationDelay: '300ms'
-        }}>
-            
-          </div>
-
-          {/* 3 KPIs Secundarios */}
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <Card className={`bg-white shadow-lg border-none hover:shadow-xl hover:scale-105 transition-all duration-300 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`} style={{
-            animationDelay: '600ms'
-          }}>
-              
-            </Card>
-
-            
-
-            
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Nuestros datos y la experiencia de nuestros clientes demuestran el impacto real de trabajar con Liventy
+            </p>
           </div>
 
           {/* Antes vs Después */}
-          <div className={`mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-          animationDelay: '1200ms'
-        }}>
+          <div className="mb-16">
             <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden">
@@ -266,9 +222,7 @@ const Stats = () => {
           </div>
 
           {/* 5 Métricas adicionales como bonus */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
-          animationDelay: '1400ms'
-        }}>
+          <div className="mb-8">
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-6xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">{propertiesCount}+</div>
