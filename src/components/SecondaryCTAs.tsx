@@ -31,13 +31,13 @@ const SecondaryCTAs = () => {
           {/* Owner Area CTA */}
           <div className="text-center p-6 rounded-lg bg-gradient-to-br from-secondary/5 to-accent/10 border border-secondary/20">
             <Users className="h-12 w-12 text-secondary mx-auto mb-4" />
-            <h3 className="font-semibold mb-2">Área de propietarios</h3>
+            <h3 className="font-semibold mb-2">Área de Clientes</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Accede a tu panel de gestión personalizado
+              Accede a tu área de gestión personalizada
             </p>
             <Button 
               variant="outline" 
-              onClick={() => navigate('/login')}
+              onClick={() => navigate('/auth')}
               className="h-11"
             >
               Acceder al área
