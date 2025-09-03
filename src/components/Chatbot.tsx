@@ -37,9 +37,14 @@ const Chatbot = () => {
   });
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(() => {
+    return sessionStorage.getItem('chatbot-conversation-id') || null;
+  });
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
-  const [userData, setUserData] = useState<UserData>({ name: "", phone: "", email: "", userType: "general" });
+  const [userData, setUserData] = useState<UserData>(() => {
+    const saved = sessionStorage.getItem('chatbot-user-data');
+    return saved ? JSON.parse(saved) : { name: "", phone: "", email: "", userType: "general" };
+  });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -71,6 +76,18 @@ const Chatbot = () => {
     }
   }, [isOpen]);
 
+  // Persist conversation ID when it changes
+  useEffect(() => {
+    if (conversationId) {
+      sessionStorage.setItem('chatbot-conversation-id', conversationId);
+    }
+  }, [conversationId]);
+
+  // Persist user data when it changes  
+  useEffect(() => {
+    sessionStorage.setItem('chatbot-user-data', JSON.stringify(userData));
+  }, [userData]);
+
   const addMessage = (text: string, isBot: boolean, intent?: string, redirection?: any) => {
     const newMessage: Message = {
       id: Date.now().toString(),
@@ -101,7 +118,11 @@ const Chatbot = () => {
           message: userMessage,
           sessionId,
           conversationId,
-          userContext: userData
+          userContext: {
+            ...userData,
+            sessionId,
+            timestamp: new Date().toISOString()
+          }
         }
       });
 
@@ -119,6 +140,15 @@ const Chatbot = () => {
       // Update conversation ID if this is the first message
       if (!conversationId && response.conversationId) {
         setConversationId(response.conversationId);
+        console.log('💾 Conversation ID set:', response.conversationId);
+      }
+
+      // Update user data from response context if available
+      if (response.leadInfo) {
+        setUserData(prev => ({
+          ...prev,
+          ...response.leadInfo
+        }));
       }
 
       // Add bot response with redirection if available
