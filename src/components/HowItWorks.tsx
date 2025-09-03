@@ -44,24 +44,26 @@ const HowItWorks = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto md:items-stretch">
           {steps.map((step, index) => (
-            <div key={index} className="relative">
-              <Card className="text-center hover:shadow-lg transition-shadow">
-                <CardContent className="p-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full text-primary-foreground text-2xl font-bold mb-6">
-                    {step.number}
+            <div key={index} className="relative flex">
+              <Card className="text-center hover:shadow-lg transition-shadow w-full h-full flex flex-col">
+                <CardContent className="p-8 flex-1 flex flex-col justify-between">
+                  <div className="flex flex-col items-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full text-primary-foreground text-2xl font-bold mb-6">
+                      {step.number}
+                    </div>
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg mb-6">
+                      <step.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
                   </div>
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg mb-6">
-                    <step.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="text-xl font-semibold mb-4">{step.title}</h3>
                   <p className="text-muted-foreground">{step.description}</p>
                 </CardContent>
               </Card>
               
               {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-primary/20 transform -translate-y-1/2"></div>
+                <div className="hidden md:block absolute top-1/2 -right-4 w-8 h-0.5 bg-primary/20 transform -translate-y-1/2 z-10"></div>
               )}
             </div>
           ))}
