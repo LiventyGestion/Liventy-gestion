@@ -123,10 +123,19 @@ const Chatbot = () => {
       addBotMessage(response.message, response.intent, response.redirection);
     } catch (error) {
       console.error('Error in AI call:', error);
-      addBotMessage(
-        "En este momento no dispongo de esa información. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto.",
-        'fallback'
-      );
+      
+      // More conversational error handling
+      if (error.message?.includes('fetch')) {
+        addBotMessage(
+          "Disculpa, parece que hay un pequeño problema de conexión. ¿Podrías repetir tu consulta? Mientras tanto, ¿hay algo específico sobre gestión de alquileres que quieras saber?",
+          'network_error'
+        );
+      } else {
+        addBotMessage(
+          "Te pido disculpas por la demora. Para darte la mejor respuesta posible, te voy a conectar con uno de nuestros especialistas. ¿Hay algo más en lo que pueda ayudarte mientras tanto?",
+          'fallback'
+        );
+      }
     } finally {
       setIsLoading(false);
     }

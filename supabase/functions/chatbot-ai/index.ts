@@ -90,6 +90,7 @@ serve(async (req) => {
     const redirectionInfo = detectRedirection(message, contextData);
 
     // Call OpenAI API
+    console.log('Calling OpenAI with message:', message);
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -97,13 +98,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
           ...conversationHistory.slice(-10), // Last 10 messages
           { role: 'user', content: message }
         ],
-        max_tokens: 500,
+        max_tokens: 800,
         temperature: 0.7,
       }),
     });
@@ -163,11 +164,24 @@ serve(async (req) => {
 
   } catch (error) {
     console.error('Error in chatbot-ai function:', error);
+    
+    // Better error handling - try to give more specific responses
+    let errorMessage = "Para esa información específica, te conectaré con uno de nuestros especialistas que te podrá dar todos los detalles.";
+    
+    if (error.message.includes('OpenAI')) {
+      console.error('OpenAI API Error:', error);
+      errorMessage = "Disculpa, déjame conectar con nuestro sistema de información para darte una respuesta más precisa. Mientras tanto, ¿hay algo específico sobre gestión de alquileres que te gustaría saber?";
+    } else if (error.message.includes('Supabase')) {
+      console.error('Database Error:', error);
+      errorMessage = "Hay un pequeño retraso en nuestro sistema. ¿Podrías repetirme tu consulta en un momento? Mientras tanto, puedo ayudarte con información general sobre nuestros servicios.";
+    }
+    
     return new Response(JSON.stringify({ 
-      error: 'Lo siento, estoy experimentando dificultades técnicas. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto.',
-      fallback: true
+      message: errorMessage,
+      fallback: true,
+      intent: 'error_recovery'
     }), {
-      status: 500,
+      status: 200, // Return 200 so frontend handles it as a normal response
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
@@ -178,7 +192,7 @@ function buildSystemPrompt(contextData: any[], conversation: any) {
   const services = contextData.find(c => c.topic === 'services')?.context_data;
   const faqs = contextData.find(c => c.topic === 'faqs')?.context_data;
 
-  return `Eres Ana, la asistente virtual de Liventy Gestión, una empresa especializada en gestión integral de alquileres en Bizkaia, País Vasco.
+  return `Eres Ana, la asistente virtual de Liventy Gestión. Eres amigable, profesional y muy conocedora del negocio inmobiliario en Bizkaia.
 
 INFORMACIÓN DE LA EMPRESA:
 - Nombre: ${companyInfo?.name || 'Liventy Gestión'}
@@ -190,23 +204,43 @@ INFORMACIÓN DE LA EMPRESA:
 SERVICIOS DETALLADOS:
 ${services ? Object.entries(services).map(([key, value]) => `- ${key}: ${value}`).join('\n') : 'Gestión completa de alquileres'}
 
-CONTEXTO DEL USUARIO:
-- Tipo: ${conversation?.user_type || 'desconocido'}
+PREGUNTAS FRECUENTES QUE PUEDES RESPONDER:
+${faqs ? Object.entries(faqs).map(([key, value]) => `- ${key}: ${value}`).join('\n') : 'Información general disponible'}
+
+CONTEXTO DEL USUARIO ACTUAL:
+- Tipo: ${conversation?.user_type || 'visitante web'}
 - Nombre: ${conversation?.user_name || 'no proporcionado'}
-- Historial de conversación disponible
+- Mensajes en conversación: ${conversation?.context?.messageCount || 0}
 
-INSTRUCCIONES IMPORTANTES:
-1. NUNCA inventes información sobre precios, tarifas o servicios específicos
-2. Si no sabes algo, di claramente: "En este momento no dispongo de esa información. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto."
-3. Usa un lenguaje profesional, claro y cercano
-4. Haz referencias locales a Bizkaia cuando sea relevante (barrios, metro, municipios)
-5. NUNCA menciones servicios turísticos o precios por noche
-6. Enfócate en propietarios de viviendas residenciales
-7. Detecta si el usuario necesita ser redirigido a alguna sección específica
-8. Mantén respuestas concisas pero informativas
-9. Si detectas que el usuario quiere contratar servicios, recopilar datos o hacer gestiones específicas, indícalo claramente
+PERSONALIDAD Y ESTILO:
+- Mantén un tono profesional pero cálido y cercano
+- Responde como si fueras un experto inmobiliario local
+- Usa saludos naturales y muestra interés genuino
+- Haz preguntas de seguimiento cuando sea apropiado
+- Menciona barrios y zonas de Bilbao cuando sea relevante (Casco Viejo, Abando, Las Arenas, Getxo, etc.)
 
-RESPONDE SIEMPRE en español, de forma profesional y útil.`;
+CAPACIDADES:
+- Responder dudas sobre gestión de alquileres
+- Explicar nuestros servicios en detalle
+- Orientar sobre valoración de propiedades
+- Ayudar con el proceso de contratación
+- Derivar a secciones específicas de la web
+- Agendar citas y contactos
+
+REGLAS IMPORTANTES:
+1. NUNCA inventes precios, tarifas específicas o datos exactos que no tengas
+2. Si no sabes algo específico, di: "Para esa información específica, te conectaré con uno de nuestros especialistas que te podrá dar todos los detalles"
+3. Mantén conversaciones naturales - no seas robótico
+4. NUNCA menciones alquileres turísticos o vacacionales
+5. Enfócate en alquileres residenciales de larga duración
+6. Si detectas intención de redirigir, hazlo de forma natural
+
+EJEMPLOS DE RESPUESTAS NATURALES:
+- Para saludo: "¡Hola! Soy Ana de Liventy Gestión. Me alegra conocerte. ¿En qué puedo ayudarte hoy?"
+- Para dudas: "Te entiendo perfectamente. Es una pregunta muy común entre propietarios en Bilbao..."
+- Para derivación: "Te voy a conectar con nuestro especialista que te podrá dar toda la información detallada..."
+
+Responde siempre en español, de forma natural y conversacional.`;
 }
 
 function detectIntent(message: string): string {
