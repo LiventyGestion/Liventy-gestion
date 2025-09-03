@@ -53,7 +53,7 @@ type ComparadorForm = z.infer<typeof comparadorSchema>;
 const Herramientas = () => {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
-  const { scrollToSection, saveCurrentPosition } = useScrollRestoration();
+  const { scrollToCalculator } = useScrollRestoration();
   
   // Estado único para controlar qué calculadora está abierta
   const [openCalc, setOpenCalc] = useState<"precio" | "rentabilidad" | "comparador" | null>(null);
@@ -67,10 +67,11 @@ const Herramientas = () => {
     // Si estamos abriendo una calculadora, hacer scroll a su sección
     if (isOpening) {
       setTimeout(() => {
-        const sectionId = `#${calcType}-calculator`;
-        scrollToSection(sectionId);
+        const calculatorId = `#calc-${calcType}`;
+        scrollToCalculator(calculatorId);
       }, 100);
     }
+    // Si estamos cerrando, no hacer scroll (mantener posición actual)
   };
 
   // Efecto para abrir calculadora automáticamente basado en query params
@@ -81,11 +82,11 @@ const Herramientas = () => {
       
       // Scroll to the calculator section after it opens
       setTimeout(() => {
-        const sectionId = `#${calcParam}-calculator`;
-        scrollToSection(sectionId);
+        const calculatorId = `#calc-${calcParam}`;
+        scrollToCalculator(calculatorId);
       }, 200);
     }
-  }, [searchParams, scrollToSection]);
+  }, [searchParams, scrollToCalculator]);
   
   // Estados para cada calculadora
   const [precioResult, setPrecioResult] = useState<{ min: number; max: number; recomendado: number } | null>(null);
@@ -311,9 +312,10 @@ const Herramientas = () => {
                   Rango óptimo de publicación
                 </p>
                 <Button 
-                  onClick={() => toggleCalculator("precio")} 
-                  className="w-full transition-all duration-200"
-                  aria-expanded={openCalc === "precio"}
+                    onClick={() => toggleCalculator("precio")} 
+                    className="w-full transition-all duration-200"
+                    aria-expanded={openCalc === "precio"}
+                    tabIndex={0}
                 >
                   Calcular ahora
                 </Button>
@@ -328,9 +330,10 @@ const Herramientas = () => {
                   Cashflow y yield anual
                 </p>
                 <Button 
-                  onClick={() => toggleCalculator("rentabilidad")} 
-                  className="w-full transition-all duration-200"
-                  aria-expanded={openCalc === "rentabilidad"}
+                    onClick={() => toggleCalculator("rentabilidad")} 
+                    className="w-full transition-all duration-200"
+                    aria-expanded={openCalc === "rentabilidad"}
+                    tabIndex={0}
                 >
                   Calcular ahora
                 </Button>
@@ -345,9 +348,10 @@ const Herramientas = () => {
                   Qué te conviene más
                 </p>
                 <Button 
-                  onClick={() => toggleCalculator("comparador")} 
-                  className="w-full transition-all duration-200"
-                  aria-expanded={openCalc === "comparador"}
+                    onClick={() => toggleCalculator("comparador")} 
+                    className="w-full transition-all duration-200"
+                    aria-expanded={openCalc === "comparador"}
+                    tabIndex={0}
                 >
                   Comparar ahora
                 </Button>
@@ -359,7 +363,7 @@ const Herramientas = () => {
         {/* Sección #precio */}
         {openCalc === "precio" && (
           <div className="animate-fade-in transition-all duration-300 ease-out">
-          <section id="precio-calculator" className="scroll-mt-24 mb-20">
+          <section id="calc-precio" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Precio</h2>
@@ -518,7 +522,7 @@ const Herramientas = () => {
         {/* Sección #rentabilidad */}
         {openCalc === "rentabilidad" && (
           <div className="animate-fade-in transition-all duration-300 ease-out">
-          <section id="rentabilidad-calculator" className="scroll-mt-24 mb-20">
+          <section id="calc-rentabilidad" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Rentabilidad</h2>
@@ -648,7 +652,7 @@ const Herramientas = () => {
         {/* Sección #comparador */}
         {openCalc === "comparador" && (
           <div className="animate-fade-in transition-all duration-300 ease-out">
-          <section id="comparador-calculator" className="scroll-mt-24 mb-20">
+          <section id="calc-comparador" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
                 <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Comparador: Larga vs. Temporal</h2>
