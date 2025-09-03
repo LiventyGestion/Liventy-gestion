@@ -138,7 +138,7 @@ const Chatbot = () => {
     const messageLower = message.toLowerCase();
     
     if (messageLower.includes('hola') || messageLower.includes('hello') || messageLower === '') {
-      return "¡Hola! Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
+      return "Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
     }
     
     if (messageLower.includes('propietario') || messageLower.includes('tengo un piso') || messageLower.includes('alquilar mi')) {
@@ -154,7 +154,7 @@ const Chatbot = () => {
     }
     
     if (messageLower.includes('contacto') || messageLower.includes('teléfono') || messageLower.includes('email')) {
-      return "Perfecto, te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
+      return "Te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
     }
     
     return "Entiendo tu consulta. En Liventy Gestión somos especialistas en gestión de alquileres en Bizkaia. Para darte la mejor respuesta personalizada, uno de nuestros especialistas se pondrá en contacto contigo pronto. ¿Hay algo más en lo que pueda ayudarte?";

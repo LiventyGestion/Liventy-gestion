@@ -72,12 +72,13 @@ SERVICIOS:
 - Cobros garantizados
 
 INSTRUCCIONES:
-- Saluda de forma natural y amigable
-- Responde consultas sobre gestión de alquileres
+- NO repitas saludos si ya estás en una conversación
+- Responde consultas sobre gestión de alquileres de forma directa
 - Haz referencias a Bilbao, Getxo, Las Arenas cuando sea apropiado
 - Si no sabes algo específico, di que te conectarás con un especialista
 - NUNCA menciones alquileres turísticos
 - Mantén un tono conversacional y profesional
+- Da respuestas concisas y útiles
 
 Responde siempre en español.` 
           },
@@ -184,7 +185,7 @@ function getBasicResponse(message: string): string {
   const messageLower = message.toLowerCase();
   
   if (messageLower.includes('hola') || messageLower.includes('hello') || messageLower === '') {
-    return "¡Hola! Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
+    return "Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
   }
   
   if (messageLower.includes('propietario') || messageLower.includes('tengo un piso') || messageLower.includes('alquilar mi')) {
@@ -196,7 +197,7 @@ function getBasicResponse(message: string): string {
   }
   
   if (messageLower.includes('contacto') || messageLower.includes('teléfono') || messageLower.includes('email')) {
-    return "Perfecto, te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
+    return "Te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
   }
   
   return "Entiendo tu consulta. En Liventy Gestión somos especialistas en gestión de alquileres en Bizkaia. Para darte la mejor respuesta, ¿podrías contarme un poco más sobre lo que necesitas?";
