@@ -94,6 +94,8 @@ const Chatbot = () => {
   const callAI = async (userMessage: string) => {
     setIsLoading(true);
     try {
+      console.log('🤖 Calling chatbot AI...');
+      
       const { data, error } = await supabase.functions.invoke('chatbot-ai', {
         body: {
           message: userMessage,
@@ -103,12 +105,12 @@ const Chatbot = () => {
         }
       });
 
+      console.log('📡 AI Response:', data, error);
+
       if (error) {
-        console.error('Error calling AI:', error);
-        addBotMessage(
-          "Lo siento, estoy experimentando dificultades técnicas. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto.",
-          'error'
-        );
+        console.error('❌ Supabase function error:', error);
+        // Use basic fallback
+        addBotMessage(getLocalFallback(userMessage), 'basic_fallback');
         return;
       }
 
@@ -121,24 +123,41 @@ const Chatbot = () => {
 
       // Add bot response with redirection if available
       addBotMessage(response.message, response.intent, response.redirection);
+
     } catch (error) {
-      console.error('Error in AI call:', error);
+      console.error('❌ Error in AI call:', error);
       
-      // More conversational error handling
-      if (error.message?.includes('fetch')) {
-        addBotMessage(
-          "Disculpa, parece que hay un pequeño problema de conexión. ¿Podrías repetir tu consulta? Mientras tanto, ¿hay algo específico sobre gestión de alquileres que quieras saber?",
-          'network_error'
-        );
-      } else {
-        addBotMessage(
-          "Te pido disculpas por la demora. Para darte la mejor respuesta posible, te voy a conectar con uno de nuestros especialistas. ¿Hay algo más en lo que pueda ayudarte mientras tanto?",
-          'fallback'
-        );
-      }
+      // Always provide a helpful fallback response
+      addBotMessage(getLocalFallback(userMessage), 'fallback');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getLocalFallback = (message: string): string => {
+    const messageLower = message.toLowerCase();
+    
+    if (messageLower.includes('hola') || messageLower.includes('hello') || messageLower === '') {
+      return "¡Hola! Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
+    }
+    
+    if (messageLower.includes('propietario') || messageLower.includes('tengo un piso') || messageLower.includes('alquilar mi')) {
+      return "Perfecto, eres propietario. En Liventy Gestión nos encargamos de todo: desde encontrar inquilinos de calidad hasta gestionar cobros y mantenimiento. Para más detalles, uno de nuestros especialistas te contactará pronto.";
+    }
+    
+    if (messageLower.includes('precio') || messageLower.includes('valorar') || messageLower.includes('cuánto vale')) {
+      return "Te ayudo con la valoración. Tenemos herramientas para calcular el valor de tu propiedad en el mercado actual de Bilbao. ¿Te gustaría que te ayude a conectarte con nuestro equipo de valoración?";
+    }
+    
+    if (messageLower.includes('servicio') || messageLower.includes('qué hacen') || messageLower.includes('cómo funciona')) {
+      return "En Liventy Gestión ofrecemos gestión integral de alquileres: encontramos inquilinos de calidad, gestionamos contratos, cobramos las rentas y nos encargamos del mantenimiento. Todo sin que tengas que preocuparte de nada.";
+    }
+    
+    if (messageLower.includes('contacto') || messageLower.includes('teléfono') || messageLower.includes('email')) {
+      return "Perfecto, te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
+    }
+    
+    return "Entiendo tu consulta. En Liventy Gestión somos especialistas en gestión de alquileres en Bizkaia. Para darte la mejor respuesta personalizada, uno de nuestros especialistas se pondrá en contacto contigo pronto. ¿Hay algo más en lo que pueda ayudarte?";
   };
 
   const handleRedirect = (url: string) => {
