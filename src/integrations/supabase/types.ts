@@ -20,29 +20,58 @@ export type Database = {
           email: string | null
           id: string
           inputs: Json
+          lead_id: string | null
           outputs: Json
-          tool_type: string
+          source_tag: string | null
+          tool: string | null
           user_id: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
         }
         Insert: {
           created_at?: string
           email?: string | null
           id?: string
           inputs: Json
+          lead_id?: string | null
           outputs: Json
-          tool_type: string
+          source_tag?: string | null
+          tool?: string | null
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
         Update: {
           created_at?: string
           email?: string | null
           id?: string
           inputs?: Json
+          lead_id?: string | null
           outputs?: Json
-          tool_type?: string
+          source_tag?: string | null
+          tool?: string | null
           user_id?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "calculadora_resultados_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       Contratos: {
         Row: {
@@ -177,6 +206,7 @@ export type Database = {
           id: string
           name: string | null
           phone: string | null
+          sale_timing: string | null
           service_interest: string | null
           source_tag: string | null
           updated_at: string
@@ -192,6 +222,7 @@ export type Database = {
           id?: string
           name?: string | null
           phone?: string | null
+          sale_timing?: string | null
           service_interest?: string | null
           source_tag?: string | null
           updated_at?: string
@@ -207,6 +238,7 @@ export type Database = {
           id?: string
           name?: string | null
           phone?: string | null
+          sale_timing?: string | null
           service_interest?: string | null
           source_tag?: string | null
           updated_at?: string
