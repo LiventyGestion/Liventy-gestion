@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { useScrollRestoration } from "@/hooks/useScrollRestoration";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Blog from "./pages/Blog";
@@ -23,6 +24,11 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const ScrollManager = () => {
+  useScrollRestoration();
+  return null;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
@@ -30,6 +36,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <ScrollManager />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />

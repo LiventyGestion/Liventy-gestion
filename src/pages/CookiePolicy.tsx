@@ -1,7 +1,10 @@
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Cookie, Mail, Settings, BarChart3, CheckCircle, XCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Card, CardContent } from "@/components/ui/card";
-import { Cookie, Settings, BarChart3, CheckCircle, XCircle, Mail } from "lucide-react";
 
 const CookiePolicy = () => {
   return (
@@ -135,13 +138,13 @@ const CookiePolicy = () => {
                   Para más información, consulta nuestra Política de Privacidad o escríbenos.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <a 
-                    href="/politica-privacidad"
+                  <Link 
+                    to="/politica-privacidad"
                     className="inline-flex items-center justify-center space-x-2 bg-secondary text-secondary-foreground px-6 py-3 rounded-lg hover:bg-secondary/80 transition-colors"
                   >
                     <Cookie className="h-4 w-4" />
                     <span>Política de Privacidad</span>
-                  </a>
+                  </Link>
                   <a 
                     href="mailto:liventygestion@gmail.com"
                     className="inline-flex items-center justify-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
