@@ -11,19 +11,19 @@ const SecondaryCTAs = () => {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
           
-          {/* Simulator CTA */}
+          {/* Tools CTA */}
           <div className="text-center p-6 rounded-lg bg-gradient-to-br from-primary/5 to-accent/10 border border-primary/20">
             <Calculator className="h-12 w-12 text-primary mx-auto mb-4" />
-            <h3 className="font-semibold mb-2">Simula tu rentabilidad</h3>
+            <h3 className="font-semibold mb-2">Herramientas gratuitas</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              Calcula el potencial de ingresos de tu propiedad
+              Precio, rentabilidad y comparador en 2 minutos
             </p>
             <Button 
               variant="outline" 
-              onClick={() => navigate('/simulador')}
+              onClick={() => navigate('/herramientas')}
               className="h-11"
             >
-              Simula tu alquiler
+              Usar herramientas
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>

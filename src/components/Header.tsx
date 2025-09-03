@@ -23,6 +23,9 @@ const Header = () => {
             <Link to="/" className="text-foreground hover:text-primary transition-colors">
               Inicio
             </Link>
+            <Link to="/herramientas" className="text-foreground hover:text-primary transition-colors">
+              Herramientas
+            </Link>
             <Link to="/about" className="text-foreground hover:text-primary transition-colors">
               Sobre Nosotros
             </Link>
@@ -62,6 +65,13 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Inicio
+              </Link>
+              <Link 
+                to="/herramientas" 
+                className="text-foreground hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-ring"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Herramientas
               </Link>
               <Link 
                 to="/about" 
