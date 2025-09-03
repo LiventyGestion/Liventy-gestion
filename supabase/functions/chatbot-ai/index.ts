@@ -317,7 +317,7 @@ SERVICIOS:
 - Selección rigurosa de inquilinos 
 - Mantenimiento y reparaciones
 - Gestión legal y contratos
-- Cobros garantizados
+- Gestión de cobros y administración
 
 ${contextInfo}
 
