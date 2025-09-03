@@ -8,34 +8,33 @@ import dataAnalytics from "@/assets/data-analytics.jpg";
 // Optimized custom hook for animated counter
 const useAnimatedCounter = (end: number, duration: number = 1500, isVisible: boolean = false) => {
   const [count, setCount] = useState(0);
-  
   useEffect(() => {
     if (!isVisible) return;
-    
     let start = 0;
     const startTime = Date.now();
-    
     const timer = setInterval(() => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
       const easeOutCubic = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(start + (end - start) * easeOutCubic));
-      
       if (progress >= 1) {
         clearInterval(timer);
         setCount(end); // Ensure final value is exact
       }
     }, 16);
-    
     return () => clearInterval(timer);
   }, [end, duration, isVisible]);
-  
   return count;
 };
 
 // Circular progress component with enhanced visuals
-const CircularProgress = ({ percentage, size = 140, strokeWidth = 10, isVisible = false, color = "text-primary" }: {
+const CircularProgress = ({
+  percentage,
+  size = 140,
+  strokeWidth = 10,
+  isVisible = false,
+  color = "text-primary"
+}: {
   percentage: number;
   size?: number;
   strokeWidth?: number;
@@ -43,94 +42,61 @@ const CircularProgress = ({ percentage, size = 140, strokeWidth = 10, isVisible 
   color?: string;
 }) => {
   const [animatedPercentage, setAnimatedPercentage] = useState(0);
-  
   useEffect(() => {
     if (!isVisible) return;
-    
     const timer = setTimeout(() => {
       setAnimatedPercentage(percentage);
     }, 200);
-    
     return () => clearTimeout(timer);
   }, [percentage, isVisible]);
-  
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
-  const strokeDashoffset = circumference - (animatedPercentage / 100) * circumference;
-  
-  return (
-    <div className="relative inline-flex items-center justify-center">
+  const strokeDashoffset = circumference - animatedPercentage / 100 * circumference;
+  return <div className="relative inline-flex items-center justify-center">
       <svg width={size} height={size} className="transform -rotate-90">
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          fill="none"
-          className="opacity-10"
-        />
-        <circle
-          cx={size / 2}
-          cy={size / 2}
-          r={radius}
-          stroke="currentColor"
-          strokeWidth={strokeWidth}
-          fill="none"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          className={`transition-all duration-1500 ease-out ${color}`}
-        />
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} fill="none" className="opacity-10" />
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} fill="none" strokeDasharray={circumference} strokeDashoffset={strokeDashoffset} strokeLinecap="round" className={`transition-all duration-1500 ease-out ${color}`} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-3xl font-bold text-foreground">{animatedPercentage}%</span>
       </div>
-    </div>
-  );
+    </div>;
 };
 
 // Tooltip component
-const Tooltip = ({ content, children }: { content: string; children: React.ReactNode }) => {
+const Tooltip = ({
+  content,
+  children
+}: {
+  content: string;
+  children: React.ReactNode;
+}) => {
   const [isVisible, setIsVisible] = useState(false);
-  
-  return (
-    <div 
-      className="relative inline-block"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
+  return <div className="relative inline-block" onMouseEnter={() => setIsVisible(true)} onMouseLeave={() => setIsVisible(false)}>
       {children}
-      {isVisible && (
-        <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-10">
+      {isVisible && <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg shadow-lg whitespace-nowrap z-10">
           {content}
           <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900"></div>
-        </div>
-      )}
-    </div>
-  );
+        </div>}
+    </div>;
 };
-
 const Stats = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [showImpactPhrase, setShowImpactPhrase] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShowImpactPhrase(true);
-          setTimeout(() => setIsVisible(true), 300);
-        }
-      },
-      { threshold: 0.2, rootMargin: '50px' }
-    );
-
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        setShowImpactPhrase(true);
+        setTimeout(() => setIsVisible(true), 300);
+      }
+    }, {
+      threshold: 0.2,
+      rootMargin: '50px'
+    });
     if (sectionRef.current) {
       observer.observe(sectionRef.current);
     }
-
     return () => observer.disconnect();
   }, []);
 
@@ -141,29 +107,16 @@ const Stats = () => {
   const propertiesCount = useAnimatedCounter(500, 1800, isVisible);
   const clientsCount = useAnimatedCounter(1200, 1900, isVisible);
   const revenueCount = useAnimatedCounter(25, 1700, isVisible);
-
-  return (
-    <div className="bg-background">
+  return <div className="bg-background">
       {/* Main Stats Section */}
       <section ref={sectionRef} className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src={dataAnalytics} 
-            alt="" 
-            className="w-full h-full object-cover opacity-5"
-            aria-hidden="true"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-50/90 via-white/80 to-orange-50/90"></div>
+          <img src={dataAnalytics} alt="" className="w-full h-full object-cover opacity-5" aria-hidden="true" loading="lazy" />
+          
         </div>
         {/* Subtle background pattern */}
-        <div className="absolute inset-0 opacity-5 z-0">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 20% 80%, hsl(var(--primary)) 1px, transparent 1px)`,
-            backgroundSize: '40px 40px'
-          }} />
-        </div>
+        
         
         <div className="container mx-auto px-4 relative z-10">
           {/* Impact phrase */}
@@ -176,84 +129,35 @@ const Stats = () => {
             <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-foreground">
               Resultados que Hablan por Sí Solos
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Nuestros números reflejan el compromiso con la excelencia y la satisfacción de nuestros clientes
-            </p>
+            
           </div>
 
           {/* 1-3-9 Structure */}
           
           {/* 1 KPI Estrella */}
-          <div className={`flex justify-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '300ms' }}>
-            <Card className="bg-white shadow-xl border-none p-12 text-center max-w-md hover:scale-105 transition-all duration-300">
-              <CardContent className="p-0">
-                <Tooltip content="Porcentaje de tiempo que nuestras propiedades están ocupadas vs. la media del mercado (70%)">
-                  <div className="text-primary mb-6">
-                    <CircularProgress 
-                      percentage={occupancyRate} 
-                      size={160} 
-                      strokeWidth={12}
-                      isVisible={isVisible} 
-                      color="text-primary"
-                    />
-                  </div>
-                </Tooltip>
-                <h3 className="text-2xl font-bold text-foreground mb-2">Ocupación Media</h3>
-                <p className="text-muted-foreground">Tu piso, siempre alquilado</p>
-              </CardContent>
-            </Card>
+          <div className={`flex justify-center mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+          animationDelay: '300ms'
+        }}>
+            
           </div>
 
           {/* 3 KPIs Secundarios */}
           <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <Card className={`bg-white shadow-lg border-none hover:shadow-xl hover:scale-105 transition-all duration-300 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '600ms' }}>
-              <CardContent className="p-8 text-center">
-                <Tooltip content="Propietarios que renuevan contrato año tras año - la media del sector es del 70%">
-                  <div className="text-green-600 mb-4">
-                    <CircularProgress 
-                      percentage={satisfactionRate} 
-                      size={120} 
-                      isVisible={isVisible} 
-                      color="text-green-600"
-                    />
-                  </div>
-                </Tooltip>
-                <h3 className="text-xl font-bold text-foreground mb-1">Retención de Clientes</h3>
-                <p className="text-muted-foreground text-sm">Cuando prueban, repiten</p>
-              </CardContent>
+            <Card className={`bg-white shadow-lg border-none hover:shadow-xl hover:scale-105 transition-all duration-300 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`} style={{
+            animationDelay: '600ms'
+          }}>
+              
             </Card>
 
-            <Card className={`bg-white shadow-lg border-none hover:shadow-xl hover:scale-105 transition-all duration-300 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '800ms' }}>
-              <CardContent className="p-8 text-center">
-                <Tooltip content="Incremento medio de rentabilidad vs. gestión propia - calculado sobre ingresos netos anuales">
-                  <div className="text-orange-600 mb-4">
-                    <CircularProgress 
-                      percentage={profitabilityRate} 
-                      size={120} 
-                      isVisible={isVisible} 
-                      color="text-orange-600"
-                    />
-                  </div>
-                </Tooltip>
-                <h3 className="text-xl font-bold text-foreground mb-1">+15% de Rentabilidad</h3>
-                <p className="text-muted-foreground text-sm">Optimizamos tus ingresos</p>
-              </CardContent>
-            </Card>
+            
 
-            <Card className={`bg-white shadow-lg border-none hover:shadow-xl hover:scale-105 transition-all duration-300 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`} style={{ animationDelay: '1000ms' }}>
-              <CardContent className="p-8 text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-full mb-4">
-                  <Clock className="h-10 w-10 text-blue-600" />
-                </div>
-                <h3 className="text-3xl font-bold text-foreground mb-2">24/7</h3>
-                <h4 className="text-xl font-bold text-foreground mb-1">Soporte Real</h4>
-                <p className="text-muted-foreground text-sm">Siempre disponibles, sin excusas</p>
-              </CardContent>
-            </Card>
+            
           </div>
 
           {/* Antes vs Después */}
-          <div className={`mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '1200ms' }}>
+          <div className={`mb-16 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+          animationDelay: '1200ms'
+        }}>
             <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               <Card className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden">
@@ -362,7 +266,9 @@ const Stats = () => {
           </div>
 
           {/* 5 Métricas adicionales como bonus */}
-          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{ animationDelay: '1400ms' }}>
+          <div className={`transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`} style={{
+          animationDelay: '1400ms'
+        }}>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-6xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">{propertiesCount}+</div>
@@ -393,8 +299,6 @@ const Stats = () => {
         </div>
       </section>
 
-    </div>
-  );
+    </div>;
 };
-
 export default Stats;
