@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      calculadora_resultados: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          inputs: Json
+          outputs: Json
+          tool_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          inputs: Json
+          outputs: Json
+          tool_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          inputs?: Json
+          outputs?: Json
+          tool_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       Contratos: {
         Row: {
           estado: string | null
@@ -139,6 +169,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          name: string | null
+          phone: string | null
+          service_interest: string | null
+          source_tag: string | null
+          updated_at: string
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          service_interest?: string | null
+          source_tag?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string | null
+          phone?: string | null
+          service_interest?: string | null
+          source_tag?: string | null
+          updated_at?: string
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
       }
       Pagos: {
         Row: {
