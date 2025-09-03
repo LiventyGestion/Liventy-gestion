@@ -128,11 +128,29 @@ const Login = () => {
               )}
               
               <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  ¿No tienes cuenta? Contacta con nosotros para obtener acceso.
-                </p>
+                {activeTab === "propietario" ? (
+                  <p className="text-sm text-muted-foreground">
+                    ¿No tienes cuenta?{" "}
+                    <button
+                      onClick={() => navigate('/contact')}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Empieza ahora a rentabilizar tu piso
+                    </button>
+                  </p>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    ¿No tienes cuenta?{" "}
+                    <button
+                      onClick={() => navigate('/contact')}
+                      className="text-primary hover:underline font-medium"
+                    >
+                      Tu alquiler ideal te está esperando
+                    </button>
+                  </p>
+                )}
                 <p className="text-xs text-muted-foreground mt-2">
-                  Demo: propietario@ejemplo.com / inquilino@ejemplo.com (contraseña: 123456)
+                  Demo: propietario@ejemplo.com / inquilino@ejemplo.com (contraseña: Prueba1*)
                 </p>
               </div>
             </CardContent>
