@@ -132,7 +132,7 @@ const Login = () => {
                   <p className="text-sm text-muted-foreground">
                     ¿No tienes cuenta?{" "}
                     <button
-                      onClick={() => navigate('/contact')}
+                      onClick={() => navigate('/empezar-ahora')}
                       className="text-primary hover:underline font-medium"
                     >
                       Empieza ahora a rentabilizar tu piso
