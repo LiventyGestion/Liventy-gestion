@@ -87,7 +87,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '#contacto')}
+              onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
               role="button"
               aria-label="Empezar ahora – ir al formulario de contacto"
             >
