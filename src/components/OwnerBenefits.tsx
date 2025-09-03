@@ -1,4 +1,4 @@
-import { CheckCircle, TrendingUp, Wrench, UserCheck, Monitor } from "lucide-react";
+import { CheckCircle, TrendingUp, Wrench, UserCheck, Monitor, Eye } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import happyHomeowner from "@/assets/happy-homeowner.jpg";
 
@@ -28,6 +28,11 @@ const OwnerBenefits = () => {
       icon: Monitor,
       title: "Seguimiento online 24/7",
       description: "Plataforma digital para controlar todo en tiempo real"
+    },
+    {
+      icon: Eye,
+      title: "Transparencia total",
+      description: "Informes detallados y comunicación clara en cada paso del proceso"
     }
   ];
 
@@ -51,19 +56,19 @@ const OwnerBenefits = () => {
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-6xl mx-auto lg:items-stretch">
           {benefits.map((benefit, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow">
-              <CardContent className="p-4 sm:p-6">
-                <div className="flex items-start space-x-4">
+            <Card key={index} className="hover:shadow-lg transition-shadow h-full flex flex-col">
+              <CardContent className="p-4 sm:p-6 flex-1 flex flex-col">
+                <div className="flex items-start space-x-4 flex-1">
                   <div className="flex-shrink-0">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-lg">
                       <benefit.icon className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
                   </div>
-                  <div className="min-w-0 flex-1">
+                  <div className="min-w-0 flex-1 flex flex-col">
                     <h3 className="font-semibold text-base sm:text-lg mb-2 leading-tight">{benefit.title}</h3>
-                    <p className="text-muted-foreground text-sm leading-relaxed">{benefit.description}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed flex-1">{benefit.description}</p>
                   </div>
                 </div>
               </CardContent>
