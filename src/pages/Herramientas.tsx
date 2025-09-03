@@ -52,10 +52,13 @@ type ComparadorForm = z.infer<typeof comparadorSchema>;
 const Herramientas = () => {
   const { toast } = useToast();
   
-  // Estados para mostrar/ocultar calculadoras
-  const [showPrecio, setShowPrecio] = useState(false);
-  const [showRentabilidad, setShowRentabilidad] = useState(false);
-  const [showComparador, setShowComparador] = useState(false);
+  // Estado único para controlar qué calculadora está abierta
+  const [openCalc, setOpenCalc] = useState<"precio" | "rentabilidad" | "comparador" | null>(null);
+  
+  // Función para alternar calculadoras
+  const toggleCalculator = (calcType: "precio" | "rentabilidad" | "comparador") => {
+    setOpenCalc(prev => prev === calcType ? null : calcType);
+  };
   
   // Estados para cada calculadora
   const [precioResult, setPrecioResult] = useState<{ min: number; max: number; recomendado: number } | null>(null);
@@ -280,7 +283,11 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Rango óptimo de publicación
                 </p>
-                <Button onClick={() => setShowPrecio(true)} className="w-full">
+                <Button 
+                  onClick={() => toggleCalculator("precio")} 
+                  className="w-full transition-all duration-200"
+                  aria-expanded={openCalc === "precio"}
+                >
                   Calcular ahora
                 </Button>
               </CardContent>
@@ -293,7 +300,11 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Cashflow y yield anual
                 </p>
-                <Button onClick={() => setShowRentabilidad(true)} className="w-full">
+                <Button 
+                  onClick={() => toggleCalculator("rentabilidad")} 
+                  className="w-full transition-all duration-200"
+                  aria-expanded={openCalc === "rentabilidad"}
+                >
                   Calcular ahora
                 </Button>
               </CardContent>
@@ -306,7 +317,11 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Qué te conviene más
                 </p>
-                <Button onClick={() => setShowComparador(true)} className="w-full">
+                <Button 
+                  onClick={() => toggleCalculator("comparador")} 
+                  className="w-full transition-all duration-200"
+                  aria-expanded={openCalc === "comparador"}
+                >
                   Comparar ahora
                 </Button>
               </CardContent>
@@ -315,7 +330,8 @@ const Herramientas = () => {
         </section>
 
         {/* Sección #precio */}
-        {showPrecio && (
+        {openCalc === "precio" && (
+          <div className="animate-fade-in transition-all duration-300 ease-out">
           <section id="precio" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -469,10 +485,12 @@ const Herramientas = () => {
               </Card>
             </div>
           </section>
+          </div>
         )}
 
         {/* Sección #rentabilidad */}
-        {showRentabilidad && (
+        {openCalc === "rentabilidad" && (
+          <div className="animate-fade-in transition-all duration-300 ease-out">
           <section id="rentabilidad" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -597,10 +615,12 @@ const Herramientas = () => {
               </Card>
             </div>
           </section>
+          </div>
         )}
 
         {/* Sección #comparador */}
-        {showComparador && (
+        {openCalc === "comparador" && (
+          <div className="animate-fade-in transition-all duration-300 ease-out">
           <section id="comparador" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
@@ -756,6 +776,7 @@ const Herramientas = () => {
               </Card>
             </div>
           </section>
+          </div>
         )}
 
         {/* Enlaces internos */}
