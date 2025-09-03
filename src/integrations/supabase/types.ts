@@ -73,6 +73,116 @@ export type Database = {
           },
         ]
       }
+      chatbot_context: {
+        Row: {
+          context_data: Json
+          created_at: string
+          effectiveness_score: number | null
+          frequency_used: number | null
+          id: string
+          topic: string
+          updated_at: string
+        }
+        Insert: {
+          context_data: Json
+          created_at?: string
+          effectiveness_score?: number | null
+          frequency_used?: number | null
+          id?: string
+          topic: string
+          updated_at?: string
+        }
+        Update: {
+          context_data?: Json
+          created_at?: string
+          effectiveness_score?: number | null
+          frequency_used?: number | null
+          id?: string
+          topic?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chatbot_conversations: {
+        Row: {
+          context: Json | null
+          created_at: string
+          id: string
+          session_id: string
+          updated_at: string
+          user_email: string | null
+          user_id: string | null
+          user_name: string | null
+          user_phone: string | null
+          user_type: string | null
+        }
+        Insert: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          session_id: string
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+          user_type?: string | null
+        }
+        Update: {
+          context?: Json | null
+          created_at?: string
+          id?: string
+          session_id?: string
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string | null
+          user_name?: string | null
+          user_phone?: string | null
+          user_type?: string | null
+        }
+        Relationships: []
+      }
+      chatbot_messages: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          id: string
+          intent: string | null
+          is_bot: boolean
+          message: string
+          metadata: Json | null
+          sentiment: string | null
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          id?: string
+          intent?: string | null
+          is_bot?: boolean
+          message: string
+          metadata?: Json | null
+          sentiment?: string | null
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          intent?: string | null
+          is_bot?: boolean
+          message?: string
+          metadata?: Json | null
+          sentiment?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chatbot_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chatbot_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Contratos: {
         Row: {
           estado: string | null

@@ -1,20 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageCircle, X, Send, Calendar } from "lucide-react";
+import { MessageCircle, X, Send, Calendar, ExternalLink } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: string;
   text: string;
   isBot: boolean;
   timestamp: Date;
+  intent?: string;
+  redirection?: {
+    url: string;
+    explanation: string;
+    action: string;
+  };
 }
 
 interface UserData {
   name: string;
   phone: string;
-  userType: 'propietario' | 'inquilino' | '';
+  email: string;
+  userType: 'propietario' | 'inquilino' | 'general';
 }
 
 const Chatbot = () => {
@@ -27,35 +36,13 @@ const Chatbot = () => {
     return saved ? JSON.parse(saved) : [];
   });
   const [inputText, setInputText] = useState("");
-  const [isCollectingData, setIsCollectingData] = useState(false);
-  const [userData, setUserData] = useState<UserData>({ name: "", phone: "", userType: "" });
-  const [dataStep, setDataStep] = useState(0); // 0: name, 1: phone, 2: userType
-  const [isCalendarMode, setIsCalendarMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [userData, setUserData] = useState<UserData>({ name: "", phone: "", email: "", userType: "general" });
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-
-  const faqs = [
-    {
-      keywords: ['pago', 'cobro', 'dinero', 'rentabilidad'],
-      answer: 'Nosotros nos encargamos de todos los cobros y te garantizamos el pago puntual. Además, optimizamos la rentabilidad de tu propiedad con precios de mercado actualizados.'
-    },
-    {
-      keywords: ['inquilino', 'selección', 'filtro', 'elegir'],
-      answer: 'Realizamos una selección rigurosa de inquilinos verificando ingresos, referencias laborales, historial crediticio y garantías. Solo te presentamos candidatos pre-aprobados.'
-    },
-    {
-      keywords: ['mantenimiento', 'reparación', 'incidencia', 'problema'],
-      answer: 'Gestionamos todas las incidencias y mantenimiento de la propiedad. Tenemos una red de profesionales de confianza y resolvemos los problemas de forma rápida y eficiente.'
-    },
-    {
-      keywords: ['contrato', 'legal', 'documentación'],
-      answer: 'Nos encargamos de toda la gestión legal: contratos, inventarios, fianzas, documentación oficial. Todo digitalizado y con total transparencia.'
-    },
-    {
-      keywords: ['precio', 'coste', 'tarifa', 'comisión'],
-      answer: 'Nuestras tarifas son transparentes y competitivas. Te ofrecemos diferentes planes según tus necesidades. ¿Te gustaría que te enviemos información detallada?'
-    }
-  ];
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -80,16 +67,18 @@ const Chatbot = () => {
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      addBotMessage("👋 Hola, soy Ana, tu asistente personal de Liventy Gestión. ¿En qué puedo ayudarte?");
+      addBotMessage("👋 Hola, soy Ana, tu asistente inteligente de Liventy Gestión. Puedo ayudarte con consultas sobre gestión de alquileres, valoraciones de propiedades y mucho más. ¿En qué puedo ayudarte?");
     }
   }, [isOpen]);
 
-  const addMessage = (text: string, isBot: boolean) => {
+  const addMessage = (text: string, isBot: boolean, intent?: string, redirection?: any) => {
     const newMessage: Message = {
       id: Date.now().toString(),
       text,
       isBot,
-      timestamp: new Date()
+      timestamp: new Date(),
+      intent,
+      redirection
     };
     setMessages(prev => {
       const updated = [...prev, newMessage];
@@ -98,167 +87,73 @@ const Chatbot = () => {
     });
   };
 
-  const addBotMessage = (text: string) => {
-    setTimeout(() => addMessage(text, true), 500);
+  const addBotMessage = (text: string, intent?: string, redirection?: any) => {
+    setTimeout(() => addMessage(text, true, intent, redirection), 500);
   };
 
-  const findFAQAnswer = (userMessage: string): string | null => {
-    const messageLower = userMessage.toLowerCase();
-    for (const faq of faqs) {
-      if (faq.keywords.some(keyword => messageLower.includes(keyword))) {
-        return faq.answer;
+  const callAI = async (userMessage: string) => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('chatbot-ai', {
+        body: {
+          message: userMessage,
+          sessionId,
+          conversationId,
+          userContext: userData
+        }
+      });
+
+      if (error) {
+        console.error('Error calling AI:', error);
+        addBotMessage(
+          "Lo siento, estoy experimentando dificultades técnicas. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto.",
+          'error'
+        );
+        return;
       }
-    }
-    return null;
-  };
 
-  const detectUserIntent = (message: string): 'propietario' | 'inquilino' | 'general' => {
-    const messageLower = message.toLowerCase();
-    if (messageLower.includes('tengo un piso') || messageLower.includes('alquilar mi') || messageLower.includes('propietario') || messageLower.includes('mi propiedad')) {
-      return 'propietario';
-    }
-    if (messageLower.includes('busco piso') || messageLower.includes('alquiler') && messageLower.includes('busco') || messageLower.includes('inquilino')) {
-      return 'inquilino';
-    }
-    return 'general';
-  };
-
-  const handleDataCollection = (message: string) => {
-    if (dataStep === 0) {
-      setUserData(prev => ({ ...prev, name: message }));
-      setDataStep(1);
-      addBotMessage(`Perfecto, ${message}. Ahora necesito tu número de teléfono para poder contactarte.`);
-    } else if (dataStep === 1) {
-      setUserData(prev => ({ ...prev, phone: message }));
-      setDataStep(2);
-      addBotMessage("¿Eres propietario de una vivienda que quieres alquilar o estás buscando un piso en alquiler? Escribe 'propietario' o 'inquilino'.");
-    } else if (dataStep === 2) {
-      const userType = message.toLowerCase().includes('propietario') ? 'propietario' : 'inquilino';
-      setUserData(prev => ({ ...prev, userType }));
-      setIsCollectingData(false);
-      setDataStep(0);
+      const response = data;
       
-      if (userType === 'propietario') {
-        addBotMessage(`Gracias ${userData.name}. Como propietario, podemos ayudarte a gestionar tu alquiler sin complicaciones. ¿Te gustaría agendar una reunión para valorar tu propiedad o prefieres que te contactemos primero?`);
-      } else {
-        addBotMessage(`Gracias ${userData.name}. Aunque nos especializamos en gestión para propietarios, podemos ayudarte a encontrar propiedades gestionadas por nosotros. Te recomendamos contactar directamente con nuestro equipo.`);
+      // Update conversation ID if this is the first message
+      if (!conversationId && response.conversationId) {
+        setConversationId(response.conversationId);
       }
-      
-      setTimeout(() => {
-        addBotMessage("¿Cómo prefieres que te contactemos?\n\n1️⃣ WhatsApp\n2️⃣ Llamada telefónica\n3️⃣ Correo electrónico\n\nEscribe el número de tu opción preferida.");
-      }, 1000);
+
+      // Add bot response with redirection if available
+      addBotMessage(response.message, response.intent, response.redirection);
+    } catch (error) {
+      console.error('Error in AI call:', error);
+      addBotMessage(
+        "En este momento no dispongo de esa información. Un agente especializado de Liventy Gestión se pondrá en contacto contigo pronto.",
+        'fallback'
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSendMessage = () => {
-    if (!inputText.trim()) return;
+  const handleRedirect = (url: string) => {
+    if (url.startsWith('/')) {
+      navigate(url);
+      setIsOpen(false);
+      toast({
+        title: "Redirigiendo...",
+        description: "Te llevamos a la sección solicitada"
+      });
+    } else {
+      window.open(url, '_blank');
+    }
+  };
 
-    addMessage(inputText, false);
+  const handleSendMessage = async () => {
+    if (!inputText.trim() || isLoading) return;
+
     const userMessage = inputText.trim();
+    addMessage(userMessage, false);
     setInputText("");
 
-    // Si estamos recolectando datos
-    if (isCollectingData) {
-      handleDataCollection(userMessage);
-      return;
-    }
-
-    // Manejar opciones de contacto
-    if (userMessage === "1" || userMessage.toLowerCase().includes("whatsapp")) {
-      addBotMessage("Perfecto, te contactaremos por WhatsApp al número que nos proporcionaste. Nuestro equipo se pondrá en contacto contigo en las próximas horas.");
-      toast({ title: "Contacto programado", description: "Te contactaremos por WhatsApp pronto." });
-      return;
-    }
-    
-    if (userMessage === "2" || userMessage.toLowerCase().includes("llamada") || userMessage.toLowerCase().includes("teléfono")) {
-      addBotMessage("Genial, te llamaremos al número que nos diste. Recibirás nuestra llamada en horario comercial.");
-      toast({ title: "Llamada programada", description: "Te llamaremos pronto." });
-      return;
-    }
-    
-    if (userMessage === "3" || userMessage.toLowerCase().includes("correo") || userMessage.toLowerCase().includes("email")) {
-      addBotMessage("Te enviaremos toda la información por correo electrónico. Revisa tu bandeja de entrada en las próximas horas.");
-      toast({ title: "Email programado", description: "Recibirás un email con la información." });
-      return;
-    }
-
-    // Detectar intención de contratación o ser cliente
-    if (userMessage.toLowerCase().includes('empezar') || userMessage.toLowerCase().includes('contratar') || 
-        userMessage.toLowerCase().includes('interesa') || userMessage.toLowerCase().includes('quiero') ||
-        userMessage.toLowerCase().includes('cliente') || userMessage.toLowerCase().includes('servicio')) {
-      addBotMessage("¡Genial! Puedes empezar ahora rellenando un formulario rápido en este enlace: /contact");
-      setTimeout(() => {
-        addBotMessage("O si prefieres, puedo ayudarte aquí mismo. ¿Cuál es tu nombre?");
-        setIsCollectingData(true);
-        setDataStep(0);
-      }, 1000);
-      return;
-    }
-
-    // Detectar solicitud de cita o reunión
-    if (userMessage.toLowerCase().includes('cita') || userMessage.toLowerCase().includes('reunión') ||
-        userMessage.toLowerCase().includes('agendar') || userMessage.toLowerCase().includes('agenda')) {
-      setIsCalendarMode(true);
-      addBotMessage("Perfecto, puedo ayudarte a agendar una reunión. Aquí tienes 3 horarios disponibles esta semana:");
-      setTimeout(() => {
-        const today = new Date();
-        const option1 = new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000);
-        const option2 = new Date(today.getTime() + 3 * 24 * 60 * 60 * 1000);
-        const option3 = new Date(today.getTime() + 5 * 24 * 60 * 60 * 1000);
-        
-        addBotMessage(`📅 Opciones disponibles:\n\n1️⃣ ${option1.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 10:00\n2️⃣ ${option2.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 16:00\n3️⃣ ${option3.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })} a las 11:30\n\nEscribe el número de tu opción preferida o dime otra fecha/hora que te convenga.`);
-      }, 1000);
-      return;
-    }
-
-    // Manejar selección de cita si estamos en modo calendario
-    if (isCalendarMode) {
-      if (userMessage === "1" || userMessage === "2" || userMessage === "3") {
-        addBotMessage(`¡Perfecto! He reservado esa cita para ti. Te enviaremos una confirmación por email con todos los detalles y el enlace de la reunión.`);
-        toast({ title: "Cita agendada", description: "Recibirás una confirmación por email." });
-        setIsCalendarMode(false);
-        return;
-      } else {
-        addBotMessage(`Entiendo que prefieres otra fecha/hora. He anotado tu preferencia: "${userMessage}". Nuestro equipo revisará la disponibilidad y te contactará para confirmar esta cita alternativa.`);
-        toast({ title: "Solicitud de cita", description: "Te contactaremos para confirmar la fecha." });
-        setIsCalendarMode(false);
-        return;
-      }
-    }
-
-    // Detectar tipo de usuario y orientar
-    const intent = detectUserIntent(userMessage);
-    if (intent === 'propietario') {
-      addBotMessage("Veo que eres propietario. ¡Perfecto! Nos especializamos en gestión integral de alquileres para propietarios. Nos encargamos de todo: desde encontrar inquilinos de calidad hasta gestionar cobros y mantenimiento.");
-      setTimeout(() => {
-        addBotMessage("¿Te gustaría conocer más detalles o prefieres que empecemos con una valoración de tu propiedad?");
-      }, 1500);
-      return;
-    }
-    
-    if (intent === 'inquilino') {
-      addBotMessage("Entiendo que buscas un piso en alquiler. Aunque nuestro servicio principal es para propietarios, gestionamos propiedades de calidad que podrían interesarte.");
-      setTimeout(() => {
-        addBotMessage("Te recomiendo contactar directamente con nuestro equipo para conocer las propiedades disponibles.");
-      }, 1500);
-      return;
-    }
-
-    // Buscar respuesta en FAQs
-    const faqAnswer = findFAQAnswer(userMessage);
-    if (faqAnswer) {
-      addBotMessage(faqAnswer);
-      setTimeout(() => {
-        addBotMessage("¿Te resuelve esta información? ¿Hay algo más específico que te gustaría saber?");
-      }, 1500);
-      return;
-    }
-
-    // Respuesta genérica y derivación
-    addBotMessage("Esa es una excelente pregunta. Para darte una respuesta más precisa y personalizada, creo que sería mejor que hables directamente con uno de nuestros especialistas.");
-    setTimeout(() => {
-      addBotMessage("¿Cómo prefieres que te contactemos?\n\n1️⃣ WhatsApp\n2️⃣ Llamada telefónica\n3️⃣ Correo electrónico\n\nO si prefieres, puedes darme tus datos y te contactamos nosotros.");
-    }, 1500);
+    // Call AI for response
+    await callAI(userMessage);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -321,10 +216,31 @@ const Chatbot = () => {
                       : 'bg-primary text-primary-foreground'
                   }`}
                 >
-                  {message.text}
+                  <div className="whitespace-pre-wrap">{message.text}</div>
+                  {message.redirection && (
+                    <Button
+                      onClick={() => handleRedirect(message.redirection!.url)}
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 text-xs"
+                    >
+                      <ExternalLink className="w-3 h-3 mr-1" />
+                      Ir ahora
+                    </Button>
+                  )}
                 </div>
               </div>
             ))}
+            {isLoading && (
+              <div className="flex justify-start">
+                <div className="bg-muted p-3 rounded-lg text-sm flex items-center gap-2">
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse delay-100"></div>
+                  <div className="w-2 h-2 bg-primary rounded-full animate-pulse delay-200"></div>
+                  <span className="text-muted-foreground ml-2">Ana está escribiendo...</span>
+                </div>
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
