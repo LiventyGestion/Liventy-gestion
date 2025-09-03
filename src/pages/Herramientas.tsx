@@ -52,6 +52,11 @@ type ComparadorForm = z.infer<typeof comparadorSchema>;
 const Herramientas = () => {
   const { toast } = useToast();
   
+  // Estados para mostrar/ocultar calculadoras
+  const [showPrecio, setShowPrecio] = useState(false);
+  const [showRentabilidad, setShowRentabilidad] = useState(false);
+  const [showComparador, setShowComparador] = useState(false);
+  
   // Estados para cada calculadora
   const [precioResult, setPrecioResult] = useState<{ min: number; max: number; recomendado: number } | null>(null);
   const [rentabilidadResult, setRentabilidadResult] = useState<{ cashflow: number; rentabilidad: number } | null>(null);
@@ -275,8 +280,8 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Rango óptimo de publicación
                 </p>
-                <Button asChild className="w-full">
-                  <a href="#precio">Calcular ahora</a>
+                <Button onClick={() => setShowPrecio(true)} className="w-full">
+                  Calcular ahora
                 </Button>
               </CardContent>
             </Card>
@@ -288,8 +293,8 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Cashflow y yield anual
                 </p>
-                <Button asChild className="w-full">
-                  <a href="#rentabilidad">Calcular ahora</a>
+                <Button onClick={() => setShowRentabilidad(true)} className="w-full">
+                  Calcular ahora
                 </Button>
               </CardContent>
             </Card>
@@ -301,8 +306,8 @@ const Herramientas = () => {
                 <p className="text-muted-foreground mb-6 font-['Lato']">
                   Qué te conviene más
                 </p>
-                <Button asChild className="w-full">
-                  <a href="#comparador">Comparar ahora</a>
+                <Button onClick={() => setShowComparador(true)} className="w-full">
+                  Comparar ahora
                 </Button>
               </CardContent>
             </Card>
@@ -310,453 +315,448 @@ const Herramientas = () => {
         </section>
 
         {/* Sección #precio */}
-        <section id="precio" className="scroll-mt-24 mb-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Precio</h2>
-              <p className="text-lg text-muted-foreground font-['Lato']">
-                Obtén el rango óptimo de precio para publicar tu propiedad
-              </p>
+        {showPrecio && (
+          <section id="precio" className="scroll-mt-24 mb-20">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Precio</h2>
+                <p className="text-lg text-muted-foreground font-['Lato']">
+                  Obtén el rango óptimo de precio para publicar tu propiedad
+                </p>
+              </div>
+
+              <Card>
+                <CardContent className="p-8">
+                  {precioResult ? (
+                    <div className="text-center">
+                      <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                      <h3 className="text-2xl font-bold mb-6">¡Resultado calculado!</h3>
+                      
+                      <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                        <div className="grid md:grid-cols-3 gap-6 text-center">
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Mínimo</div>
+                            <div className="text-2xl font-bold text-primary">{precioResult.min}€</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Recomendado</div>
+                            <div className="text-3xl font-bold text-primary">{precioResult.recomendado}€</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Máximo</div>
+                            <div className="text-2xl font-bold text-primary">{precioResult.max}€</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Button asChild>
+                          <Link to="/propietarios#form">Publicad mi piso</Link>
+                        </Button>
+                        <Button variant="outline" asChild>
+                          <Link to="/propietarios#form?tipo=valoracion">Quiero una valoración completa</Link>
+                        </Button>
+                      </div>
+
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => setPrecioResult(null)}
+                        className="mt-4"
+                      >
+                        Calcular otra propiedad
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={precioForm.handleSubmit(onSubmitPrecio)} className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="barrio">Barrio *</Label>
+                          <Input
+                            id="barrio"
+                            {...precioForm.register("barrio")}
+                            placeholder="Ej: Malasaña, Gràcia..."
+                          />
+                          {precioForm.formState.errors.barrio && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.barrio.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="metros">Metros cuadrados *</Label>
+                          <Input
+                            id="metros"
+                            type="number"
+                            {...precioForm.register("metros")}
+                            placeholder="Ej: 75"
+                          />
+                          {precioForm.formState.errors.metros && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.metros.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="habitaciones">Habitaciones *</Label>
+                          <Select onValueChange={(value) => precioForm.setValue("habitaciones", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1</SelectItem>
+                              <SelectItem value="2">2</SelectItem>
+                              <SelectItem value="3">3</SelectItem>
+                              <SelectItem value="4">4+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {precioForm.formState.errors.habitaciones && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.habitaciones.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="banos">Baños *</Label>
+                          <Select onValueChange={(value) => precioForm.setValue("banos", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="1">1</SelectItem>
+                              <SelectItem value="2">2</SelectItem>
+                              <SelectItem value="3">3+</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {precioForm.formState.errors.banos && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.banos.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="estado">Estado *</Label>
+                          <Select onValueChange={(value) => precioForm.setValue("estado", value)}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="necesita_reforma">Necesita reforma</SelectItem>
+                              <SelectItem value="bueno">Buen estado</SelectItem>
+                              <SelectItem value="excelente">Excelente estado</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          {precioForm.formState.errors.estado && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.estado.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="email">Email (opcional)</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            {...precioForm.register("email")}
+                            placeholder="Para recibir el resultado"
+                          />
+                          {precioForm.formState.errors.email && (
+                            <p className="text-sm text-destructive">{precioForm.formState.errors.email.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <Button type="submit" className="w-full">
+                        Calcular precio recomendado
+                      </Button>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-
-            <Card>
-              <CardContent className="p-8">
-                {precioResult ? (
-                  <div className="text-center">
-                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold mb-6">¡Resultado calculado!</h3>
-                    
-                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
-                      <div className="grid md:grid-cols-3 gap-6 text-center">
-                        <div>
-                          <div className="text-sm text-muted-foreground mb-1">Mínimo</div>
-                          <div className="text-2xl font-bold text-primary">{precioResult.min}€</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-muted-foreground mb-1">Recomendado</div>
-                          <div className="text-3xl font-bold text-primary">{precioResult.recomendado}€</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-muted-foreground mb-1">Máximo</div>
-                          <div className="text-2xl font-bold text-primary">{precioResult.max}€</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button asChild>
-                        <Link to="/propietarios#form">Publicad mi piso</Link>
-                      </Button>
-                      <Button variant="outline" asChild>
-                        <Link to="/propietarios#form?tipo=valoracion">Quiero una valoración completa</Link>
-                      </Button>
-                    </div>
-
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => setPrecioResult(null)}
-                      className="mt-4"
-                    >
-                      Calcular otra propiedad
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={precioForm.handleSubmit(onSubmitPrecio)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="barrio">Barrio *</Label>
-                        <Input
-                          id="barrio"
-                          {...precioForm.register("barrio")}
-                          placeholder="Ej: Malasaña, Gràcia..."
-                        />
-                        {precioForm.formState.errors.barrio && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.barrio.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="metros">Metros cuadrados *</Label>
-                        <Input
-                          id="metros"
-                          type="number"
-                          {...precioForm.register("metros")}
-                          placeholder="Ej: 75"
-                        />
-                        {precioForm.formState.errors.metros && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.metros.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="habitaciones">Habitaciones *</Label>
-                        <Select onValueChange={(value) => precioForm.setValue("habitaciones", value)}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="2">2</SelectItem>
-                            <SelectItem value="3">3</SelectItem>
-                            <SelectItem value="4">4+</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {precioForm.formState.errors.habitaciones && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.habitaciones.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="banos">Baños *</Label>
-                        <Select onValueChange={(value) => precioForm.setValue("banos", value)}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="1">1</SelectItem>
-                            <SelectItem value="2">2</SelectItem>
-                            <SelectItem value="3">3+</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {precioForm.formState.errors.banos && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.banos.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="estado">Estado *</Label>
-                        <Select onValueChange={(value) => precioForm.setValue("estado", value)}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecciona" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="excelente">Excelente</SelectItem>
-                            <SelectItem value="bueno">Bueno</SelectItem>
-                            <SelectItem value="regular">Regular</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        {precioForm.formState.errors.estado && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.estado.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="email-precio">Email (opcional)</Label>
-                        <Input
-                          id="email-precio"
-                          type="email"
-                          {...precioForm.register("email")}
-                          placeholder="Para enviarte el resultado"
-                        />
-                        {precioForm.formState.errors.email && (
-                          <p className="text-sm text-destructive">{precioForm.formState.errors.email.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={precioForm.formState.isSubmitting}
-                    >
-                      {precioForm.formState.isSubmitting ? "Calculando..." : "Calcular precio"}
-                    </Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Sección #rentabilidad */}
-        <section id="rentabilidad" className="scroll-mt-24 mb-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Rentabilidad</h2>
-              <p className="text-lg text-muted-foreground font-['Lato']">
-                Analiza el cashflow mensual y yield anual de tu inversión
-              </p>
+        {showRentabilidad && (
+          <section id="rentabilidad" className="scroll-mt-24 mb-20">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Rentabilidad</h2>
+                <p className="text-lg text-muted-foreground font-['Lato']">
+                  Analiza el cashflow mensual y yield anual de tu inversión
+                </p>
+              </div>
+
+              <Card>
+                <CardContent className="p-8">
+                  {rentabilidadResult ? (
+                    <div className="text-center">
+                      <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                      <h3 className="text-2xl font-bold mb-6">¡Análisis completado!</h3>
+                      
+                      <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                        <div className="grid md:grid-cols-2 gap-8 text-center">
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Cashflow mensual</div>
+                            <div className="text-3xl font-bold text-primary">{rentabilidadResult.cashflow}€</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Rentabilidad anual</div>
+                            <div className="text-3xl font-bold text-primary">{rentabilidadResult.rentabilidad}%</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Button asChild>
+                          <Link to="/propietarios#form">Quiero que lo gestionen</Link>
+                        </Button>
+                        <Button variant="outline" asChild>
+                          <Link to="/propietarios#form?tipo=asesoria">Necesito asesoría</Link>
+                        </Button>
+                      </div>
+
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => setRentabilidadResult(null)}
+                        className="mt-4"
+                      >
+                        Calcular otra propiedad
+                      </Button>
+                    </div>
+                  ) : (
+                    <form onSubmit={rentabilidadForm.handleSubmit(onSubmitRentabilidad)} className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                          <Label htmlFor="ingresosMensuales">Ingresos mensuales (€) *</Label>
+                          <Input
+                            id="ingresosMensuales"
+                            type="number"
+                            {...rentabilidadForm.register("ingresosMensuales")}
+                            placeholder="Ej: 1200"
+                          />
+                          {rentabilidadForm.formState.errors.ingresosMensuales && (
+                            <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.ingresosMensuales.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="gastosMensuales">Gastos mensuales (€) *</Label>
+                          <Input
+                            id="gastosMensuales"
+                            type="number"
+                            {...rentabilidadForm.register("gastosMensuales")}
+                            placeholder="Ej: 300"
+                          />
+                          {rentabilidadForm.formState.errors.gastosMensuales && (
+                            <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.gastosMensuales.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="comision">Comisión gestora (%) *</Label>
+                          <Input
+                            id="comision"
+                            type="number"
+                            {...rentabilidadForm.register("comision")}
+                            placeholder="Ej: 12"
+                          />
+                          {rentabilidadForm.formState.errors.comision && (
+                            <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.comision.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="diasVacios">Días vacíos anuales *</Label>
+                          <Input
+                            id="diasVacios"
+                            type="number"
+                            {...rentabilidadForm.register("diasVacios")}
+                            placeholder="Ej: 30"
+                          />
+                          {rentabilidadForm.formState.errors.diasVacios && (
+                            <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.diasVacios.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor="email">Email (opcional)</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            {...rentabilidadForm.register("email")}
+                            placeholder="Para recibir el análisis detallado"
+                          />
+                          {rentabilidadForm.formState.errors.email && (
+                            <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.email.message}</p>
+                          )}
+                        </div>
+                      </div>
+
+                      <Button type="submit" className="w-full">
+                        Analizar rentabilidad
+                      </Button>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-
-            <Card>
-              <CardContent className="p-8">
-                {rentabilidadResult ? (
-                  <div className="text-center">
-                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold mb-6">¡Análisis completado!</h3>
-                    
-                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
-                      <div className="grid md:grid-cols-2 gap-8">
-                        <div className="text-center">
-                          <div className="text-sm text-muted-foreground mb-2">Cashflow mensual</div>
-                          <div className="text-4xl font-bold text-primary">{rentabilidadResult.cashflow}€</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm text-muted-foreground mb-2">Rentabilidad anual</div>
-                          <div className="text-4xl font-bold text-primary">{rentabilidadResult.rentabilidad}%</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                      <Button asChild>
-                        <Link to="/propietarios#form">Quiero que gestionéis mi piso</Link>
-                      </Button>
-                      <Button variant="outline" asChild>
-                        <Link to="/propietarios#form?tipo=asesoria">Habla 15' con un asesor</Link>
-                      </Button>
-                    </div>
-
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => setRentabilidadResult(null)}
-                      className="mt-4"
-                    >
-                      Calcular otra propiedad
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={rentabilidadForm.handleSubmit(onSubmitRentabilidad)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="ingresosMensuales">Ingresos mensuales (€) *</Label>
-                        <Input
-                          id="ingresosMensuales"
-                          type="number"
-                          {...rentabilidadForm.register("ingresosMensuales")}
-                          placeholder="Ej: 1200"
-                        />
-                        {rentabilidadForm.formState.errors.ingresosMensuales && (
-                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.ingresosMensuales.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="gastosMensuales">Gastos mensuales (€) *</Label>
-                        <Input
-                          id="gastosMensuales"
-                          type="number"
-                          {...rentabilidadForm.register("gastosMensuales")}
-                          placeholder="Ej: 300"
-                        />
-                        {rentabilidadForm.formState.errors.gastosMensuales && (
-                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.gastosMensuales.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="comision">Comisión gestión (%) *</Label>
-                        <Input
-                          id="comision"
-                          type="number"
-                          {...rentabilidadForm.register("comision")}
-                          placeholder="Ej: 10"
-                        />
-                        {rentabilidadForm.formState.errors.comision && (
-                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.comision.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="diasVacios">Días vacíos anuales *</Label>
-                        <Input
-                          id="diasVacios"
-                          type="number"
-                          {...rentabilidadForm.register("diasVacios")}
-                          placeholder="Ej: 30"
-                        />
-                        {rentabilidadForm.formState.errors.diasVacios && (
-                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.diasVacios.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="email-rentabilidad">Email (opcional)</Label>
-                        <Input
-                          id="email-rentabilidad"
-                          type="email"
-                          {...rentabilidadForm.register("email")}
-                          placeholder="Para enviarte el resultado"
-                        />
-                        {rentabilidadForm.formState.errors.email && (
-                          <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.email.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={rentabilidadForm.formState.isSubmitting}
-                    >
-                      {rentabilidadForm.formState.isSubmitting ? "Calculando..." : "Calcular rentabilidad"}
-                    </Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Sección #comparador */}
-        <section id="comparador" className="scroll-mt-24 mb-20">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Comparador: Larga vs. Temporal</h2>
-              <p className="text-lg text-muted-foreground font-['Lato']">
-                Descubre qué modalidad de alquiler te conviene más
-              </p>
-            </div>
+        {showComparador && (
+          <section id="comparador" className="scroll-mt-24 mb-20">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Comparador: Larga vs. Temporal</h2>
+                <p className="text-lg text-muted-foreground font-['Lato']">
+                  Descubre qué modalidad de alquiler te conviene más
+                </p>
+              </div>
 
-            <Card>
-              <CardContent className="p-8">
-                {comparadorResult ? (
-                  <div className="text-center">
-                    <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold mb-6">¡Comparación completada!</h3>
-                    
-                    <div className="bg-primary/5 rounded-lg p-8 mb-8">
-                      <div className="grid md:grid-cols-2 gap-8 mb-6">
-                        <div className="text-center">
-                          <div className="text-sm text-muted-foreground mb-2">Alquiler largo plazo</div>
-                          <div className="text-3xl font-bold text-primary">{comparadorResult.largo}%</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm text-muted-foreground mb-2">Alquiler temporal</div>
-                          <div className="text-3xl font-bold text-primary">{comparadorResult.temporal}%</div>
-                        </div>
-                      </div>
+              <Card>
+                <CardContent className="p-8">
+                  {comparadorResult ? (
+                    <div className="text-center">
+                      <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-6" />
+                      <h3 className="text-2xl font-bold mb-6">¡Comparación completada!</h3>
                       
-                      <div className="bg-accent/20 rounded-lg p-4">
-                        <div className="text-sm text-muted-foreground mb-1">Recomendación</div>
-                        <div className="text-lg font-semibold text-accent-foreground">
-                          {comparadorResult.recomendacion}
+                      <div className="bg-primary/5 rounded-lg p-8 mb-8">
+                        <div className="grid md:grid-cols-2 gap-8 text-center mb-6">
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Larga duración</div>
+                            <div className="text-3xl font-bold text-primary">{comparadorResult.largo}%</div>
+                          </div>
+                          <div>
+                            <div className="text-sm text-muted-foreground mb-1">Temporal</div>
+                            <div className="text-3xl font-bold text-primary">{comparadorResult.temporal}%</div>
+                          </div>
+                        </div>
+                        
+                        <div className="text-center">
+                          <h4 className="text-lg font-semibold mb-2">Recomendación</h4>
+                          <p className="text-xl font-bold text-primary">{comparadorResult.recomendacion}</p>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="flex justify-center">
-                      <Button asChild size="lg">
-                        <Link to="/propietarios#form?tipo=plan">Implementad el plan recomendado</Link>
+                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <Button asChild>
+                          <Link to="/propietarios#form">Quiero empezar</Link>
+                        </Button>
+                        <Button variant="outline" asChild>
+                          <Link to="/propietarios#form?tipo=consultoria">Necesito más información</Link>
+                        </Button>
+                      </div>
+
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => setComparadorResult(null)}
+                        className="mt-4"
+                      >
+                        Comparar otra propiedad
                       </Button>
                     </div>
+                  ) : (
+                    <form onSubmit={comparadorForm.handleSubmit(onSubmitComparador)} className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor="precioCompra">Precio de compra (€) *</Label>
+                          <Input
+                            id="precioCompra"
+                            type="number"
+                            {...comparadorForm.register("precioCompra")}
+                            placeholder="Ej: 250000"
+                          />
+                          {comparadorForm.formState.errors.precioCompra && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.precioCompra.message}</p>
+                          )}
+                        </div>
 
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => setComparadorResult(null)}
-                      className="mt-4"
-                    >
-                      Hacer otra comparación
-                    </Button>
-                  </div>
-                ) : (
-                  <form onSubmit={comparadorForm.handleSubmit(onSubmitComparador)} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <Label htmlFor="precioCompra">Precio de compra (€) *</Label>
-                        <Input
-                          id="precioCompra"
-                          type="number"
-                          {...comparadorForm.register("precioCompra")}
-                          placeholder="Ej: 300000"
-                        />
-                        {comparadorForm.formState.errors.precioCompra && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.precioCompra.message}</p>
-                        )}
+                        <div className="space-y-2">
+                          <Label htmlFor="alquilerLargo">Alquiler largo plazo (€/mes) *</Label>
+                          <Input
+                            id="alquilerLargo"
+                            type="number"
+                            {...comparadorForm.register("alquilerLargo")}
+                            placeholder="Ej: 900"
+                          />
+                          {comparadorForm.formState.errors.alquilerLargo && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerLargo.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="gastosLargo">Gastos largo plazo (€/mes) *</Label>
+                          <Input
+                            id="gastosLargo"
+                            type="number"
+                            {...comparadorForm.register("gastosLargo")}
+                            placeholder="Ej: 200"
+                          />
+                          {comparadorForm.formState.errors.gastosLargo && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosLargo.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="alquilerTemporal">Alquiler temporal (€/mes) *</Label>
+                          <Input
+                            id="alquilerTemporal"
+                            type="number"
+                            {...comparadorForm.register("alquilerTemporal")}
+                            placeholder="Ej: 1500"
+                          />
+                          {comparadorForm.formState.errors.alquilerTemporal && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerTemporal.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="gastosTemporal">Gastos temporal (€/mes) *</Label>
+                          <Input
+                            id="gastosTemporal"
+                            type="number"
+                            {...comparadorForm.register("gastosTemporal")}
+                            placeholder="Ej: 400"
+                          />
+                          {comparadorForm.formState.errors.gastosTemporal && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosTemporal.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor="ocupacionTemporal">Ocupación temporal (%) *</Label>
+                          <Input
+                            id="ocupacionTemporal"
+                            type="number"
+                            {...comparadorForm.register("ocupacionTemporal")}
+                            placeholder="Ej: 75"
+                          />
+                          {comparadorForm.formState.errors.ocupacionTemporal && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.ocupacionTemporal.message}</p>
+                          )}
+                        </div>
+
+                        <div className="space-y-2 md:col-span-2">
+                          <Label htmlFor="email">Email (opcional)</Label>
+                          <Input
+                            id="email"
+                            type="email"
+                            {...comparadorForm.register("email")}
+                            placeholder="Para recibir la comparación detallada"
+                          />
+                          {comparadorForm.formState.errors.email && (
+                            <p className="text-sm text-destructive">{comparadorForm.formState.errors.email.message}</p>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="space-y-2">
-                        <Label htmlFor="alquilerLargo">Alquiler largo plazo (€/mes) *</Label>
-                        <Input
-                          id="alquilerLargo"
-                          type="number"
-                          {...comparadorForm.register("alquilerLargo")}
-                          placeholder="Ej: 1200"
-                        />
-                        {comparadorForm.formState.errors.alquilerLargo && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerLargo.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="alquilerTemporal">Alquiler temporal (€/mes) *</Label>
-                        <Input
-                          id="alquilerTemporal"
-                          type="number"
-                          {...comparadorForm.register("alquilerTemporal")}
-                          placeholder="Ej: 1800"
-                        />
-                        {comparadorForm.formState.errors.alquilerTemporal && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerTemporal.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="ocupacionTemporal">Ocupación temporal (%) *</Label>
-                        <Input
-                          id="ocupacionTemporal"
-                          type="number"
-                          {...comparadorForm.register("ocupacionTemporal")}
-                          placeholder="Ej: 75"
-                        />
-                        {comparadorForm.formState.errors.ocupacionTemporal && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.ocupacionTemporal.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="gastosLargo">Gastos largo plazo (€/mes) *</Label>
-                        <Input
-                          id="gastosLargo"
-                          type="number"
-                          {...comparadorForm.register("gastosLargo")}
-                          placeholder="Ej: 200"
-                        />
-                        {comparadorForm.formState.errors.gastosLargo && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosLargo.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="gastosTemporal">Gastos temporal (€/mes) *</Label>
-                        <Input
-                          id="gastosTemporal"
-                          type="number"
-                          {...comparadorForm.register("gastosTemporal")}
-                          placeholder="Ej: 300"
-                        />
-                        {comparadorForm.formState.errors.gastosTemporal && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.gastosTemporal.message}</p>
-                        )}
-                      </div>
-
-                      <div className="space-y-2 md:col-span-2">
-                        <Label htmlFor="email-comparador">Email (opcional)</Label>
-                        <Input
-                          id="email-comparador"
-                          type="email"
-                          {...comparadorForm.register("email")}
-                          placeholder="Para enviarte el resultado"
-                        />
-                        {comparadorForm.formState.errors.email && (
-                          <p className="text-sm text-destructive">{comparadorForm.formState.errors.email.message}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <Button 
-                      type="submit" 
-                      className="w-full" 
-                      disabled={comparadorForm.formState.isSubmitting}
-                    >
-                      {comparadorForm.formState.isSubmitting ? "Comparando..." : "Comparar modalidades"}
-                    </Button>
-                  </form>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+                      <Button type="submit" className="w-full">
+                        Comparar modalidades
+                      </Button>
+                    </form>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+        )}
 
         {/* Enlaces internos */}
         <section className="text-center mb-12">
