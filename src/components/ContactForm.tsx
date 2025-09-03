@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import professionalService from "@/assets/professional-service.jpg";
 
 const contactSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -75,15 +76,25 @@ const ContactFormSection = () => {
   return (
     <section 
       id="contacto" 
-      className="py-16 sm:py-20 bg-gradient-to-br from-background via-accent/5 to-primary/5 scroll-mt-24"
+      className="py-16 sm:py-20 bg-gradient-to-r from-primary to-primary/80 text-primary-foreground relative overflow-hidden scroll-mt-24"
     >
-      <div className="container mx-auto px-4 sm:px-6">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src={professionalService} 
+          alt="" 
+          className="w-full h-full object-cover opacity-10"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary/70"></div>
+      </div>
+      <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-primary-foreground">
               ¿Listo para empezar?
             </h2>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-primary-foreground/90 max-w-2xl mx-auto">
               Cuéntanos sobre tu propiedad y te contactaremos en menos de 24 horas
             </p>
           </div>
