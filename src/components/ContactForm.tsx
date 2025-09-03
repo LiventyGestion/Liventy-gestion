@@ -163,7 +163,7 @@ const ContactFormSection = () => {
                           id="phone"
                           type="tel"
                           {...register("phone")}
-                          placeholder="600 000 000"
+                          placeholder="+34 688 123 456"
                           className={cn(
                             "min-h-[44px] pr-10",
                             getFieldState("phone").hasError && "border-destructive focus-visible:ring-destructive",
@@ -195,7 +195,7 @@ const ContactFormSection = () => {
                         id="email"
                         type="email"
                         {...register("email")}
-                        placeholder="tu@email.com"
+                        placeholder="propietario@liventygestion.com"
                         className={cn(
                           "min-h-[44px] pr-10",
                           getFieldState("email").hasError && "border-destructive focus-visible:ring-destructive",

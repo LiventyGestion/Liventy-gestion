@@ -80,7 +80,7 @@ const LeadMagnet = () => {
               <div>
                 <Input
                   type="text"
-                  placeholder="Tu nombre"
+                  placeholder="Juan Pérez"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="h-12"
@@ -90,7 +90,7 @@ const LeadMagnet = () => {
               <div>
                 <Input
                   type="email"
-                  placeholder="Tu email"
+                  placeholder="propietario@liventygestion.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12"

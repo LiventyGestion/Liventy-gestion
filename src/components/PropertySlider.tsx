@@ -10,10 +10,10 @@ const PropertySlider = () => {
   const properties = [
     {
       id: 1,
-      title: "Apartamento Moderno Centro",
-      location: "Malasaña, Madrid",
-      price: "€1,200/mes",
-      type: "Larga duración",
+      title: "Piso Moderno en Indautxu",
+      location: "Indautxu, Bilbao",
+      price: "1.100 €/mes",
+      type: "Gestión integral",
       beds: 2,
       baths: 1,
       area: 85,
@@ -21,10 +21,10 @@ const PropertySlider = () => {
     },
     {
       id: 2,
-      title: "Loft Industrial Reformado",
-      location: "Chueca, Madrid", 
-      price: "€150/noche",
-      type: "Temporada",
+      title: "Apartamento Reformado",
+      location: "Barakaldo", 
+      price: "875 €/mes",
+      type: "Gestión integral",
       beds: 1,
       baths: 1,
       area: 65,
@@ -32,10 +32,10 @@ const PropertySlider = () => {
     },
     {
       id: 3,
-      title: "Ático con Terraza",
-      location: "Salamanca, Madrid",
-      price: "€2,500/mes", 
-      type: "Larga duración",
+      title: "Ático con Vistas",
+      location: "Getxo (Algorta)",
+      price: "1.250 €/mes", 
+      type: "Gestión integral",
       beds: 3,
       baths: 2,
       area: 120,
@@ -43,10 +43,10 @@ const PropertySlider = () => {
     },
     {
       id: 4,
-      title: "Estudio Luminoso",
-      location: "La Latina, Madrid",
-      price: "€80/noche",
-      type: "Temporada", 
+      title: "Estudio Céntrico",
+      location: "Santutxu, Bilbao",
+      price: "725 €/mes",
+      type: "Gestión integral", 
       beds: 1,
       baths: 1,
       area: 40,
@@ -68,7 +68,7 @@ const PropertySlider = () => {
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4">Propiedades Destacadas</h2>
           <p className="text-muted-foreground text-lg">
-            Descubre nuestra selección de propiedades disponibles
+            Descubre propiedades gestionadas por Liventy con total tranquilidad
           </p>
         </div>
 

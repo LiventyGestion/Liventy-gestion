@@ -399,7 +399,7 @@ const Herramientas = () => {
                           <Input
                             id="barrio"
                             {...precioForm.register("barrio")}
-                            placeholder="Ej: Malasaña, Gràcia..."
+                            placeholder="Ej: Indautxu, Abando, Deusto..."
                           />
                           {precioForm.formState.errors.barrio && (
                             <p className="text-sm text-destructive">{precioForm.formState.errors.barrio.message}</p>
@@ -477,7 +477,7 @@ const Herramientas = () => {
                             id="email"
                             type="email"
                             {...precioForm.register("email")}
-                            placeholder="Para recibir el resultado"
+                            placeholder="propietario@liventygestion.com"
                           />
                           {precioForm.formState.errors.email && (
                             <p className="text-sm text-destructive">{precioForm.formState.errors.email.message}</p>
@@ -555,7 +555,7 @@ const Herramientas = () => {
                             id="ingresosMensuales"
                             type="number"
                             {...rentabilidadForm.register("ingresosMensuales")}
-                            placeholder="Ej: 1200"
+                            placeholder="Ej: 1.100"
                           />
                           {rentabilidadForm.formState.errors.ingresosMensuales && (
                             <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.ingresosMensuales.message}</p>
@@ -568,7 +568,7 @@ const Herramientas = () => {
                             id="gastosMensuales"
                             type="number"
                             {...rentabilidadForm.register("gastosMensuales")}
-                            placeholder="Ej: 300"
+                            placeholder="Ej: 280"
                           />
                           {rentabilidadForm.formState.errors.gastosMensuales && (
                             <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.gastosMensuales.message}</p>
@@ -607,7 +607,7 @@ const Herramientas = () => {
                             id="email"
                             type="email"
                             {...rentabilidadForm.register("email")}
-                            placeholder="Para recibir el análisis detallado"
+                            placeholder="propietario@liventygestion.com"
                           />
                           {rentabilidadForm.formState.errors.email && (
                             <p className="text-sm text-destructive">{rentabilidadForm.formState.errors.email.message}</p>
@@ -690,7 +690,7 @@ const Herramientas = () => {
                             id="precioCompra"
                             type="number"
                             {...comparadorForm.register("precioCompra")}
-                            placeholder="Ej: 250000"
+                            placeholder="Ej: 280.000"
                           />
                           {comparadorForm.formState.errors.precioCompra && (
                             <p className="text-sm text-destructive">{comparadorForm.formState.errors.precioCompra.message}</p>
@@ -703,7 +703,7 @@ const Herramientas = () => {
                             id="alquilerLargo"
                             type="number"
                             {...comparadorForm.register("alquilerLargo")}
-                            placeholder="Ej: 900"
+                            placeholder="Ej: 950"
                           />
                           {comparadorForm.formState.errors.alquilerLargo && (
                             <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerLargo.message}</p>
@@ -729,7 +729,7 @@ const Herramientas = () => {
                             id="alquilerTemporal"
                             type="number"
                             {...comparadorForm.register("alquilerTemporal")}
-                            placeholder="Ej: 1500"
+                            placeholder="Ej: 1.350"
                           />
                           {comparadorForm.formState.errors.alquilerTemporal && (
                             <p className="text-sm text-destructive">{comparadorForm.formState.errors.alquilerTemporal.message}</p>
@@ -768,7 +768,7 @@ const Herramientas = () => {
                             id="email"
                             type="email"
                             {...comparadorForm.register("email")}
-                            placeholder="Para recibir la comparación detallada"
+                            placeholder="propietario@liventygestion.com"
                           />
                           {comparadorForm.formState.errors.email && (
                             <p className="text-sm text-destructive">{comparadorForm.formState.errors.email.message}</p>

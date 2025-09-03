@@ -57,7 +57,7 @@ const RentalSimulator = () => {
                 </label>
                 <Input
                   type="number"
-                  placeholder="350000"
+                  placeholder="280000"
                   value={propertyValue}
                   onChange={(e) => setPropertyValue(e.target.value)}
                   className="h-12"
@@ -69,7 +69,7 @@ const RentalSimulator = () => {
                 </label>
                 <Input
                   type="number"
-                  placeholder="1500"
+                  placeholder="1100"
                   value={monthlyRent}
                   onChange={(e) => setMonthlyRent(e.target.value)}
                   className="h-12"
