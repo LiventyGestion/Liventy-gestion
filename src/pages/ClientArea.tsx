@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -9,12 +9,20 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 const ClientArea = () => {
   const { user, isLoading } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (!isLoading && !user) {
       navigate('/auth');
+    } else if (user && location.pathname === '/area-clientes') {
+      // Redirect to appropriate section based on user role
+      if (user.role === 'inquilino') {
+        navigate('/area-clientes/inquilino/servicios');
+      } else if (user.role === 'propietario') {
+        navigate('/area-clientes/propietario/dashboard');
+      }
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading, navigate, location.pathname]);
 
   if (isLoading) {
     return (
