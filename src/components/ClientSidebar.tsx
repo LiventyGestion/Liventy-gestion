@@ -71,7 +71,10 @@ export function ClientSidebar() {
   const items = user.role === 'inquilino' ? tenantItems : ownerItems;
 
   return (
-    <Sidebar className={state === "collapsed" ? "w-14" : "w-64"} collapsible="icon">
+    <Sidebar 
+      className={state === "collapsed" ? "w-14" : "w-64"} 
+      collapsible="icon"
+    >
       <SidebarTrigger className="m-2 self-end" />
       
       <SidebarContent>

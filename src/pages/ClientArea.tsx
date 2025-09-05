@@ -38,10 +38,12 @@ const ClientArea = () => {
     <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <SidebarProvider>
-        <div className="flex flex-1 w-full">
+        <div className="flex flex-1 w-full overflow-hidden">
           <ClientSidebar />
-          <main className="flex-1 p-6 pb-8">
-            <Outlet />
+          <main className="flex-1 overflow-auto">
+            <div className="p-6 pb-8">
+              <Outlet />
+            </div>
           </main>
         </div>
       </SidebarProvider>
