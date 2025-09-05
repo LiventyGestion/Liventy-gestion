@@ -10,6 +10,8 @@ import { ArrowLeft, MapPin, Upload, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useServiceRequests } from "@/hooks/useServiceRequests";
+import { sanitizeInput, RateLimiter } from '@/utils/security';
+import { useToast } from '@/hooks/use-toast';
 
 interface MaintenanceFormProps {
   selectedDate: Date;
@@ -24,6 +26,10 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
   const { createServiceRequest, isLoading } = useServiceRequests();
+  const { toast } = useToast();
+  
+  // Rate limiter instance
+  const rateLimiter = new RateLimiter();
 
   const categories = [
     { value: "albanileria", label: "Albañilería" },
@@ -52,7 +58,27 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
   };
 
   const handleSubmit = async () => {
-    if (!availableHours || !category || !priority || !description) return;
+    // Sanitize inputs
+    const sanitizedDescription = sanitizeInput(description);
+    
+    if (!availableHours || !category || !priority || !sanitizedDescription) {
+      toast({
+        title: "Campos requeridos",
+        description: "Por favor completa todos los campos obligatorios.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Rate limiting check (max 5 maintenance requests per hour)
+    if (!rateLimiter.isAllowed(`maintenance_${Date.now()}`, 5, 3600000)) {
+      toast({
+        title: "Demasiadas solicitudes",
+        description: "Has enviado muchas solicitudes de mantenimiento. Intenta de nuevo en una hora.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     const result = await createServiceRequest({
       type: 'mantenimiento',
@@ -60,7 +86,7 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
       time_slot: availableHours,
       priority: priority as any,
       maintenance_category: category as any,
-      description: description,
+      description: sanitizedDescription,
       photos: photos.map(f => f.name) // For now, just store filenames
     });
 

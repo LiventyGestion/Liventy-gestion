@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
 import propertyGuide from "@/assets/property-guide.jpg";
 
 const LeadMagnet = () => {
@@ -11,13 +12,41 @@ const LeadMagnet = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  
+  // Rate limiter instance
+  const rateLimiter = new RateLimiter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name || !email) {
+    
+    // Sanitize inputs
+    const sanitizedName = sanitizeName(name);
+    const sanitizedEmail = sanitizeEmail(email);
+    
+    if (!sanitizedName || !sanitizedEmail) {
       toast({
         title: "Campos requeridos",
         description: "Por favor, completa todos los campos.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Validate email format
+    if (!validateEmail(sanitizedEmail)) {
+      toast({
+        title: "Email inválido",
+        description: "Por favor ingresa un email válido.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Rate limiting check
+    if (!rateLimiter.isAllowed(`lead_${sanitizedEmail}`, 3, 3600000)) { // 3 attempts per hour
+      toast({
+        title: "Demasiados intentos",
+        description: "Intenta de nuevo en una hora.",
         variant: "destructive",
       });
       return;

@@ -10,13 +10,26 @@ import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail, RateLimiter } from '@/utils/security';
 import professionalService from "@/assets/professional-service.jpg";
 
 const contactSchema = z.object({
-  name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
-  email: z.string().email("Por favor, introduce un email válido"),
-  phone: z.string().min(9, "El teléfono debe tener al menos 9 dígitos"),
-  message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres")
+  name: z.string()
+    .min(2, "El nombre debe tener al menos 2 caracteres")
+    .max(100, "El nombre no puede exceder 100 caracteres")
+    .transform(sanitizeName),
+  email: z.string()
+    .email("Por favor, introduce un email válido")
+    .transform(sanitizeEmail)
+    .refine(validateEmail, "Formato de email inválido"),
+  phone: z.string()
+    .min(9, "El teléfono debe tener al menos 9 dígitos")
+    .max(20, "El teléfono no puede exceder 20 dígitos")
+    .transform(sanitizeInput),
+  message: z.string()
+    .min(10, "El mensaje debe tener al menos 10 caracteres")
+    .max(1000, "El mensaje no puede exceder 1000 caracteres")
+    .transform(sanitizeInput)
 });
 
 type ContactForm = z.infer<typeof contactSchema>;
@@ -24,6 +37,9 @@ type ContactForm = z.infer<typeof contactSchema>;
 const ContactFormSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const { toast } = useToast();
+  
+  // Rate limiter instance
+  const rateLimiter = new RateLimiter();
   
   const {
     register,
@@ -37,6 +53,16 @@ const ContactFormSection = () => {
 
   const onSubmit = async (data: ContactForm) => {
     try {
+      // Rate limiting check
+      if (!rateLimiter.isAllowed(`contact_${data.email}`, 3, 3600000)) { // 3 attempts per hour
+        toast({
+          title: "Demasiados intentos",
+          description: "Has enviado muchos mensajes. Intenta de nuevo en una hora.",
+          variant: "destructive",
+        });
+        return;
+      }
+      
       // Simulate form submission
       await new Promise(resolve => setTimeout(resolve, 1000));
       

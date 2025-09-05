@@ -9,6 +9,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { PasswordStrength } from '@/components/ui/password-strength';
+import { validatePassword, sanitizeInput, sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -20,6 +22,9 @@ const Auth: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('login');
+  
+  // Rate limiter instance
+  const rateLimiter = new RateLimiter();
   
   const { login, signUp, user, isLoading } = useAuth();
   const navigate = useNavigate();
@@ -42,12 +47,28 @@ const Auth: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password) {
+    // Sanitize inputs
+    const sanitizedEmail = sanitizeEmail(email);
+    
+    if (!sanitizedEmail || !password) {
       setError('Por favor completa todos los campos');
       return;
     }
 
-    const result = await login(email, password);
+    // Validate email format
+    if (!validateEmail(sanitizedEmail)) {
+      setError('Por favor ingresa un email válido');
+      return;
+    }
+
+    // Rate limiting check
+    if (!rateLimiter.isAllowed(`login_${sanitizedEmail}`, 5, 900000)) { // 5 attempts per 15 minutes
+      const remainingTime = Math.ceil(rateLimiter.getRemainingTime(`login_${sanitizedEmail}`, 900000) / 60000);
+      setError(`Demasiados intentos. Intenta de nuevo en ${remainingTime} minutos`);
+      return;
+    }
+
+    const result = await login(sanitizedEmail, password);
     
     if (result.success) {
       toast({
@@ -68,8 +89,18 @@ const Auth: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (!email || !password || !name || !confirmPassword) {
+    // Sanitize inputs
+    const sanitizedEmail = sanitizeEmail(email);
+    const sanitizedName = sanitizeName(name);
+
+    if (!sanitizedEmail || !password || !sanitizedName || !confirmPassword) {
       setError('Por favor completa todos los campos');
+      return;
+    }
+
+    // Validate email format
+    if (!validateEmail(sanitizedEmail)) {
+      setError('Por favor ingresa un email válido');
       return;
     }
 
@@ -78,12 +109,20 @@ const Auth: React.FC = () => {
       return;
     }
 
-    if (password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
+    // Enhanced password validation
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      setError(passwordValidation.errors[0]); // Show first error
       return;
     }
 
-    const result = await signUp(email, password, name, role);
+    // Rate limiting check
+    if (!rateLimiter.isAllowed(`signup_${sanitizedEmail}`, 3, 3600000)) { // 3 attempts per hour
+      setError('Demasiados intentos de registro. Intenta de nuevo en una hora');
+      return;
+    }
+
+    const result = await signUp(sanitizedEmail, password, sanitizedName, role);
     
     if (result.success) {
       toast({
@@ -202,6 +241,7 @@ const Auth: React.FC = () => {
                       placeholder="••••••••"
                       required
                     />
+                    <PasswordStrength password={password} />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
