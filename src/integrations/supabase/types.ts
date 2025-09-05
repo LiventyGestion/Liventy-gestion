@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      availability: {
+        Row: {
+          created_at: string | null
+          date: string
+          id: string
+          is_available: boolean | null
+          service_type: string
+          time_slot: string
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          id?: string
+          is_available?: boolean | null
+          service_type: string
+          time_slot: string
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          id?: string
+          is_available?: boolean | null
+          service_type?: string
+          time_slot?: string
+        }
+        Relationships: []
+      }
       calculadora_resultados: {
         Row: {
           created_at: string
@@ -75,30 +102,40 @@ export type Database = {
       }
       chat_messages: {
         Row: {
-          attachments: string[] | null
-          created_at: string
+          attachments: Json | null
+          created_at: string | null
           id: string
-          message: string
-          sender: string
+          sender_role: string | null
+          sender_user_id: string | null
+          text: string | null
           thread_id: string
         }
         Insert: {
-          attachments?: string[] | null
-          created_at?: string
+          attachments?: Json | null
+          created_at?: string | null
           id?: string
-          message: string
-          sender: string
+          sender_role?: string | null
+          sender_user_id?: string | null
+          text?: string | null
           thread_id: string
         }
         Update: {
-          attachments?: string[] | null
-          created_at?: string
+          attachments?: Json | null
+          created_at?: string | null
           id?: string
-          message?: string
-          sender?: string
+          sender_role?: string | null
+          sender_user_id?: string | null
+          text?: string | null
           thread_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "chat_messages_sender_user_id_fkey"
+            columns: ["sender_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "chat_messages_thread_id_fkey"
             columns: ["thread_id"]
@@ -110,36 +147,38 @@ export type Database = {
       }
       chat_threads: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           lease_id: string | null
           property_id: string | null
-          status: string
-          title: string | null
-          updated_at: string
+          status: Database["public"]["Enums"]["thread_status"] | null
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           lease_id?: string | null
           property_id?: string | null
-          status?: string
-          title?: string | null
-          updated_at?: string
+          status?: Database["public"]["Enums"]["thread_status"] | null
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           lease_id?: string | null
           property_id?: string | null
-          status?: string
-          title?: string | null
-          updated_at?: string
+          status?: Database["public"]["Enums"]["thread_status"] | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_threads_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chatbot_context: {
         Row: {
@@ -378,13 +417,6 @@ export type Database = {
             referencedRelation: "Propiedades"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "Incidencias_service_request_id_fkey"
-            columns: ["service_request_id"]
-            isOneToOne: false
-            referencedRelation: "service_requests"
-            referencedColumns: ["id"]
-          },
         ]
       }
       leads: {
@@ -477,6 +509,27 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          created_at: string | null
+          full_name: string | null
+          id: string
+          role: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          full_name?: string | null
+          id: string
+          role?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          full_name?: string | null
+          id?: string
+          role?: string | null
+        }
+        Relationships: []
+      }
       Propiedades: {
         Row: {
           descripcion: string | null
@@ -511,54 +564,65 @@ export type Database = {
       }
       service_requests: {
         Row: {
-          created_at: string
+          created_at: string | null
           date: string
           description: string | null
           hours: number | null
           id: string
-          maintenance_category: string | null
-          photos: string[] | null
-          priority: string | null
+          maintenance_category:
+            | Database["public"]["Enums"]["maintenance_category"]
+            | null
+          photos: Json | null
+          priority: Database["public"]["Enums"]["priority_level"] | null
           role: string
-          status: string
+          status: string | null
           time_slot: string | null
           type: string
-          updated_at: string
           user_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           date: string
           description?: string | null
           hours?: number | null
           id?: string
-          maintenance_category?: string | null
-          photos?: string[] | null
-          priority?: string | null
+          maintenance_category?:
+            | Database["public"]["Enums"]["maintenance_category"]
+            | null
+          photos?: Json | null
+          priority?: Database["public"]["Enums"]["priority_level"] | null
           role: string
-          status?: string
+          status?: string | null
           time_slot?: string | null
           type: string
-          updated_at?: string
           user_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           date?: string
           description?: string | null
           hours?: number | null
           id?: string
-          maintenance_category?: string | null
-          photos?: string[] | null
-          priority?: string | null
+          maintenance_category?:
+            | Database["public"]["Enums"]["maintenance_category"]
+            | null
+          photos?: Json | null
+          priority?: Database["public"]["Enums"]["priority_level"] | null
           role?: string
-          status?: string
+          status?: string | null
           time_slot?: string | null
           type?: string
-          updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "service_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       Usuarios: {
         Row: {
@@ -596,7 +660,22 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      incident_status: "pendiente" | "en_curso" | "resuelta" | "cancelada"
+      maintenance_category:
+        | "albanileria"
+        | "pintura"
+        | "fontaneria"
+        | "grifos"
+        | "banos"
+        | "cisternas"
+        | "bajantes"
+        | "atascos"
+        | "cocinas"
+        | "persianas"
+        | "calefaccion"
+        | "electricidad_general"
+      priority_level: "baja" | "media" | "alta"
+      thread_status: "abierto" | "en_seguimiento" | "resuelto"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -723,6 +802,24 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      incident_status: ["pendiente", "en_curso", "resuelta", "cancelada"],
+      maintenance_category: [
+        "albanileria",
+        "pintura",
+        "fontaneria",
+        "grifos",
+        "banos",
+        "cisternas",
+        "bajantes",
+        "atascos",
+        "cocinas",
+        "persianas",
+        "calefaccion",
+        "electricidad_general",
+      ],
+      priority_level: ["baja", "media", "alta"],
+      thread_status: ["abierto", "en_seguimiento", "resuelto"],
+    },
   },
 } as const
