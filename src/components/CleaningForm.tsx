@@ -26,10 +26,10 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
   ];
 
   const hourOptions = [
-    { value: "2", label: "2 horas", price: 40 },
-    { value: "3", label: "3 horas", price: 60 },
-    { value: "4", label: "4 horas", price: 80 },
-    { value: "6", label: "6 horas", price: 120 }
+    { value: "1", label: "1 hora", price: 15 },
+    { value: "2", label: "2 horas", price: 30 },
+    { value: "3", label: "3 horas", price: 45 },
+    { value: "4", label: "4 horas", price: 60 }
   ];
 
   const handleSubmit = async () => {
