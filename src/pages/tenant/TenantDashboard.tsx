@@ -14,7 +14,7 @@ export default function TenantDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Panel de Inquilino</h1>
+        <h1 className="text-3xl font-bold mb-2">Tu Hogar</h1>
         <p className="text-muted-foreground">
           Información general de tu contrato y vivienda
         </p>

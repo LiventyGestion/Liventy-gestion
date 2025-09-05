@@ -46,7 +46,7 @@ export function ClientSidebar() {
 
   // Items para inquilinos
   const tenantItems = [
-    { title: "Dashboard", url: "/area-clientes/inquilino/dashboard", icon: Home },
+    { title: "Hogar", url: "/area-clientes/inquilino/dashboard", icon: Home },
     { title: "Solicitar Servicios", url: "/area-clientes/inquilino/servicios", icon: Wrench },
     { title: "Consulta (Chat)", url: "/area-clientes/inquilino/consulta", icon: MessageSquare },
     { title: "Mis Incidencias", url: "/area-clientes/inquilino/incidencias", icon: AlertTriangle },
