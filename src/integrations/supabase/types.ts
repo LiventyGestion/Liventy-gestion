@@ -650,6 +650,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      create_service_request_and_incident: {
+        Args: {
+          p_date: string
+          p_description: string
+          p_hours: number
+          p_maint_cat: Database["public"]["Enums"]["maintenance_category"]
+          p_priority: Database["public"]["Enums"]["priority_level"]
+          p_time_slot: string
+          p_type: string
+        }
+        Returns: string
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string

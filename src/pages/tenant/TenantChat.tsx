@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
   MessageSquare, 
   Send, 
@@ -34,7 +33,7 @@ interface ChatThread {
   messages: ChatMessage[];
 }
 
-// Mock data
+// Mock data - En producción esto vendría de useChatThreads()
 const mockThreads: ChatThread[] = [
   {
     id: '1',
@@ -52,14 +51,8 @@ const mockThreads: ChatThread[] = [
       {
         id: '2',
         sender: 'agent',
-        message: 'Hola! Estaré encantado de ayudarte con tu consulta sobre el contrato. ¿Podrías ser más específico sobre qué aspecto te gustaría consultar?',
+        message: 'Hola! Estaré encantado de ayudarte con tu consulta sobre el contrato.',
         timestamp: '2024-03-15T10:15:00Z'
-      },
-      {
-        id: '3',
-        sender: 'user',
-        message: 'Me gustaría saber si puedo tener mascotas en el apartamento.',
-        timestamp: '2024-03-15T10:30:00Z'
       }
     ]
   }
@@ -113,7 +106,6 @@ export default function TenantChat() {
       timestamp: new Date().toISOString()
     };
 
-    // Update thread with new message
     const updatedThread = {
       ...selectedThread,
       messages: [...selectedThread.messages, newMsg],
@@ -124,7 +116,7 @@ export default function TenantChat() {
     setThreads(threads.map(t => t.id === selectedThread.id ? updatedThread : t));
     setNewMessage("");
     
-    // Simulate agent response
+    // Simular respuesta del agente
     setTimeout(() => {
       const agentMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
@@ -253,18 +245,6 @@ export default function TenantChat() {
               </Card>
             ))}
           </div>
-
-          {threads.length === 0 && (
-            <Card>
-              <CardContent className="p-8 text-center">
-                <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-semibold mb-2">No tienes consultas</h3>
-                <p className="text-muted-foreground mb-4">
-                  Crea una nueva consulta para empezar a chatear con soporte
-                </p>
-              </CardContent>
-            </Card>
-          )}
         </div>
 
         {/* Chat Area */}

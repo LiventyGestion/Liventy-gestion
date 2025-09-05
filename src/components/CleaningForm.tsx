@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useServiceRequests } from "@/hooks/useServiceRequests";
 
 interface CleaningFormProps {
   selectedDate: Date;
@@ -16,7 +17,7 @@ interface CleaningFormProps {
 export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormProps) {
   const [hours, setHours] = useState<string>("");
   const [timeSlot, setTimeSlot] = useState<string>("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { createServiceRequest, isLoading } = useServiceRequests();
 
   const timeSlots = [
     { value: "morning", label: "Mañana (9:00 - 13:00)", available: true },
@@ -34,13 +35,18 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
   const handleSubmit = async () => {
     if (!hours || !timeSlot) return;
     
-    setIsSubmitting(true);
+    const timeSlotLabel = timeSlots.find(slot => slot.value === timeSlot)?.label || timeSlot;
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    onComplete();
-    setIsSubmitting(false);
+    const result = await createServiceRequest({
+      type: 'limpieza',
+      date: selectedDate,
+      time_slot: timeSlotLabel,
+      hours: parseInt(hours)
+    });
+
+    if (result) {
+      onComplete();
+    }
   };
 
   const selectedHourOption = hourOptions.find(option => option.value === hours);
@@ -153,9 +159,9 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
               className="w-full mt-6" 
               size="lg" 
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? 'Enviando solicitud...' : 'Confirmar Solicitud de Limpieza'}
+              {isLoading ? 'Enviando solicitud...' : 'Confirmar Solicitud de Limpieza'}
             </Button>
           </CardContent>
         </Card>

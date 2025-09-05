@@ -35,7 +35,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session?.user) {
           // Defer fetching user profile to avoid deadlock
           setTimeout(() => {
-            fetchUserProfile(session.user.id);
+            fetchUserProfile(session.user.id).then(() => {
+              // Set email from session after profile is fetched
+              if (session?.user?.email) {
+                setUser(prev => prev ? { ...prev, email: session.user.email } : null);
+              }
+            });
           }, 0);
         } else {
           setUser(null);
@@ -48,7 +53,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       if (session?.user) {
-        fetchUserProfile(session.user.id);
+        fetchUserProfile(session.user.id).then(() => {
+          // Set email from session after profile is fetched
+          if (session?.user?.email) {
+            setUser(prev => prev ? { ...prev, email: session.user.email } : null);
+          }
+        });
       } else {
         setIsLoading(false);
       }
@@ -60,7 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchUserProfile = async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from('Usuarios')
+        .from('profiles')
         .select('*')
         .eq('id', userId)
         .maybeSingle();
@@ -69,11 +79,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error('Error fetching user profile:', error);
         setUser(null);
       } else if (data) {
+        // Get email from session since profiles doesn't store email
+        const email = session?.user?.email || '';
         setUser({
           id: data.id,
-          email: data.email || '',
-          name: data.nombre || '',
-          role: data.rol as UserRole || 'inquilino'
+          email: email,
+          name: data.full_name || '',
+          role: data.role as UserRole || 'inquilino'
         });
       }
     } catch (error) {

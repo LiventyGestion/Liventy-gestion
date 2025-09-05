@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, MapPin, Upload, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { useServiceRequests } from "@/hooks/useServiceRequests";
 
 interface MaintenanceFormProps {
   selectedDate: Date;
@@ -22,7 +23,7 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
   const [priority, setPriority] = useState("");
   const [description, setDescription] = useState("");
   const [photos, setPhotos] = useState<File[]>([]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { createServiceRequest, isLoading } = useServiceRequests();
 
   const categories = [
     { value: "albanileria", label: "Albañilería" },
@@ -53,13 +54,19 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
   const handleSubmit = async () => {
     if (!availableHours || !category || !priority || !description) return;
     
-    setIsSubmitting(true);
-    
-    // Simulate API call - This would create both service_request and incident
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    onComplete();
-    setIsSubmitting(false);
+    const result = await createServiceRequest({
+      type: 'mantenimiento',
+      date: selectedDate,
+      time_slot: availableHours,
+      priority: priority as any,
+      maintenance_category: category as any,
+      description: description,
+      photos: photos.map(f => f.name) // For now, just store filenames
+    });
+
+    if (result) {
+      onComplete();
+    }
   };
 
   const isFormValid = availableHours && category && priority && description;
@@ -222,9 +229,9 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
               className="w-full mt-6" 
               size="lg" 
               onClick={handleSubmit}
-              disabled={isSubmitting}
+              disabled={isLoading}
             >
-              {isSubmitting ? 'Creando solicitud...' : 'Confirmar Solicitud de Mantenimiento'}
+              {isLoading ? 'Creando solicitud...' : 'Confirmar Solicitud de Mantenimiento'}
             </Button>
           </CardContent>
         </Card>
