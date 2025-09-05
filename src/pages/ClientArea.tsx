@@ -17,7 +17,7 @@ const ClientArea = () => {
     } else if (user && location.pathname === '/area-clientes') {
       // Redirect to appropriate section based on user role
       if (user.role === 'inquilino') {
-        navigate('/area-clientes/inquilino/servicios');
+        navigate('/area-clientes/inquilino/dashboard');
       } else if (user.role === 'propietario') {
         navigate('/area-clientes/propietario/dashboard');
       }

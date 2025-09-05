@@ -13,6 +13,7 @@ import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Auth from "./pages/Auth";
 import ClientArea from "./pages/ClientArea";
+import TenantDashboard from "./pages/tenant/TenantDashboard";
 import TenantServices from "./pages/tenant/TenantServices";
 import TenantIncidents from "./pages/tenant/TenantIncidents";
 import TenantChat from "./pages/tenant/TenantChat";
@@ -59,6 +60,14 @@ const App = () => (
               }
             >
               {/* Tenant Routes */}
+              <Route 
+                path="inquilino/dashboard" 
+                element={
+                  <ProtectedRoute allowedRoles={['inquilino']}>
+                    <TenantDashboard />
+                  </ProtectedRoute>
+                } 
+              />
               <Route 
                 path="inquilino/servicios" 
                 element={

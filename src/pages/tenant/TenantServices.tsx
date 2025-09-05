@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import PropertyInfo from "@/components/PropertyInfo";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { CalendarDatePicker } from "@/components/CalendarDatePicker";
@@ -50,9 +49,6 @@ export default function TenantServices() {
           Solicita servicios de limpieza y mantenimiento para tu vivienda
         </p>
       </div>
-
-      {/* Property Info */}
-      <PropertyInfo />
 
       {/* Service Cards */}
       <div className="grid md:grid-cols-2 gap-6">

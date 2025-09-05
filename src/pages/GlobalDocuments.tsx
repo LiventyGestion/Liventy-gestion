@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import PropertyInfo from "@/components/PropertyInfo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -144,11 +143,6 @@ export default function GlobalDocuments() {
           Accede a todos tus documentos relacionados con {user?.role === 'inquilino' ? 'tu contrato y vivienda' : 'tus propiedades'}
         </p>
       </div>
-
-      {/* Property Info for tenants */}
-      {user?.role === 'inquilino' && (
-        <PropertyInfo />
-      )}
 
       {/* Filters */}
       <Card>
