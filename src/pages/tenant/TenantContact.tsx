@@ -1,16 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Phone, 
-  Mail, 
-  MessageSquare, 
-  Clock, 
-  MapPin,
-  Wrench,
-  AlertTriangle,
-  User
-} from "lucide-react";
+import { Phone, Mail, MessageSquare, Clock, MapPin, Wrench, AlertTriangle, User } from "lucide-react";
 
 // Mock contact data
 const contacts = {
@@ -46,23 +37,18 @@ const contacts = {
     photo: "AC"
   }
 };
-
 export default function TenantContact() {
   const handleCall = (phone: string) => {
     window.location.href = `tel:${phone}`;
   };
-
   const handleEmail = (email: string) => {
     window.location.href = `mailto:${email}`;
   };
-
   const handleWhatsApp = (phone: string) => {
     const cleanPhone = phone.replace(/[^0-9]/g, '');
     window.open(`https://wa.me/${cleanPhone}`, '_blank');
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div>
         <h1 className="text-3xl font-bold mb-2">Contacto</h1>
         <p className="text-muted-foreground">
@@ -96,20 +82,11 @@ export default function TenantContact() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="destructive" 
-                size="sm"
-                onClick={() => handleCall(contacts.emergency.phone)}
-              >
+              <Button variant="destructive" size="sm" onClick={() => handleCall(contacts.emergency.phone)}>
                 <Phone className="h-4 w-4 mr-2" />
                 Llamar Ahora
               </Button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => handleWhatsApp(contacts.emergency.phone)}
-                className="border-red-300 text-red-700 hover:bg-red-50"
-              >
+              <Button variant="outline" size="sm" onClick={() => handleWhatsApp(contacts.emergency.phone)} className="border-red-300 text-red-700 hover:bg-red-50">
                 <MessageSquare className="h-4 w-4 mr-2" />
                 WhatsApp
               </Button>
@@ -151,19 +128,11 @@ export default function TenantContact() {
               </div>
               
               <div className="flex gap-2 pt-2">
-                <Button 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => handleCall(contacts.property_manager.phone)}
-                >
+                <Button size="sm" className="flex-1" onClick={() => handleCall(contacts.property_manager.phone)}>
                   <Phone className="h-4 w-4 mr-2" />
                   Llamar
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => handleEmail(contacts.property_manager.email)}
-                >
+                <Button size="sm" variant="outline" onClick={() => handleEmail(contacts.property_manager.email)}>
                   <Mail className="h-4 w-4" />
                 </Button>
               </div>
@@ -202,19 +171,11 @@ export default function TenantContact() {
               </div>
               
               <div className="flex gap-2 pt-2">
-                <Button 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => handleCall(contacts.maintenance.phone)}
-                >
+                <Button size="sm" className="flex-1" onClick={() => handleCall(contacts.maintenance.phone)}>
                   <Phone className="h-4 w-4 mr-2" />
                   Llamar
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => handleEmail(contacts.maintenance.email)}
-                >
+                <Button size="sm" variant="outline" onClick={() => handleEmail(contacts.maintenance.email)}>
                   <Mail className="h-4 w-4" />
                 </Button>
               </div>
@@ -253,19 +214,11 @@ export default function TenantContact() {
               </div>
               
               <div className="flex gap-2 pt-2">
-                <Button 
-                  size="sm" 
-                  className="flex-1"
-                  onClick={() => handleCall(contacts.general.phone)}
-                >
+                <Button size="sm" className="flex-1" onClick={() => handleCall(contacts.general.phone)}>
                   <Phone className="h-4 w-4 mr-2" />
                   Llamar
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline"
-                  onClick={() => handleEmail(contacts.general.email)}
-                >
+                <Button size="sm" variant="outline" onClick={() => handleEmail(contacts.general.email)}>
                   <Mail className="h-4 w-4" />
                 </Button>
               </div>
@@ -306,25 +259,6 @@ export default function TenantContact() {
       </Card>
 
       {/* Office Info */}
-      <Card className="bg-muted/30">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MapPin className="h-5 w-5" />
-            Oficina Central
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            <p className="font-semibold">Liventy Gestión Inmobiliaria</p>
-            <p className="text-muted-foreground">Calle Serrano, 45, 2º Planta</p>
-            <p className="text-muted-foreground">28001 Madrid, España</p>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mt-3">
-              <span>Lun-Vie: 9:00-18:00</span>
-              <span>Sáb: 10:00-14:00</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+      
+    </div>;
 }
