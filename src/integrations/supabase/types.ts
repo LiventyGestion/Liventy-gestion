@@ -650,6 +650,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_anonymous_conversations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_anonymous_results: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       create_service_request_and_incident: {
         Args: {
           p_date: string
@@ -668,6 +676,10 @@ export type Database = {
       }
       user_owns_property: {
         Args: { property_id: string }
+        Returns: boolean
+      }
+      validate_email_format: {
+        Args: { email: string }
         Returns: boolean
       }
     }
