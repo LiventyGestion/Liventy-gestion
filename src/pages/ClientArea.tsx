@@ -35,12 +35,12 @@ const ClientArea = () => {
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-background">
       <Header />
       <SidebarProvider>
-        <div className="flex min-h-screen w-full">
+        <div className="flex flex-1 w-full">
           <ClientSidebar />
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 pb-8">
             <Outlet />
           </main>
         </div>
