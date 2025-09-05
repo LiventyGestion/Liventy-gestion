@@ -24,7 +24,13 @@ const Login = () => {
   useEffect(() => {
     // Redirect if already logged in
     if (user) {
-      navigate(user.role === 'propietario' ? '/owner-dashboard' : '/tenant-dashboard');
+      if (user.role === 'propietario') {
+        navigate('/area-clientes/propietario/dashboard');
+      } else if (user.role === 'inquilino') {
+        navigate('/area-clientes/inquilino/servicios');
+      } else {
+        navigate('/');
+      }
     }
   }, [user, navigate]);
 
