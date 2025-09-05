@@ -16,11 +16,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children, allowedRoles 
       if (!user) {
         navigate('/auth');
       } else if (!allowedRoles.includes(user.role)) {
-        // Redirect to appropriate dashboard based on user role
+        // Redirect to appropriate area based on user role
         if (user.role === 'propietario') {
-          navigate('/owner-dashboard');
+          navigate('/area-clientes/propietario/dashboard');
         } else if (user.role === 'inquilino') {
-          navigate('/tenant-dashboard');
+          navigate('/area-clientes/inquilino/servicios');
         } else {
           navigate('/auth');
         }

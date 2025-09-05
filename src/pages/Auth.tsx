@@ -29,9 +29,9 @@ const Auth: React.FC = () => {
     if (user) {
       // Redirect based on user role
       if (user.role === 'propietario') {
-        navigate('/owner-dashboard');
+        navigate('/area-clientes/propietario/dashboard');
       } else if (user.role === 'inquilino') {
-        navigate('/tenant-dashboard');
+        navigate('/area-clientes/inquilino/servicios');
       } else {
         navigate('/');
       }

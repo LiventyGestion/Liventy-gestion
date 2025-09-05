@@ -12,8 +12,12 @@ import Blog from "./pages/Blog";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Auth from "./pages/Auth";
-import OwnerDashboard from "./pages/OwnerDashboard";
-import TenantDashboard from "./pages/TenantDashboard";
+import ClientArea from "./pages/ClientArea";
+import TenantServices from "./pages/tenant/TenantServices";
+import TenantIncidents from "./pages/tenant/TenantIncidents";
+import TenantChat from "./pages/tenant/TenantChat";
+import TenantContact from "./pages/tenant/TenantContact";
+import GlobalDocuments from "./pages/GlobalDocuments";
 import RentalSimulatorPage from "./pages/RentalSimulatorPage";
 import LeadMagnetPage from "./pages/LeadMagnetPage";
 import Herramientas from "./pages/Herramientas";
@@ -42,31 +46,62 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/auth" element={<Auth />} />
+            
+            {/* New Client Area Structure */}
             <Route 
-              path="/owner-dashboard" 
+              path="/area-clientes" 
               element={
-                <ProtectedRoute allowedRoles={['propietario']}>
-                  <OwnerDashboard />
+                <ProtectedRoute allowedRoles={['inquilino', 'propietario']}>
+                  <ClientArea />
                 </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/tenant-dashboard" 
-              element={
-                <ProtectedRoute allowedRoles={['inquilino']}>
-                  <TenantDashboard />
-                </ProtectedRoute>
-              } 
-            />
+              }
+            >
+              {/* Tenant Routes */}
+              <Route 
+                path="inquilino/servicios" 
+                element={
+                  <ProtectedRoute allowedRoles={['inquilino']}>
+                    <TenantServices />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="inquilino/incidencias" 
+                element={
+                  <ProtectedRoute allowedRoles={['inquilino']}>
+                    <TenantIncidents />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="inquilino/consulta" 
+                element={
+                  <ProtectedRoute allowedRoles={['inquilino']}>
+                    <TenantChat />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="inquilino/contacto" 
+                element={
+                  <ProtectedRoute allowedRoles={['inquilino']}>
+                    <TenantContact />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Global Documents */}
+              <Route path="documentos" element={<GlobalDocuments />} />
+            </Route>
+            
             <Route path="/simulador" element={<RentalSimulatorPage />} />
             <Route path="/herramientas" element={<Herramientas />} />
             <Route path="/empezar-ahora" element={<StartNowPage />} />
             <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

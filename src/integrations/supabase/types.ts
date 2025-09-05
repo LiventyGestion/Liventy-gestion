@@ -73,6 +73,74 @@ export type Database = {
           },
         ]
       }
+      chat_messages: {
+        Row: {
+          attachments: string[] | null
+          created_at: string
+          id: string
+          message: string
+          sender: string
+          thread_id: string
+        }
+        Insert: {
+          attachments?: string[] | null
+          created_at?: string
+          id?: string
+          message: string
+          sender: string
+          thread_id: string
+        }
+        Update: {
+          attachments?: string[] | null
+          created_at?: string
+          id?: string
+          message?: string
+          sender?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          created_at: string
+          id: string
+          lease_id: string | null
+          property_id: string | null
+          status: string
+          title: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lease_id?: string | null
+          property_id?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lease_id?: string | null
+          property_id?: string | null
+          status?: string
+          title?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       chatbot_context: {
         Row: {
           context_data: Json
@@ -275,6 +343,7 @@ export type Database = {
           fecha_resolucion: string | null
           id: string
           propiedad_id: string
+          service_request_id: string | null
         }
         Insert: {
           descripcion?: string | null
@@ -283,6 +352,7 @@ export type Database = {
           fecha_resolucion?: string | null
           id?: string
           propiedad_id: string
+          service_request_id?: string | null
         }
         Update: {
           descripcion?: string | null
@@ -291,6 +361,7 @@ export type Database = {
           fecha_resolucion?: string | null
           id?: string
           propiedad_id?: string
+          service_request_id?: string | null
         }
         Relationships: [
           {
@@ -305,6 +376,13 @@ export type Database = {
             columns: ["propiedad_id"]
             isOneToOne: false
             referencedRelation: "Propiedades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Incidencias_service_request_id_fkey"
+            columns: ["service_request_id"]
+            isOneToOne: false
+            referencedRelation: "service_requests"
             referencedColumns: ["id"]
           },
         ]
@@ -430,6 +508,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      service_requests: {
+        Row: {
+          created_at: string
+          date: string
+          description: string | null
+          hours: number | null
+          id: string
+          maintenance_category: string | null
+          photos: string[] | null
+          priority: string | null
+          role: string
+          status: string
+          time_slot: string | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          description?: string | null
+          hours?: number | null
+          id?: string
+          maintenance_category?: string | null
+          photos?: string[] | null
+          priority?: string | null
+          role: string
+          status?: string
+          time_slot?: string | null
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          description?: string | null
+          hours?: number | null
+          id?: string
+          maintenance_category?: string | null
+          photos?: string[] | null
+          priority?: string | null
+          role?: string
+          status?: string
+          time_slot?: string | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       Usuarios: {
         Row: {
