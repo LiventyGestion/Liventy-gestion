@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { useSearchParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
@@ -17,29 +19,77 @@ const contactSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor, introduce un email válido"),
   phone: z.string().min(9, "El teléfono debe tener al menos 9 dígitos"),
-  message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres")
+  message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres"),
+  // Additional fields for property owners
+  tipo: z.string().optional(),
+  origen: z.string().optional(),
+  motivo: z.string().optional(),
+  municipio: z.string().optional(),
+  barrio: z.string().optional(),
+  direccion: z.string().optional(),
+  tipoAlquiler: z.string().optional(),
+  superficie: z.string().optional(),
+  habitaciones: z.string().optional(),
+  estado: z.string().optional()
 });
 
 type ContactForm = z.infer<typeof contactSchema>;
 
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [searchParams] = useSearchParams();
   const { toast } = useToast();
+  
+  // Get URL parameters
+  const urlTipo = searchParams.get('tipo');
+  const urlOrigen = searchParams.get('origen');
+  const urlMotivo = searchParams.get('motivo');
   
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, touchedFields },
-    reset
+    reset,
+    setValue,
+    watch
   } = useForm<ContactForm>({
     resolver: zodResolver(contactSchema),
-    mode: "onBlur"
+    mode: "onBlur",
+    defaultValues: {
+      tipo: urlTipo || '',
+      origen: urlOrigen || '',
+      motivo: urlMotivo || ''
+    }
   });
+
+  // Set default values from URL parameters
+  useEffect(() => {
+    if (urlTipo) setValue('tipo', urlTipo);
+    if (urlOrigen) setValue('origen', urlOrigen);
+    if (urlMotivo) setValue('motivo', urlMotivo);
+  }, [urlTipo, urlOrigen, urlMotivo, setValue]);
+
+  const watchedFields = watch();
+  const isPropertyOwner = watchedFields.tipo === 'propietario';
 
   const onSubmit = async (data: ContactForm) => {
     try {
       // Simulate form submission
       await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('Form data:', data); // For debugging
+      
+      // Analytics tracking
+      if (data.origen === 'gestion-integral') {
+        // Track cta_gestion_integral_click event
+        console.log('Tracking: cta_gestion_integral_click');
+      } else if (data.motivo === 'asesoramiento-legal') {
+        // Track cta_asesoramiento_click event  
+        console.log('Tracking: cta_asesoramiento_click');
+      } else if (data.motivo === 'incidencias') {
+        // Track cta_incidencias_prop_click event
+        console.log('Tracking: cta_incidencias_prop_click');
+      }
       
       setIsSubmitted(true);
       reset();
@@ -71,9 +121,14 @@ const Contact = () => {
       <main className="container mx-auto px-6 sm:px-8 py-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-4">Contacta con Nosotros</h1>
+            <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+              {isPropertyOwner ? 'Contacta con Nosotros - Propietarios' : 'Contacta con Nosotros'}
+            </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Estamos aquí para ayudarte en todo lo que necesites
+              {isPropertyOwner ? 
+                'Cuéntanos más sobre tu propiedad y cómo podemos ayudarte' :
+                'Estamos aquí para ayudarte en todo lo que necesites'
+              }
             </p>
           </div>
 
@@ -102,9 +157,10 @@ const Contact = () => {
                   ) : (
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                       <div className="space-y-4">
+                        {/* Nombre */}
                         <div className="space-y-2">
                           <Label htmlFor="name" className="text-sm font-medium">
-                            Tu nombre *
+                            Nombre y apellidos *
                           </Label>
                           <div className="relative">
                             <Input
@@ -132,9 +188,10 @@ const Contact = () => {
                           )}
                         </div>
 
+                        {/* Email */}
                         <div className="space-y-2">
                           <Label htmlFor="email" className="text-sm font-medium">
-                            Tu email *
+                            Email *
                           </Label>
                           <div className="relative">
                             <Input
@@ -163,9 +220,10 @@ const Contact = () => {
                           )}
                         </div>
 
+                        {/* Teléfono */}
                         <div className="space-y-2">
                           <Label htmlFor="phone" className="text-sm font-medium">
-                            Tu teléfono *
+                            Teléfono *
                           </Label>
                           <div className="relative">
                             <Input
@@ -194,15 +252,120 @@ const Contact = () => {
                           )}
                         </div>
 
+                        {/* Property Owner Fields */}
+                        {isPropertyOwner && (
+                          <>
+                            {/* Municipio */}
+                            <div className="space-y-2">
+                              <Label htmlFor="municipio" className="text-sm font-medium">
+                                Municipio
+                              </Label>
+                              <Input
+                                id="municipio"
+                                {...register("municipio")}
+                                placeholder="Ej: Barakaldo, Getxo, Bilbao..."
+                                className="min-h-[44px]"
+                              />
+                            </div>
+
+                            {/* Barrio/Zona */}
+                            <div className="space-y-2">
+                              <Label htmlFor="barrio" className="text-sm font-medium">
+                                Barrio/Zona
+                              </Label>
+                              <Input
+                                id="barrio"
+                                {...register("barrio")}
+                                placeholder="Ej: Indautxu, Abando, Deusto, Santutxu..."
+                                className="min-h-[44px]"
+                              />
+                            </div>
+
+                            {/* Dirección */}
+                            <div className="space-y-2">
+                              <Label htmlFor="direccion" className="text-sm font-medium">
+                                Dirección
+                              </Label>
+                              <Input
+                                id="direccion"
+                                {...register("direccion")}
+                                placeholder="Ej: Gran Vía Don Diego López de Haro 45"
+                                className="min-h-[44px]"
+                              />
+                            </div>
+
+                            {/* Tipo de alquiler */}
+                            <div className="space-y-2">
+                              <Label htmlFor="tipoAlquiler" className="text-sm font-medium">
+                                Tipo de alquiler
+                              </Label>
+                              <Select onValueChange={(value) => setValue('tipoAlquiler', value)}>
+                                <SelectTrigger className="min-h-[44px]">
+                                  <SelectValue placeholder="Selecciona el tipo de alquiler" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="temporal">Temporal</SelectItem>
+                                  <SelectItem value="larga-duracion">Larga duración</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+
+                            {/* Property details grid */}
+                            <div className="grid grid-cols-3 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="superficie" className="text-sm font-medium">
+                                  Superficie (m²)
+                                </Label>
+                                <Input
+                                  id="superficie"
+                                  {...register("superficie")}
+                                  placeholder="80"
+                                  className="min-h-[44px]"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="habitaciones" className="text-sm font-medium">
+                                  Habitaciones
+                                </Label>
+                                <Input
+                                  id="habitaciones"
+                                  {...register("habitaciones")}
+                                  placeholder="2"
+                                  className="min-h-[44px]"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label htmlFor="estado" className="text-sm font-medium">
+                                  Estado
+                                </Label>
+                                <Select onValueChange={(value) => setValue('estado', value)}>
+                                  <SelectTrigger className="min-h-[44px]">
+                                    <SelectValue placeholder="Estado" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="excelente">Excelente</SelectItem>
+                                    <SelectItem value="bueno">Bueno</SelectItem>
+                                    <SelectItem value="reforma">A reformar</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                            </div>
+                          </>
+                        )}
+
+                        {/* Mensaje */}
                         <div className="space-y-2">
                           <Label htmlFor="message" className="text-sm font-medium">
-                            Mensaje *
+                            {isPropertyOwner ? 'Comentarios' : 'Mensaje'} *
                           </Label>
                           <div className="relative">
                             <Textarea
                               id="message"
                               {...register("message")}
-                              placeholder="Cuéntanos en qué podemos ayudarte..."
+                              placeholder={isPropertyOwner ? 
+                                "Cuéntanos más detalles sobre tu propiedad o cualquier pregunta que tengas..." :
+                                "Cuéntanos en qué podemos ayudarte..."
+                              }
                               rows={4}
                               className={cn(
                                 "min-h-[100px] resize-none",
@@ -218,6 +381,11 @@ const Contact = () => {
                             </p>
                           )}
                         </div>
+
+                        {/* Hidden fields for tracking */}
+                        <input type="hidden" {...register("tipo")} />
+                        <input type="hidden" {...register("origen")} />
+                        <input type="hidden" {...register("motivo")} />
                       </div>
 
                       <Button 

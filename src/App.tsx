@@ -26,6 +26,9 @@ import StartNowPage from "./pages/StartNowPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
 import NotFound from "./pages/NotFound";
+import GestionIntegral from "./pages/services/GestionIntegral";
+import AsesoramientoLegal from "./pages/services/AsesoramientoLegal";
+import MantenimientoIncidencias from "./pages/services/MantenimientoIncidencias";
 
 const queryClient = new QueryClient();
 
@@ -109,6 +112,12 @@ const App = () => (
             <Route path="/herramientas" element={<Herramientas />} />
             <Route path="/empezar-ahora" element={<StartNowPage />} />
             <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
+            
+            {/* Service Pages */}
+            <Route path="/servicios/gestion-integral" element={<GestionIntegral />} />
+            <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
+            <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
+            
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
             <Route path="*" element={<NotFound />} />
