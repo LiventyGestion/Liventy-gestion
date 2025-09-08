@@ -419,6 +419,30 @@ export type Database = {
           },
         ]
       }
+      lead_rate_limits: {
+        Row: {
+          attempt_count: number | null
+          email: string
+          first_attempt: string | null
+          id: string
+          last_attempt: string | null
+        }
+        Insert: {
+          attempt_count?: number | null
+          email: string
+          first_attempt?: string | null
+          id?: string
+          last_attempt?: string | null
+        }
+        Update: {
+          attempt_count?: number | null
+          email?: string
+          first_attempt?: string | null
+          id?: string
+          last_attempt?: string | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           created_at: string
@@ -650,11 +674,23 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_lead_rate_limit: {
+        Args: {
+          max_attempts?: number
+          p_email: string
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
       cleanup_old_anonymous_conversations: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
       cleanup_old_anonymous_results: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_lead_rate_limits: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -680,6 +716,10 @@ export type Database = {
       }
       validate_email_format: {
         Args: { email: string }
+        Returns: boolean
+      }
+      validate_lead_email: {
+        Args: { p_email: string }
         Returns: boolean
       }
     }
