@@ -22,7 +22,7 @@ const Footer = () => {
           <div className="sm:col-span-2 lg:col-span-1">
             <div className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/8a8330ce-f5ff-4c18-9ac4-2d21db8b4d79.png" 
+                src="/lovable-uploads/5b1ed236-dc4e-465f-a21e-7c3186a1ba0d.png" 
                 alt="Liventy Gestión - Logo de la empresa" 
                 className="h-16 sm:h-20 w-auto"
               />
