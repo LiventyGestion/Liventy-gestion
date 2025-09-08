@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      anonymous_rate_limits: {
+        Row: {
+          attempt_count: number | null
+          first_attempt: string | null
+          id: string
+          last_attempt: string | null
+          operation_type: string
+          session_id: string
+        }
+        Insert: {
+          attempt_count?: number | null
+          first_attempt?: string | null
+          id?: string
+          last_attempt?: string | null
+          operation_type: string
+          session_id: string
+        }
+        Update: {
+          attempt_count?: number | null
+          first_attempt?: string | null
+          id?: string
+          last_attempt?: string | null
+          operation_type?: string
+          session_id?: string
+        }
+        Relationships: []
+      }
       availability: {
         Row: {
           created_at: string | null
@@ -674,6 +701,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_anonymous_rate_limit: {
+        Args: {
+          max_attempts?: number
+          p_operation_type: string
+          p_session_id: string
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
       check_lead_rate_limit: {
         Args: {
           max_attempts?: number
@@ -683,6 +719,10 @@ export type Database = {
         Returns: boolean
       }
       cleanup_old_anonymous_conversations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_anonymous_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -706,6 +746,16 @@ export type Database = {
         }
         Returns: string
       }
+      detect_suspicious_activity: {
+        Args: { check_window_minutes?: number }
+        Returns: {
+          activity_type: string
+          attempt_count: number
+          first_attempt: string
+          identifier: string
+          last_attempt: string
+        }[]
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -720,6 +770,10 @@ export type Database = {
       }
       validate_lead_email: {
         Args: { p_email: string }
+        Returns: boolean
+      }
+      validate_session_access: {
+        Args: { p_session_id: string; p_user_id?: string }
         Returns: boolean
       }
     }
