@@ -764,6 +764,10 @@ export type Database = {
         Args: { property_id: string }
         Returns: boolean
       }
+      validate_chatbot_session_access: {
+        Args: { p_session_id: string; p_user_id?: string }
+        Returns: boolean
+      }
       validate_email_format: {
         Args: { email: string }
         Returns: boolean
