@@ -756,6 +756,16 @@ export type Database = {
           last_attempt: string
         }[]
       }
+      detect_usuarios_suspicious_activity: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          details: string
+          event_time: string
+          event_type: string
+          target_user_id: string
+          user_id: string
+        }[]
+      }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
