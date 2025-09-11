@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, AlertCircle, ArrowLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { useFormEmail } from "@/hooks/useFormEmail";
 
 const startNowSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -38,13 +39,14 @@ const StartNowPage = () => {
   const [serviceInterests, setServiceInterests] = useState<string[]>([]);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { sendFormEmail, isSubmitting: isEmailSubmitting } = useFormEmail();
   
   const {
     register,
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting, touchedFields },
+    formState: { errors, touchedFields },
     reset
   } = useForm<StartNowForm>({
     resolver: zodResolver(startNowSchema),
@@ -64,8 +66,27 @@ const StartNowPage = () => {
 
   const onSubmit = async (data: StartNowForm) => {
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Parse name into nombre and apellidos  
+      const nameParts = data.name.trim().split(' ');
+      const nombre = nameParts[0] || '';
+      const apellidos = nameParts.slice(1).join(' ') || '';
+      
+      await sendFormEmail({
+        formType: 'solicitud_detallada',
+        email: data.email,
+        nombre,
+        apellidos,
+        phone: data.phone,
+        propertyType: data.propertyType,
+        propertyLocation: data.propertyLocation,
+        propertySize: data.propertySize,
+        currentSituation: data.currentSituation,
+        serviceInterest: data.serviceInterest.join(', '),
+        monthlyRent: data.monthlyRent || '',
+        timeline: data.timeline,
+        additionalInfo: data.additionalInfo || '',
+        hasAgreedToTerms: data.hasAgreedToTerms
+      });
       
       setIsSubmitted(true);
       reset();
@@ -80,16 +101,8 @@ const StartNowPage = () => {
         });
       }
       
-      toast({
-        title: "¡Solicitud enviada!",
-        description: "Hemos recibido tu información. Te contactaremos en las próximas 2 horas.",
-      });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
-        variant: "destructive",
-      });
+      console.error('Error sending form:', error);
     }
   };
 
@@ -461,7 +474,8 @@ const StartNowPage = () => {
                     <div className="flex items-start space-x-2">
                       <Checkbox
                         id="hasAgreedToTerms"
-                        {...register("hasAgreedToTerms")}
+                        checked={watch("hasAgreedToTerms") || false}
+                        onCheckedChange={(checked) => setValue("hasAgreedToTerms", Boolean(checked))}
                         className="mt-1"
                       />
                       <Label htmlFor="hasAgreedToTerms" className="text-sm cursor-pointer leading-relaxed">
@@ -487,9 +501,9 @@ const StartNowPage = () => {
                   <Button 
                     type="submit" 
                     className="w-full min-h-[52px] text-lg font-medium"
-                    disabled={isSubmitting}
+                    disabled={isEmailSubmitting}
                   >
-                    {isSubmitting ? "Enviando solicitud..." : "Enviar solicitud detallada"}
+                    {isEmailSubmitting ? "Enviando solicitud..." : "Enviar solicitud detallada"}
                   </Button>
                   
                   <p className="text-sm text-muted-foreground text-center">
