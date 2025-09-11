@@ -1,0 +1,2 @@
+-- Check if RESEND_API_KEY is configured (this is informational only)
+-- The actual secret management happens at the Supabase level

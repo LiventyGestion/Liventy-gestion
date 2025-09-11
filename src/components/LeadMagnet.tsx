@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { useFormEmail } from "@/hooks/useFormEmail";
 import { sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
 import propertyGuide from "@/assets/property-guide.jpg";
 
@@ -11,12 +11,19 @@ const LeadMagnet = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { toast } = useToast();
   
   // Rate limiter instance
   const rateLimiter = new RateLimiter();
+  
+  const { sendFormEmail, isSubmitting } = useFormEmail({
+    onSuccess: () => {
+      setIsSubmitted(true);
+      setName("");
+      setEmail("");
+    }
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Sanitize inputs
@@ -24,39 +31,23 @@ const LeadMagnet = () => {
     const sanitizedEmail = sanitizeEmail(email);
     
     if (!sanitizedName || !sanitizedEmail) {
-      toast({
-        title: "Campos requeridos",
-        description: "Por favor, completa todos los campos.",
-        variant: "destructive",
-      });
       return;
     }
     
     // Validate email format
     if (!validateEmail(sanitizedEmail)) {
-      toast({
-        title: "Email inválido",
-        description: "Por favor ingresa un email válido.",
-        variant: "destructive",
-      });
       return;
     }
     
     // Rate limiting check
-    if (!rateLimiter.isAllowed(`lead_${sanitizedEmail}`, 3, 3600000)) { // 3 attempts per hour
-      toast({
-        title: "Demasiados intentos",
-        description: "Intenta de nuevo en una hora.",
-        variant: "destructive",
-      });
+    if (!rateLimiter.isAllowed(`lead_${sanitizedEmail}`, 3, 3600000)) {
       return;
     }
 
-    // Simulate form submission
-    setIsSubmitted(true);
-    toast({
-      title: "¡Descarga iniciada!",
-      description: "Revisa tu email para acceder a la guía.",
+    await sendFormEmail({
+      formType: 'lead_magnet',
+      fullName: sanitizedName,
+      email: sanitizedEmail
     });
   };
 
@@ -119,7 +110,7 @@ const LeadMagnet = () => {
               <div>
                 <Input
                   type="email"
-                  placeholder="propietario@liventygestion.com"
+                  placeholder="propietario@ejemplo.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12"
@@ -130,8 +121,9 @@ const LeadMagnet = () => {
                 type="submit" 
                 size="lg" 
                 className="w-full h-12 text-base"
+                disabled={isSubmitting}
               >
-                Descarga tu guía gratuita
+                {isSubmitting ? "Enviando..." : "Descarga tu guía gratuita"}
                 <Download className="ml-2 h-5 w-5" />
               </Button>
             </form>

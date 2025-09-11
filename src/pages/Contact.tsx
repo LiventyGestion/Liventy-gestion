@@ -13,7 +13,8 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { useFormEmail } from "@/hooks/useFormEmail";
+import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail } from '@/utils/security';
 
 const contactSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -38,7 +39,13 @@ type ContactForm = z.infer<typeof contactSchema>;
 const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchParams] = useSearchParams();
-  const { toast } = useToast();
+  
+  const { sendFormEmail, isSubmitting } = useFormEmail({
+    onSuccess: () => {
+      setIsSubmitted(true);
+      reset();
+    }
+  });
   
   // Get URL parameters
   const urlTipo = searchParams.get('tipo');
@@ -48,7 +55,7 @@ const Contact = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, touchedFields },
+    formState: { errors, isSubmitting: isFormSubmitting, touchedFields },
     reset,
     setValue,
     watch
@@ -74,36 +81,38 @@ const Contact = () => {
 
   const onSubmit = async (data: ContactForm) => {
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
       console.log('Form data:', data); // For debugging
       
-      // Analytics tracking
-      if (data.origen === 'gestion-integral') {
-        // Track cta_gestion_integral_click event
-        console.log('Tracking: cta_gestion_integral_click');
-      } else if (data.motivo === 'asesoramiento-legal') {
-        // Track cta_asesoramiento_click event  
-        console.log('Tracking: cta_asesoramiento_click');
-      } else if (data.motivo === 'incidencias') {
-        // Track cta_incidencias_prop_click event
-        console.log('Tracking: cta_incidencias_prop_click');
-      }
+      // Parse name into nombre and apellidos  
+      const nameParts = data.name.trim().split(' ');
+      const nombre = nameParts[0] || '';
+      const apellidos = nameParts.slice(1).join(' ') || '';
       
-      setIsSubmitted(true);
-      reset();
-      
-      toast({
-        title: "¡Mensaje enviado!",
-        description: "Gracias por contactarnos. Te responderemos en menos de 24 h.",
+      // Determine form type based on tipo field
+      const formType = isPropertyOwner ? 'captacion_propietarios' : 'contacto_general';
+
+      await sendFormEmail({
+        formType,
+        nombre,
+        apellidos, 
+        email: data.email,
+        phone: data.phone,
+        message: data.message,
+        // Additional owner fields
+        tipo: data.tipo,
+        origen: data.origen,
+        motivo: data.motivo,
+        municipio: data.municipio,
+        barrio: data.barrio,
+        direccion: data.direccion,
+        tipoAlquiler: data.tipoAlquiler,
+        superficie: data.superficie,
+        habitaciones: data.habitaciones,
+        estado: data.estado
       });
+
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
-        variant: "destructive",
-      });
+      console.error('Contact form error:', error);
     }
   };
 
@@ -198,7 +207,7 @@ const Contact = () => {
                               id="email"
                               type="email"
                               {...register("email")}
-                              placeholder="propietario@liventygestion.com"
+                              placeholder="propietario@ejemplo.com"
                               className={cn(
                                 "min-h-[44px] pr-10",
                                 getFieldState("email").hasError && "border-destructive focus-visible:ring-destructive",
@@ -391,9 +400,9 @@ const Contact = () => {
                       <Button 
                         type="submit" 
                         className="w-full min-h-[44px] text-base font-medium"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isFormSubmitting}
                       >
-                        {isSubmitting ? "Enviando..." : "Enviar Mensaje"}
+                        {(isSubmitting || isFormSubmitting) ? "Enviando..." : "Enviar Mensaje"}
                       </Button>
                       
                       <p className="text-xs text-muted-foreground text-center">
@@ -435,11 +444,11 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold text-lg">Email</h3>
                       <a 
-                        href="mailto:liventygestion@gmail.com" 
+                        href="mailto:contacto@liventygestion.com" 
                         className="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center break-all"
-                        aria-label="Enviar email a liventygestion@gmail.com"
+                        aria-label="Enviar email a contacto@liventygestion.com"
                       >
-                        liventygestion@gmail.com
+                        contacto@liventygestion.com
                       </a>
                     </div>
                   </div>

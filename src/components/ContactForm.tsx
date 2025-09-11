@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useToast } from "@/hooks/use-toast";
+import { useFormEmail } from "@/hooks/useFormEmail";
 import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail, RateLimiter } from '@/utils/security';
 import professionalService from "@/assets/professional-service.jpg";
 
@@ -36,7 +36,13 @@ type ContactForm = z.infer<typeof contactSchema>;
 
 const ContactFormSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { toast } = useToast();
+  
+  const { sendFormEmail, isSubmitting: isEmailSubmitting } = useFormEmail({
+    onSuccess: () => {
+      setIsSubmitted(true);
+      reset();
+    }
+  });
   
   // Rate limiter instance
   const rateLimiter = new RateLimiter();
@@ -52,43 +58,24 @@ const ContactFormSection = () => {
   });
 
   const onSubmit = async (data: ContactForm) => {
-    try {
-      // Rate limiting check
-      if (!rateLimiter.isAllowed(`contact_${data.email}`, 3, 3600000)) { // 3 attempts per hour
-        toast({
-          title: "Demasiados intentos",
-          description: "Has enviado muchos mensajes. Intenta de nuevo en una hora.",
-          variant: "destructive",
-        });
-        return;
-      }
-      
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      setIsSubmitted(true);
-      reset();
-      
-      // GA4 tracking
-      if (typeof (window as any).gtag !== 'undefined') {
-        (window as any).gtag('event', 'form_submit', {
-          location: 'home_contact',
-          label: 'contacto_form',
-          form_name: 'contact_form'
-        });
-      }
-      
-      toast({
-        title: "¡Mensaje enviado!",
-        description: "Gracias por contactarnos. Te responderemos en menos de 24 h.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
-        variant: "destructive",
-      });
+    // Rate limiting check
+    if (!rateLimiter.isAllowed(`contact_${data.email}`, 3, 3600000)) {
+      return;
     }
+
+    // Parse name into nombre and apellidos
+    const nameParts = data.name.trim().split(' ');
+    const nombre = nameParts[0] || '';
+    const apellidos = nameParts.slice(1).join(' ') || '';
+
+    await sendFormEmail({
+      formType: 'contacto_general',
+      nombre,
+      apellidos,
+      email: data.email,
+      phone: data.phone,
+      message: data.message
+    });
   };
 
   const getFieldState = (fieldName: keyof ContactForm) => {
@@ -221,7 +208,7 @@ const ContactFormSection = () => {
                         id="email"
                         type="email"
                         {...register("email")}
-                        placeholder="propietario@liventygestion.com"
+                        placeholder="propietario@ejemplo.com"
                         className={cn(
                           "min-h-[44px] pr-10",
                           getFieldState("email").hasError && "border-destructive focus-visible:ring-destructive",
@@ -271,9 +258,9 @@ const ContactFormSection = () => {
                   <Button 
                     type="submit" 
                     className="w-full min-h-[44px] text-base font-medium"
-                    disabled={isSubmitting}
+                    disabled={isEmailSubmitting}
                   >
-                    {isSubmitting ? "Enviando..." : "Solicitar información"}
+                    {isEmailSubmitting ? "Enviando..." : "Solicitar información"}
                   </Button>
                   
                   <p className="text-xs text-muted-foreground text-center">

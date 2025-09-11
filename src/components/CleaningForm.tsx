@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useServiceRequests } from "@/hooks/useServiceRequests";
+import { useFormEmail } from "@/hooks/useFormEmail";
+import { RateLimiter } from '@/utils/security';
 
 interface CleaningFormProps {
   selectedDate: Date;
@@ -17,7 +18,13 @@ interface CleaningFormProps {
 export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormProps) {
   const [hours, setHours] = useState<string>("");
   const [timeSlot, setTimeSlot] = useState<string>("");
-  const { createServiceRequest, isLoading } = useServiceRequests();
+  
+  const rateLimiter = new RateLimiter();
+  const { sendFormEmail, isSubmitting } = useFormEmail({
+    onSuccess: () => {
+      onComplete();
+    }
+  });
 
   const timeSlots = [
     { value: "morning", label: "Mañana (9:00 - 13:00)", available: true },
@@ -35,18 +42,23 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
   const handleSubmit = async () => {
     if (!hours || !timeSlot) return;
     
-    const timeSlotLabel = timeSlots.find(slot => slot.value === timeSlot)?.label || timeSlot;
-    
-    const result = await createServiceRequest({
-      type: 'limpieza',
-      date: selectedDate,
-      time_slot: timeSlotLabel,
-      hours: parseInt(hours)
-    });
-
-    if (result) {
-      onComplete();
+    // Rate limiting check
+    if (!rateLimiter.isAllowed('cleaning_form', 5, 3600000)) {
+      return;
     }
+
+    const timeSlotLabel = timeSlots.find(slot => slot.value === timeSlot)?.label || timeSlot;
+    const selectedHourOption = hourOptions.find(option => option.value === hours);
+    
+    await sendFormEmail({
+      formType: 'servicio_limpieza',
+      fullName: 'Usuario Área Cliente', // This would come from auth context normally
+      email: 'cliente@ejemplo.com', // This would come from auth context normally  
+      selectedDate: format(selectedDate, 'yyyy-MM-dd'),
+      hours: selectedHourOption?.label,
+      timeSlot: timeSlotLabel,
+      price: selectedHourOption?.price
+    });
   };
 
   const selectedHourOption = hourOptions.find(option => option.value === hours);
@@ -159,9 +171,9 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
               className="w-full mt-6" 
               size="lg" 
               onClick={handleSubmit}
-              disabled={isLoading}
+              disabled={isSubmitting}
             >
-              {isLoading ? 'Enviando solicitud...' : 'Confirmar Solicitud de Limpieza'}
+              {isSubmitting ? 'Enviando solicitud...' : 'Confirmar Solicitud de Limpieza'}
             </Button>
           </CardContent>
         </Card>
