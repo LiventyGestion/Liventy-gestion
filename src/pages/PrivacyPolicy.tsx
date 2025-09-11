@@ -50,7 +50,7 @@ const PrivacyPolicy = () => {
                   <p>Domicilio: [Dirección]</p>
                   <p className="flex items-center space-x-2">
                     <Mail className="h-4 w-4" />
-                    <span>Correo electrónico: liventygestion@gmail.com</span>
+                    <span>Correo electrónico: contacto@liventygestion.com</span>
                   </p>
                 </div>
               </CardContent>
@@ -157,8 +157,8 @@ const PrivacyPolicy = () => {
                   </ul>
                   <p className="text-muted-foreground mt-4">
                     Para ejercerlos, escríbenos a{" "}
-                    <a href="mailto:liventygestion@gmail.com" className="text-primary hover:underline">
-                      liventygestion@gmail.com
+                    <a href="mailto:contacto@liventygestion.com" className="text-primary hover:underline">
+                      contacto@liventygestion.com
                     </a>
                     . También puedes reclamar ante la Agencia Española de Protección de Datos si lo consideras necesario.
                   </p>
@@ -199,7 +199,7 @@ const PrivacyPolicy = () => {
                   Estamos aquí para resolver cualquier pregunta que tengas sobre el tratamiento de tus datos.
                 </p>
                 <a 
-                  href="mailto:liventygestion@gmail.com"
+                  href="mailto:contacto@liventygestion.com"
                   className="inline-flex items-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
                 >
                   <Mail className="h-4 w-4" />

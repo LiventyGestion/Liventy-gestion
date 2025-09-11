@@ -145,8 +145,8 @@ const CookiePolicy = () => {
                     <Cookie className="h-4 w-4" />
                     <span>Política de Privacidad</span>
                   </Link>
-                  <a 
-                    href="mailto:liventygestion@gmail.com"
+                    <a 
+                      href="mailto:contacto@liventygestion.com"
                     className="inline-flex items-center justify-center space-x-2 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     <Mail className="h-4 w-4" />
