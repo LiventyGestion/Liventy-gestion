@@ -2,9 +2,18 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.56.0";
 
-const corsHeaders = {
+// Enhanced security headers with CSP and additional protections
+const enhancedCorsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+  'X-XSS-Protection': '1; mode=block',
+  'Referrer-Policy': 'strict-origin-when-cross-origin',
+  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
+  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:",
+  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
 };
 
 serve(async (req) => {
@@ -12,7 +21,7 @@ serve(async (req) => {
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: enhancedCorsHeaders });
   }
 
   try {
@@ -43,7 +52,7 @@ serve(async (req) => {
         conversationId: null,
         intent: 'basic_fallback'
       }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...enhancedCorsHeaders, 'Content-Type': 'application/json' },
       });
     }
 

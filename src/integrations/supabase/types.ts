@@ -446,6 +446,36 @@ export type Database = {
           },
         ]
       }
+      ip_rate_limits: {
+        Row: {
+          attempt_count: number
+          blocked_until: string | null
+          first_attempt: string
+          id: string
+          ip_address: string
+          last_attempt: string
+          operation_type: string
+        }
+        Insert: {
+          attempt_count?: number
+          blocked_until?: string | null
+          first_attempt?: string
+          id?: string
+          ip_address: string
+          last_attempt?: string
+          operation_type: string
+        }
+        Update: {
+          attempt_count?: number
+          blocked_until?: string | null
+          first_attempt?: string
+          id?: string
+          ip_address?: string
+          last_attempt?: string
+          operation_type?: string
+        }
+        Relationships: []
+      }
       lead_rate_limits: {
         Row: {
           attempt_count: number | null
@@ -613,6 +643,39 @@ export type Database = {
           },
         ]
       }
+      security_audit_log: {
+        Row: {
+          created_at: string
+          details: Json | null
+          event_type: string
+          id: string
+          ip_address: string | null
+          severity: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: string | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       service_requests: {
         Row: {
           created_at: string | null
@@ -710,6 +773,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_ip_rate_limit: {
+        Args: {
+          block_duration_minutes?: number
+          max_attempts?: number
+          p_ip_address: string
+          p_operation_type: string
+          window_minutes?: number
+        }
+        Returns: Json
+      }
       check_lead_rate_limit: {
         Args: {
           max_attempts?: number
@@ -746,6 +819,18 @@ export type Database = {
         }
         Returns: string
       }
+      detect_advanced_suspicious_activity: {
+        Args: { check_window_minutes?: number }
+        Returns: {
+          activity_type: string
+          attempt_count: number
+          first_attempt: string
+          identifier: string
+          last_attempt: string
+          recommendation: string
+          severity: string
+        }[]
+      }
       detect_suspicious_activity: {
         Args: { check_window_minutes?: number }
         Returns: {
@@ -769,6 +854,21 @@ export type Database = {
       get_current_user_role: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      log_security_event: {
+        Args: {
+          p_details?: Json
+          p_event_type: string
+          p_ip_address?: string
+          p_severity?: string
+          p_user_agent?: string
+          p_user_id?: string
+        }
+        Returns: undefined
+      }
+      schedule_security_cleanup: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       user_owns_property: {
         Args: { property_id: string }

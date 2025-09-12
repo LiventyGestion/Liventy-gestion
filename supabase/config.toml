@@ -2,3 +2,12 @@ project_id = "ozckjosasowyorthaxus"
 
 [functions.chatbot-ai]
 verify_jwt = false
+
+[functions.security-monitor]
+verify_jwt = false
+
+[functions.automated-security-cleanup]
+verify_jwt = false
+
+[functions.security-cron-job]
+verify_jwt = false
