@@ -56,8 +56,8 @@ const handler = async (req: Request): Promise<Response> => {
       ? `${nombre} ${apellidos}` 
       : (fullName || nombre || "Sin nombre");
 
-    // Generate subject with pattern: LG | {form_type} | {nombre} {apellidos}
-    const subject = `LG | ${formType} | ${displayName}`;
+    // Generate subject based on form type with specific patterns
+    const subject = getEmailSubject(formType, displayName);
 
     // Build email body content
     const currentTime = new Date().toLocaleString('es-ES', {
@@ -217,6 +217,28 @@ INFORMACIÓN TÉCNICA:
 };
 
 // Helper functions
+function getEmailSubject(formType: string, displayName: string): string {
+  // Map form types to specific subject patterns
+  switch (formType) {
+    case 'contacto':
+    case 'contacto_general':
+      return `Nuevo contacto – ${displayName}`;
+    
+    case 'solicitud':
+    case 'captacion_propietarios':
+    case 'solicitud_empresas':
+      return `Nueva solicitud – ${displayName}`;
+    
+    case 'guia':
+    case 'lead_magnet':
+      return `Descarga guía – ${displayName}`;
+    
+    default:
+      const formDisplayName = getFormTypeDisplayName(formType);
+      return `Nuevo envío (${formDisplayName}) – ${displayName}`;
+  }
+}
+
 function getFormTypeDisplayName(formType: string): string {
   const formTypes: Record<string, string> = {
     contacto_general: "Contacto General",
