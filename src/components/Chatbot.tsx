@@ -57,17 +57,44 @@ const Chatbot = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Auto-open chatbot after 3 seconds
+  // Auto-open chatbot based on user engagement
   useEffect(() => {
-    const timer = setTimeout(() => {
+    let timer: NodeJS.Timeout;
+    let scrollTimer: NodeJS.Timeout;
+    let hasScrolled = false;
+
+    const handleScroll = () => {
+      if (!hasScrolled && window.scrollY > 300) {
+        hasScrolled = true;
+        // Open after user scrolls and shows interest (15 seconds)
+        scrollTimer = setTimeout(() => {
+          if (!hasAutoOpened) {
+            setIsOpen(true);
+            setHasAutoOpened(true);
+            sessionStorage.setItem('chatbot-auto-opened', 'true');
+          }
+        }, 15000);
+      }
+    };
+
+    // Initial timer for users who don't scroll (45 seconds)
+    timer = setTimeout(() => {
       if (!hasAutoOpened) {
         setIsOpen(true);
         setHasAutoOpened(true);
         sessionStorage.setItem('chatbot-auto-opened', 'true');
       }
-    }, 3000);
+    }, 45000);
 
-    return () => clearTimeout(timer);
+    if (!hasAutoOpened) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(scrollTimer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [hasAutoOpened]);
 
   useEffect(() => {
