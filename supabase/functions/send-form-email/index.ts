@@ -46,7 +46,7 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Faltan campos obligatorios: formType, email y nombre" }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders },
+          headers: { "Content-Type": "application/json", ...enhancedCorsHeaders },
         }
       );
     }
@@ -198,7 +198,7 @@ INFORMACIÓN TÉCNICA:
       message: "Email enviado correctamente" 
     }), {
       status: 200,
-      headers: { "Content-Type": "application/json", ...corsHeaders },
+      headers: { "Content-Type": "application/json", ...enhancedCorsHeaders },
     });
 
   } catch (error: any) {
@@ -210,7 +210,7 @@ INFORMACIÓN TÉCNICA:
       }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { "Content-Type": "application/json", ...enhancedCorsHeaders },
       }
     );
   }

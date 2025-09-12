@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useFormEmail } from "@/hooks/useFormEmail";
 import { RateLimiter } from '@/utils/security';
+import { supabase } from "@/integrations/supabase/client";
 
 interface CleaningFormProps {
   selectedDate: Date;
@@ -40,20 +41,49 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
   ];
 
   const handleSubmit = async () => {
-    if (!hours || !timeSlot) return;
-    
-    // Rate limiting check
-    if (!rateLimiter.isAllowed('cleaning_form', 5, 3600000)) {
-      return;
-    }
-
+    // Sanitize inputs
     const timeSlotLabel = timeSlots.find(slot => slot.value === timeSlot)?.label || timeSlot;
     const selectedHourOption = hourOptions.find(option => option.value === hours);
     
+    if (!hours || !timeSlot) {
+      return;
+    }
+    
+    // Rate limiting check (max 3 cleaning requests per hour)
+    if (!rateLimiter.isAllowed(`cleaning_${Date.now()}`, 3, 3600000)) {
+      return;
+    }
+    
+    // First, save to Supabase (using leads table for service inquiries)
+    try {
+      const { error } = await supabase
+        .from('leads')
+        .insert([{
+          email: 'admin@liventygestion.com', // Anonymous cleaning request
+          nombre: 'Solicitud de Limpieza',
+          telefono: '',
+          mensaje: `Solicitud de limpieza para ${format(selectedDate, 'dd/MM/yyyy')}:
+Horas: ${selectedHourOption?.label}
+Franja horaria: ${timeSlotLabel}
+Precio estimado: ${selectedHourOption?.price}€`,
+          origen: 'servicio_limpieza',
+          source_tag: 'cleaning_form'
+        }]);
+
+      if (error) {
+        console.error('Error saving cleaning request:', error);
+        // Continue with email sending even if DB save fails
+      }
+    } catch (dbError) {
+      console.error('Database error:', dbError);
+      // Continue with email sending
+    }
+    
+    // Then, send email notification
     await sendFormEmail({
       formType: 'servicio_limpieza',
-      fullName: 'Usuario Área Cliente', // This would come from auth context normally
-      email: 'cliente@ejemplo.com', // This would come from auth context normally  
+      nombre: 'Solicitud de Limpieza',
+      email: 'admin@liventygestion.com',
       selectedDate: format(selectedDate, 'yyyy-MM-dd'),
       hours: selectedHourOption?.label,
       timeSlot: timeSlotLabel,

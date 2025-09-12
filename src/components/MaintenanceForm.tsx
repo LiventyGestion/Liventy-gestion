@@ -11,6 +11,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { useFormEmail } from "@/hooks/useFormEmail";
 import { sanitizeInput, RateLimiter } from '@/utils/security';
+import { supabase } from "@/integrations/supabase/client";
 
 interface MaintenanceFormProps {
   selectedDate: Date;
@@ -73,10 +74,38 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
       return;
     }
     
+    // First, save to Supabase (using leads table for now since these are service inquiries)
+    try {
+      const { error } = await supabase
+        .from('leads')
+        .insert([{
+          email: 'admin@liventygestion.com', // Anonymous maintenance request
+          nombre: 'Solicitud de Mantenimiento',
+          telefono: '',
+          mensaje: `Solicitud de mantenimiento para ${format(selectedDate, 'dd/MM/yyyy')}:
+Horas disponibles: ${availableHours}
+Categoría: ${categories.find(cat => cat.value === category)?.label || category}
+Prioridad: ${priorities.find(prio => prio.value === priority)?.label || priority}
+Descripción: ${sanitizedDescription}
+Fotos adjuntas: ${photos.length}`,
+          origen: 'servicio_mantenimiento',
+          source_tag: 'maintenance_form'
+        }]);
+
+      if (error) {
+        console.error('Error saving maintenance request:', error);
+        // Continue with email sending even if DB save fails
+      }
+    } catch (dbError) {
+      console.error('Database error:', dbError);
+      // Continue with email sending
+    }
+    
+    // Then, send email notification
     await sendFormEmail({
       formType: 'servicio_mantenimiento',
-      fullName: 'Usuario Área Cliente', // This would come from auth context normally
-      email: 'cliente@ejemplo.com', // This would come from auth context normally
+      nombre: 'Solicitud de Mantenimiento',
+      email: 'admin@liventygestion.com',
       selectedDate: format(selectedDate, 'yyyy-MM-dd'),
       availableHours,
       category: categories.find(cat => cat.value === category)?.label || category,

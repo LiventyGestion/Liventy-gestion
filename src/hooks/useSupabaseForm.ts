@@ -52,8 +52,17 @@ export function useSupabaseForm(options: UseSupabaseFormOptions = {}) {
 
       // Send notification email
       try {
-        await supabase.functions.invoke('form-notification', {
-          body: { type: 'lead', data }
+        await supabase.functions.invoke('send-form-email', {
+          body: { 
+            formType: 'contacto_general', 
+            nombre: data.nombre,
+            email: data.email,
+            phone: data.telefono,
+            message: data.mensaje,
+            origen: data.origen,
+            source_tag: data.source_tag,
+            service_interest: data.service_interest
+          }
         });
       } catch (emailError) {
         console.error('Error sending notification email:', emailError);
@@ -90,8 +99,21 @@ export function useSupabaseForm(options: UseSupabaseFormOptions = {}) {
 
       // Send notification email
       try {
-        await supabase.functions.invoke('form-notification', {
-          body: { type: 'solicitud', data }
+        await supabase.functions.invoke('send-form-email', {
+          body: { 
+            formType: 'solicitud_empresas', 
+            nombre: data.nombre,
+            email: data.email,
+            phone: data.telefono,
+            tipo_propiedad: data.tipo_propiedad,
+            ubicacion_propiedad: data.ubicacion_propiedad,
+            tamano_propiedad: data.tamano_propiedad,
+            situacion_actual: data.situacion_actual,
+            servicios_interes: data.servicios_interes,
+            renta_mensual: data.renta_mensual,
+            timeline: data.timeline,
+            info_adicional: data.info_adicional
+          }
         });
       } catch (emailError) {
         console.error('Error sending notification email:', emailError);
