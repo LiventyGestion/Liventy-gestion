@@ -764,6 +764,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_anonymous_lead_limits: {
+        Args: { p_email: string; p_session_id?: string }
+        Returns: boolean
+      }
       check_anonymous_rate_limit: {
         Args: {
           max_attempts?: number
@@ -872,6 +876,10 @@ export type Database = {
       }
       user_owns_property: {
         Args: { property_id: string }
+        Returns: boolean
+      }
+      validate_anonymous_lead_session: {
+        Args: { p_email: string; p_session_id: string; p_source_tag?: string }
         Returns: boolean
       }
       validate_chatbot_session_access: {

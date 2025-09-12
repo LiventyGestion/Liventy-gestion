@@ -9,6 +9,7 @@ interface FormEmailData {
   fullName?: string;
   email: string;
   phone?: string;
+  sessionId?: string;
   [key: string]: any;
 }
 
@@ -35,6 +36,8 @@ export const useFormEmail = (options?: UseFormEmailOptions) => {
         referrerUrl: window.location.href,
         // Add timestamp
         timestamp: new Date().toISOString(),
+        // Add session ID for anonymous users if not provided
+        sessionId: data.sessionId || `anon_${Date.now()}_${Math.random().toString(36).substring(2)}`,
         // Parse fullName if only that field exists
         ...(data.fullName && !data.nombre && parseFullName(data.fullName)),
         sendConfirmation: options?.sendConfirmation ?? true

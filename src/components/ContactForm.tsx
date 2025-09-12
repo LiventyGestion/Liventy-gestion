@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -36,6 +36,7 @@ type ContactForm = z.infer<typeof contactSchema>;
 
 const ContactFormSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [sessionId, setSessionId] = useState("");
   
   const { sendFormEmail, isSubmitting: isEmailSubmitting } = useFormEmail({
     onSuccess: () => {
@@ -46,6 +47,12 @@ const ContactFormSection = () => {
   
   // Rate limiter instance
   const rateLimiter = new RateLimiter();
+  
+  // Generate session ID for anonymous users
+  useEffect(() => {
+    const id = `contact_${Date.now()}_${Math.random().toString(36).substring(2, 18)}`;
+    setSessionId(id);
+  }, []);
   
   const {
     register,
@@ -74,7 +81,9 @@ const ContactFormSection = () => {
       apellidos,
       email: data.email,
       phone: data.phone,
-      message: data.message
+      message: data.message,
+      sessionId: sessionId,
+      source_tag: 'contact_form'
     });
   };
 

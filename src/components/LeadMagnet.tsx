@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,9 +11,16 @@ const LeadMagnet = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [sessionId, setSessionId] = useState("");
   
   // Rate limiter instance
   const rateLimiter = new RateLimiter();
+  
+  // Generate session ID for anonymous users
+  useEffect(() => {
+    const id = `lead_${Date.now()}_${Math.random().toString(36).substring(2, 18)}`;
+    setSessionId(id);
+  }, []);
   
   const { sendFormEmail, isSubmitting } = useFormEmail({
     onSuccess: () => {
@@ -47,7 +54,9 @@ const LeadMagnet = () => {
     await sendFormEmail({
       formType: 'lead_magnet',
       fullName: sanitizedName,
-      email: sanitizedEmail
+      email: sanitizedEmail,
+      sessionId: sessionId,
+      source_tag: 'lead_magnet_form'
     });
   };
 
