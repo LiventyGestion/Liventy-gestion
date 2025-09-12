@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle } from "lucide-react";
-import { useSupabaseForm } from "@/hooks/useSupabaseForm";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
 import propertyGuide from "@/assets/property-guide.jpg";
 
@@ -22,7 +22,7 @@ const LeadMagnet = () => {
     setSessionId(id);
   }, []);
   
-  const { submitLead, isSubmitting } = useSupabaseForm({
+  const { submitLead, isSubmitting } = useUnifiedLeads({
     onSuccess: () => {
       setIsSubmitted(true);
       setName("");
@@ -52,10 +52,11 @@ const LeadMagnet = () => {
     }
 
     await submitLead({
-      email: sanitizedEmail,
-      nombre: sanitizedName,
       origen: 'lead_magnet',
-      source_tag: 'lead_magnet_form'
+      nombre: sanitizedName,
+      email: sanitizedEmail,
+      acepta_comercial: true, // Implied by download request
+      payload: { name: sanitizedName, email: sanitizedEmail }
     });
   };
 

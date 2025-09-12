@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, AlertCircle, ArrowLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useSupabaseForm } from "@/hooks/useSupabaseForm";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 
 const startNowSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -39,7 +39,7 @@ const StartNowPage = () => {
   const [serviceInterests, setServiceInterests] = useState<string[]>([]);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { submitSolicitud, isSubmitting: isEmailSubmitting } = useSupabaseForm();
+  const { submitLead, isSubmitting: isEmailSubmitting } = useUnifiedLeads();
   
   const {
     register,
@@ -66,18 +66,25 @@ const StartNowPage = () => {
 
   const onSubmit = async (data: StartNowForm) => {
     try {
-      await submitSolicitud({
-        nombre: data.name,
+      // Split name into nombre and apellidos
+      const nameParts = data.name?.split(' ') || [];
+      const nombre = nameParts[0] || '';
+      const apellidos = nameParts.slice(1).join(' ') || '';
+
+      await submitLead({
+        origen: 'solicitud_empresas',
+        nombre,
+        apellidos,
         email: data.email,
         telefono: data.phone,
         tipo_propiedad: data.propertyType,
-        ubicacion_propiedad: data.propertyLocation,
-        tamano_propiedad: data.propertySize,
-        situacion_actual: data.currentSituation,
-        servicios_interes: data.serviceInterest,
-        renta_mensual: data.monthlyRent || '',
-        timeline: data.timeline,
-        info_adicional: data.additionalInfo || ''
+        ubicacion: data.propertyLocation,
+        m2: data.propertySize ? parseFloat(data.propertySize.replace(/\D/g, '')) : undefined,
+        alquiler_deseado: data.monthlyRent ? parseFloat(data.monthlyRent.replace(/\D/g, '')) : undefined,
+        info_adicional: `Situación: ${data.currentSituation}. Servicios: ${data.serviceInterest.join(', ')}. Timeline: ${data.timeline}. ${data.additionalInfo || ''}`,
+        acepta_politica: data.hasAgreedToTerms,
+        acepta_comercial: true, // Implied by form submission
+        payload: data
       });
       
       setIsSubmitted(true);

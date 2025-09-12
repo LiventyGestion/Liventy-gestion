@@ -563,6 +563,99 @@ export type Database = {
         }
         Relationships: []
       }
+      Leads: {
+        Row: {
+          acepta_comercial: boolean | null
+          acepta_cookies: boolean | null
+          acepta_politica: boolean | null
+          alquiler_deseado: number | null
+          apellidos: string | null
+          created_at: string | null
+          email: string | null
+          fecha_disponibilidad: string | null
+          habitaciones: number | null
+          id: string
+          info_adicional: string | null
+          ip: string | null
+          m2: number | null
+          mensaje: string | null
+          nombre: string | null
+          origen: string | null
+          page_url: string | null
+          payload: Json | null
+          referrer: string | null
+          telefono: string | null
+          tipo_propiedad: string | null
+          ubicacion: string | null
+          user_agent: string | null
+          utm_campaign: string | null
+          utm_content: string | null
+          utm_medium: string | null
+          utm_source: string | null
+          utm_term: string | null
+        }
+        Insert: {
+          acepta_comercial?: boolean | null
+          acepta_cookies?: boolean | null
+          acepta_politica?: boolean | null
+          alquiler_deseado?: number | null
+          apellidos?: string | null
+          created_at?: string | null
+          email?: string | null
+          fecha_disponibilidad?: string | null
+          habitaciones?: number | null
+          id?: string
+          info_adicional?: string | null
+          ip?: string | null
+          m2?: number | null
+          mensaje?: string | null
+          nombre?: string | null
+          origen?: string | null
+          page_url?: string | null
+          payload?: Json | null
+          referrer?: string | null
+          telefono?: string | null
+          tipo_propiedad?: string | null
+          ubicacion?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Update: {
+          acepta_comercial?: boolean | null
+          acepta_cookies?: boolean | null
+          acepta_politica?: boolean | null
+          alquiler_deseado?: number | null
+          apellidos?: string | null
+          created_at?: string | null
+          email?: string | null
+          fecha_disponibilidad?: string | null
+          habitaciones?: number | null
+          id?: string
+          info_adicional?: string | null
+          ip?: string | null
+          m2?: number | null
+          mensaje?: string | null
+          nombre?: string | null
+          origen?: string | null
+          page_url?: string | null
+          payload?: Json | null
+          referrer?: string | null
+          telefono?: string | null
+          tipo_propiedad?: string | null
+          ubicacion?: string | null
+          user_agent?: string | null
+          utm_campaign?: string | null
+          utm_content?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+          utm_term?: string | null
+        }
+        Relationships: []
+      }
       Pagos: {
         Row: {
           contrato_id: string

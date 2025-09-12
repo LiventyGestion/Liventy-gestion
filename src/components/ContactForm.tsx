@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSupabaseForm } from "@/hooks/useSupabaseForm";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail, RateLimiter } from '@/utils/security';
 import professionalService from "@/assets/professional-service.jpg";
 
@@ -38,7 +38,7 @@ const ContactFormSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sessionId, setSessionId] = useState("");
   
-  const { submitLead, isSubmitting: isEmailSubmitting } = useSupabaseForm({
+  const { submitLead, isSubmitting: isEmailSubmitting } = useUnifiedLeads({
     onSuccess: () => {
       setIsSubmitted(true);
       reset();
@@ -71,12 +71,13 @@ const ContactFormSection = () => {
     }
 
     await submitLead({
-      email: data.email,
+      origen: 'contacto_general',
       nombre: data.name,
+      email: data.email,
       telefono: data.phone,
       mensaje: data.message,
-      origen: 'contacto_general',
-      source_tag: 'contact_form'
+      acepta_politica: true, // Implied consent by submitting
+      payload: data
     });
   };
 

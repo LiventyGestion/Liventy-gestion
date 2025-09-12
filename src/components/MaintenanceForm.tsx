@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { ArrowLeft, MapPin, Upload, AlertTriangle } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { sanitizeInput, RateLimiter } from '@/utils/security';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -29,7 +29,7 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
   // Rate limiter instance
   const rateLimiter = new RateLimiter();
   
-  const { sendFormEmail, isSubmitting } = useFormEmail({
+  const { submitLead, isSubmitting } = useUnifiedLeads({
     onSuccess: () => {
       onComplete();
     }
@@ -74,44 +74,26 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
       return;
     }
     
-    // First, save to Supabase (using leads table for now since these are service inquiries)
-    try {
-      const { error } = await supabase
-        .from('leads')
-        .insert([{
-          email: 'admin@liventygestion.com', // Anonymous maintenance request
-          nombre: 'Solicitud de Mantenimiento',
-          telefono: '',
-          mensaje: `Solicitud de mantenimiento para ${format(selectedDate, 'dd/MM/yyyy')}:
+    await submitLead({
+      origen: 'servicio_mantenimiento',
+      nombre: 'Solicitud de Mantenimiento',
+      email: 'admin@liventygestion.com',
+      mensaje: `Solicitud de mantenimiento para ${format(selectedDate, 'dd/MM/yyyy')}:
 Horas disponibles: ${availableHours}
 Categoría: ${categories.find(cat => cat.value === category)?.label || category}
 Prioridad: ${priorities.find(prio => prio.value === priority)?.label || priority}
 Descripción: ${sanitizedDescription}
 Fotos adjuntas: ${photos.length}`,
-          origen: 'servicio_mantenimiento',
-          source_tag: 'maintenance_form'
-        }]);
-
-      if (error) {
-        console.error('Error saving maintenance request:', error);
-        // Continue with email sending even if DB save fails
+      info_adicional: `Servicio: Mantenimiento - ${category}, Prioridad: ${priority}, Fotos: ${photos.length}`,
+      acepta_comercial: true, // Service request implies consent
+      payload: {
+        selectedDate: format(selectedDate, 'yyyy-MM-dd'),
+        availableHours,
+        category,
+        priority,
+        description: sanitizedDescription,
+        photosCount: photos.length
       }
-    } catch (dbError) {
-      console.error('Database error:', dbError);
-      // Continue with email sending
-    }
-    
-    // Then, send email notification
-    await sendFormEmail({
-      formType: 'servicio_mantenimiento',
-      nombre: 'Solicitud de Mantenimiento',
-      email: 'admin@liventygestion.com',
-      selectedDate: format(selectedDate, 'yyyy-MM-dd'),
-      availableHours,
-      category: categories.find(cat => cat.value === category)?.label || category,
-      priority: priorities.find(prio => prio.value === priority)?.label || priority,
-      description: sanitizedDescription,
-      photosCount: photos.length
     });
   };
 

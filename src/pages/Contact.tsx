@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useSupabaseForm } from "@/hooks/useSupabaseForm";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail } from '@/utils/security';
 
 const contactSchema = z.object({
@@ -40,7 +40,7 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchParams] = useSearchParams();
   
-  const { submitLead, isSubmitting } = useSupabaseForm({
+  const { submitLead, isSubmitting } = useUnifiedLeads({
     onSuccess: () => {
       setIsSubmitted(true);
       reset();
@@ -85,14 +85,26 @@ const Contact = () => {
       
       // Determine form type based on tipo field
       const origen = isPropertyOwner ? 'captacion_propietarios' : 'contacto_general';
+      
+      // Split name into nombre and apellidos
+      const nameParts = data.name?.split(' ') || [];
+      const nombre = nameParts[0] || '';
+      const apellidos = nameParts.slice(1).join(' ') || '';
 
       await submitLead({
+        origen,
+        nombre,
+        apellidos,
         email: data.email,
-        nombre: data.name, 
         telefono: data.phone,
         mensaje: data.message,
-        origen,
-        source_tag: 'contact_page'
+        ubicacion: data.municipio && data.barrio ? `${data.municipio}, ${data.barrio}` : data.municipio,
+        tipo_propiedad: data.tipo === 'propietario' ? 'propiedad_existente' : undefined,
+        m2: data.superficie ? parseFloat(data.superficie) : undefined,
+        habitaciones: data.habitaciones ? parseInt(data.habitaciones) : undefined,
+        info_adicional: data.direccion ? `Dirección: ${data.direccion}${data.tipoAlquiler ? `, Tipo: ${data.tipoAlquiler}` : ''}${data.estado ? `, Estado: ${data.estado}` : ''}` : undefined,
+        acepta_politica: true, // Implied consent by form submission
+        payload: data
       });
 
     } catch (error) {

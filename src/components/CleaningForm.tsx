@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Clock, MapPin } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { RateLimiter } from '@/utils/security';
 import { supabase } from "@/integrations/supabase/client";
 
@@ -21,7 +21,7 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
   const [timeSlot, setTimeSlot] = useState<string>("");
   
   const rateLimiter = new RateLimiter();
-  const { sendFormEmail, isSubmitting } = useFormEmail({
+  const { submitLead, isSubmitting } = useUnifiedLeads({
     onSuccess: () => {
       onComplete();
     }
@@ -54,40 +54,22 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
       return;
     }
     
-    // First, save to Supabase (using leads table for service inquiries)
-    try {
-      const { error } = await supabase
-        .from('leads')
-        .insert([{
-          email: 'admin@liventygestion.com', // Anonymous cleaning request
-          nombre: 'Solicitud de Limpieza',
-          telefono: '',
-          mensaje: `Solicitud de limpieza para ${format(selectedDate, 'dd/MM/yyyy')}:
+    await submitLead({
+      origen: 'servicio_limpieza',
+      nombre: 'Solicitud de Limpieza',
+      email: 'admin@liventygestion.com',
+      mensaje: `Solicitud de limpieza para ${format(selectedDate, 'dd/MM/yyyy')}:
 Horas: ${selectedHourOption?.label}
 Franja horaria: ${timeSlotLabel}
 Precio estimado: ${selectedHourOption?.price}€`,
-          origen: 'servicio_limpieza',
-          source_tag: 'cleaning_form'
-        }]);
-
-      if (error) {
-        console.error('Error saving cleaning request:', error);
-        // Continue with email sending even if DB save fails
+      info_adicional: `Servicio: Limpieza - ${selectedHourOption?.label}, Horario: ${timeSlotLabel}, Precio: €${selectedHourOption?.price}`,
+      acepta_comercial: true, // Service request implies consent
+      payload: {
+        selectedDate: format(selectedDate, 'yyyy-MM-dd'),
+        hours: selectedHourOption?.label,
+        timeSlot: timeSlotLabel,
+        price: selectedHourOption?.price
       }
-    } catch (dbError) {
-      console.error('Database error:', dbError);
-      // Continue with email sending
-    }
-    
-    // Then, send email notification
-    await sendFormEmail({
-      formType: 'servicio_limpieza',
-      nombre: 'Solicitud de Limpieza',
-      email: 'admin@liventygestion.com',
-      selectedDate: format(selectedDate, 'yyyy-MM-dd'),
-      hours: selectedHourOption?.label,
-      timeSlot: timeSlotLabel,
-      price: selectedHourOption?.price
     });
   };
 
