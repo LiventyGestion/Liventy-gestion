@@ -962,6 +962,10 @@ export type Database = {
         Args: { p_email: string; p_session_id: string; p_source_tag?: string }
         Returns: boolean
       }
+      validate_anonymous_session_access: {
+        Args: { p_conversation_session_id: string; p_session_id: string }
+        Returns: boolean
+      }
       validate_chatbot_session_access: {
         Args: { p_session_id: string; p_user_id?: string }
         Returns: boolean

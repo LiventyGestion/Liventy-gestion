@@ -69,12 +69,23 @@ serve(async (req) => {
         
         // Get or create conversation
         if (conversationId) {
+          // For existing conversations, validate session access for anonymous users
           const { data } = await supabase
             .from('chatbot_conversations')
             .select('*')
-            .eq('id', conversationId)
-            .single();
-          conversation = data;
+            .eq('id', conversationId);
+          
+          if (data && data.length > 0) {
+            const conv = data[0];
+            // Validate that anonymous users can only access their own session conversations
+            if (conv.user_id === null && conv.session_id !== sessionId) {
+              console.error('🚨 Security: Anonymous user tried to access different session conversation');
+              throw new Error('Unauthorized access to conversation');
+            }
+            conversation = conv;
+          } else {
+            console.warn('⚠️ Conversation not found:', conversationId);
+          }
         } else {
           const { data, error } = await supabase
             .from('chatbot_conversations')
