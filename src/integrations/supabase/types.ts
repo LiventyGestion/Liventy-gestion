@@ -823,6 +823,19 @@ export type Database = {
         }
         Returns: string
       }
+      detect_advanced_security_threats: {
+        Args: { check_window_minutes?: number }
+        Returns: {
+          details: Json
+          event_count: number
+          first_occurrence: string
+          identifier: string
+          last_occurrence: string
+          recommendation: string
+          threat_level: string
+          threat_type: string
+        }[]
+      }
       detect_advanced_suspicious_activity: {
         Args: { check_window_minutes?: number }
         Returns: {
@@ -854,6 +867,10 @@ export type Database = {
           target_user_id: string
           user_id: string
         }[]
+      }
+      generate_security_summary_report: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
       }
       get_current_user_role: {
         Args: Record<PropertyKey, never>
