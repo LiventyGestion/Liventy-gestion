@@ -99,7 +99,7 @@ const Chatbot = () => {
 
   useEffect(() => {
     if (isOpen && messages.length === 0) {
-      addBotMessage("Hola, soy Ana, tu asistente inteligente de Liventy Gestión, ¿en qué puedo ayudarte?");
+      addBotMessage("Hola, soy Ana, tu asistente inteligente de Liventy Gestión, en que puedo ayudarte?");
     }
   }, [isOpen]);
 
