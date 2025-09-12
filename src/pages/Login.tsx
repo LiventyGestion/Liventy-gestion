@@ -156,7 +156,7 @@ const Login = () => {
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground mt-2">
-                  Demo: propietario@ejemplo.com / inquilino@ejemplo.com (contraseña: Prueba1*)
+                  Demo: propietario@liventygestion.com / inquilino@liventygestion.com (contraseña: Prueba1*)
                 </p>
               </div>
             </CardContent>

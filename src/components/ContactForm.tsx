@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useSupabaseForm } from "@/hooks/useSupabaseForm";
 import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail, RateLimiter } from '@/utils/security';
 import professionalService from "@/assets/professional-service.jpg";
 
@@ -38,7 +38,7 @@ const ContactFormSection = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [sessionId, setSessionId] = useState("");
   
-  const { sendFormEmail, isSubmitting: isEmailSubmitting } = useFormEmail({
+  const { submitLead, isSubmitting: isEmailSubmitting } = useSupabaseForm({
     onSuccess: () => {
       setIsSubmitted(true);
       reset();
@@ -70,19 +70,12 @@ const ContactFormSection = () => {
       return;
     }
 
-    // Parse name into nombre and apellidos
-    const nameParts = data.name.trim().split(' ');
-    const nombre = nameParts[0] || '';
-    const apellidos = nameParts.slice(1).join(' ') || '';
-
-    await sendFormEmail({
-      formType: 'contacto_general',
-      nombre,
-      apellidos,
+    await submitLead({
       email: data.email,
-      phone: data.phone,
-      message: data.message,
-      sessionId: sessionId,
+      nombre: data.name,
+      telefono: data.phone,
+      mensaje: data.message,
+      origen: 'contacto_general',
       source_tag: 'contact_form'
     });
   };
@@ -217,7 +210,7 @@ const ContactFormSection = () => {
                         id="email"
                         type="email"
                         {...register("email")}
-                        placeholder="propietario@ejemplo.com"
+                        placeholder="propietario@liventygestion.com"
                         className={cn(
                           "min-h-[44px] pr-10",
                           getFieldState("email").hasError && "border-destructive focus-visible:ring-destructive",

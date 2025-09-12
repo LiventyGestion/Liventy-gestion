@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useSupabaseForm } from "@/hooks/useSupabaseForm";
 import { sanitizeName, sanitizeEmail, sanitizeInput, validateEmail } from '@/utils/security';
 
 const contactSchema = z.object({
@@ -40,7 +40,7 @@ const Contact = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [searchParams] = useSearchParams();
   
-  const { sendFormEmail, isSubmitting } = useFormEmail({
+  const { submitLead, isSubmitting } = useSupabaseForm({
     onSuccess: () => {
       setIsSubmitted(true);
       reset();
@@ -83,32 +83,16 @@ const Contact = () => {
     try {
       console.log('Form data:', data); // For debugging
       
-      // Parse name into nombre and apellidos  
-      const nameParts = data.name.trim().split(' ');
-      const nombre = nameParts[0] || '';
-      const apellidos = nameParts.slice(1).join(' ') || '';
-      
       // Determine form type based on tipo field
-      const formType = isPropertyOwner ? 'captacion_propietarios' : 'contacto_general';
+      const origen = isPropertyOwner ? 'captacion_propietarios' : 'contacto_general';
 
-      await sendFormEmail({
-        formType,
-        nombre,
-        apellidos, 
+      await submitLead({
         email: data.email,
-        phone: data.phone,
-        message: data.message,
-        // Additional owner fields
-        tipo: data.tipo,
-        origen: data.origen,
-        motivo: data.motivo,
-        municipio: data.municipio,
-        barrio: data.barrio,
-        direccion: data.direccion,
-        tipoAlquiler: data.tipoAlquiler,
-        superficie: data.superficie,
-        habitaciones: data.habitaciones,
-        estado: data.estado
+        nombre: data.name, 
+        telefono: data.phone,
+        mensaje: data.message,
+        origen,
+        source_tag: 'contact_page'
       });
 
     } catch (error) {
@@ -207,7 +191,7 @@ const Contact = () => {
                               id="email"
                               type="email"
                               {...register("email")}
-                              placeholder="propietario@ejemplo.com"
+                              placeholder="propietario@liventygestion.com"
                               className={cn(
                                 "min-h-[44px] pr-10",
                                 getFieldState("email").hasError && "border-destructive focus-visible:ring-destructive",

@@ -41,11 +41,11 @@ const Footer = () => {
               <div className="flex items-center space-x-2">
                 <Mail className="h-4 w-4 text-primary" aria-hidden="true" />
                 <a 
-                  href="mailto:liventygestion@gmail.com" 
+                  href="mailto:contacto@liventygestion.com" 
                   className="hover:text-primary transition-colors"
                   aria-label="Enviar email a Liventy Gestión"
                 >
-                  liventygestion@gmail.com
+                  contacto@liventygestion.com
                 </a>
               </div>
               <div className="flex items-center space-x-2">

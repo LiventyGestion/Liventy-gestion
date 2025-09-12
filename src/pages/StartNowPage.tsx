@@ -15,7 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, AlertCircle, ArrowLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useSupabaseForm } from "@/hooks/useSupabaseForm";
 
 const startNowSchema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -39,7 +39,7 @@ const StartNowPage = () => {
   const [serviceInterests, setServiceInterests] = useState<string[]>([]);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { sendFormEmail, isSubmitting: isEmailSubmitting } = useFormEmail();
+  const { submitSolicitud, isSubmitting: isEmailSubmitting } = useSupabaseForm();
   
   const {
     register,
@@ -66,26 +66,18 @@ const StartNowPage = () => {
 
   const onSubmit = async (data: StartNowForm) => {
     try {
-      // Parse name into nombre and apellidos  
-      const nameParts = data.name.trim().split(' ');
-      const nombre = nameParts[0] || '';
-      const apellidos = nameParts.slice(1).join(' ') || '';
-      
-      await sendFormEmail({
-        formType: 'solicitud_detallada',
+      await submitSolicitud({
+        nombre: data.name,
         email: data.email,
-        nombre,
-        apellidos,
-        phone: data.phone,
-        propertyType: data.propertyType,
-        propertyLocation: data.propertyLocation,
-        propertySize: data.propertySize,
-        currentSituation: data.currentSituation,
-        serviceInterest: data.serviceInterest.join(', '),
-        monthlyRent: data.monthlyRent || '',
+        telefono: data.phone,
+        tipo_propiedad: data.propertyType,
+        ubicacion_propiedad: data.propertyLocation,
+        tamano_propiedad: data.propertySize,
+        situacion_actual: data.currentSituation,
+        servicios_interes: data.serviceInterest,
+        renta_mensual: data.monthlyRent || '',
         timeline: data.timeline,
-        additionalInfo: data.additionalInfo || '',
-        hasAgreedToTerms: data.hasAgreedToTerms
+        info_adicional: data.additionalInfo || ''
       });
       
       setIsSubmitted(true);

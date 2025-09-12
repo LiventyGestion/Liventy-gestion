@@ -505,11 +505,15 @@ export type Database = {
           created_at: string
           email: string
           id: string
+          mensaje: string | null
           name: string | null
+          nombre: string | null
+          origen: string | null
           phone: string | null
           sale_timing: string | null
           service_interest: string | null
           source_tag: string | null
+          telefono: string | null
           updated_at: string
           utm_campaign: string | null
           utm_content: string | null
@@ -521,11 +525,15 @@ export type Database = {
           created_at?: string
           email: string
           id?: string
+          mensaje?: string | null
           name?: string | null
+          nombre?: string | null
+          origen?: string | null
           phone?: string | null
           sale_timing?: string | null
           service_interest?: string | null
           source_tag?: string | null
+          telefono?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -537,11 +545,15 @@ export type Database = {
           created_at?: string
           email?: string
           id?: string
+          mensaje?: string | null
           name?: string | null
+          nombre?: string | null
+          origen?: string | null
           phone?: string | null
           sale_timing?: string | null
           service_interest?: string | null
           source_tag?: string | null
+          telefono?: string | null
           updated_at?: string
           utm_campaign?: string | null
           utm_content?: string | null
@@ -737,6 +749,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      solicitudes: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          info_adicional: string | null
+          nombre: string
+          renta_mensual: string | null
+          servicios_interes: string[] | null
+          situacion_actual: string | null
+          tamano_propiedad: string | null
+          telefono: string
+          timeline: string | null
+          tipo_propiedad: string | null
+          ubicacion_propiedad: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          info_adicional?: string | null
+          nombre: string
+          renta_mensual?: string | null
+          servicios_interes?: string[] | null
+          situacion_actual?: string | null
+          tamano_propiedad?: string | null
+          telefono: string
+          timeline?: string | null
+          tipo_propiedad?: string | null
+          ubicacion_propiedad?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          info_adicional?: string | null
+          nombre?: string
+          renta_mensual?: string | null
+          servicios_interes?: string[] | null
+          situacion_actual?: string | null
+          tamano_propiedad?: string | null
+          telefono?: string
+          timeline?: string | null
+          tipo_propiedad?: string | null
+          ubicacion_propiedad?: string | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       Usuarios: {
         Row: {

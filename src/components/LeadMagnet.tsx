@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, CheckCircle } from "lucide-react";
-import { useFormEmail } from "@/hooks/useFormEmail";
+import { useSupabaseForm } from "@/hooks/useSupabaseForm";
 import { sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
 import propertyGuide from "@/assets/property-guide.jpg";
 
@@ -22,7 +22,7 @@ const LeadMagnet = () => {
     setSessionId(id);
   }, []);
   
-  const { sendFormEmail, isSubmitting } = useFormEmail({
+  const { submitLead, isSubmitting } = useSupabaseForm({
     onSuccess: () => {
       setIsSubmitted(true);
       setName("");
@@ -51,11 +51,10 @@ const LeadMagnet = () => {
       return;
     }
 
-    await sendFormEmail({
-      formType: 'lead_magnet',
-      fullName: sanitizedName,
+    await submitLead({
       email: sanitizedEmail,
-      sessionId: sessionId,
+      nombre: sanitizedName,
+      origen: 'lead_magnet',
       source_tag: 'lead_magnet_form'
     });
   };
@@ -119,7 +118,7 @@ const LeadMagnet = () => {
               <div>
                 <Input
                   type="email"
-                  placeholder="propietario@ejemplo.com"
+                  placeholder="propietario@liventygestion.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="h-12"
