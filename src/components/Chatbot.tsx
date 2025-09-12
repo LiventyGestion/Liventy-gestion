@@ -98,9 +98,7 @@ const Chatbot = () => {
   }, [hasAutoOpened]);
 
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
-      addBotMessage("Hola, soy Ana, tu asistente inteligente de Liventy Gestión, en que puedo ayudarte?");
-    }
+    // Chatbot opens without initial message
   }, [isOpen]);
 
   // Persist conversation ID when it changes
