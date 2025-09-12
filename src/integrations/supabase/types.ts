@@ -890,6 +890,10 @@ export type Database = {
         Args: { email: string }
         Returns: boolean
       }
+      validate_lead_access: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       validate_lead_email: {
         Args: { p_email: string }
         Returns: boolean
