@@ -30,7 +30,7 @@ import GestionIntegral from "./pages/services/GestionIntegral";
 import AsesoramientoLegal from "./pages/services/AsesoramientoLegal";
 import MantenimientoIncidencias from "./pages/services/MantenimientoIncidencias";
 import ConsultarMiCaso from "./pages/ConsultarMiCaso";
-import ComoGestionamosIncidencias from "./pages/ComoGestionamosIncidencias";
+
 
 const queryClient = new QueryClient();
 
@@ -120,7 +120,7 @@ const App = () => (
             <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
-            <Route path="/como-gestionamos-incidencias" element={<ComoGestionamosIncidencias />} />
+            
             
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />

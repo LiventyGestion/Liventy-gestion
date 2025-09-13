@@ -37,21 +37,38 @@ const MantenimientoIncidencias = () => {
     }
   ];
 
-  const howItWorks = [
+  const processSteps = [
     {
       step: "1",
-      title: "Alta de incidencia",
-      description: "El inquilino reporta la incidencia desde el área cliente con fotos y descripción"
+      title: "El inquilino reporta la incidencia",
+      description: "Desde el Área de Clientes, el inquilino describe el problema, adjunta fotos y especifica la urgencia.",
+      icon: UserCheck,
+      image: "/src/assets/handyman-professional.jpg",
+      imageAlt: "Inquilino reportando incidencia desde área de clientes"
     },
     {
       step: "2", 
-      title: "Asignación y cita",
-      description: "Coordinamos con el profesional adecuado y gestionamos la cita con el inquilino"
+      title: "Liventy recibe y valida la incidencia",
+      description: "Nuestro equipo revisa la solicitud, evalúa el tipo de intervención necesaria y asigna la prioridad adecuada.",
+      icon: Wrench,
+      image: "/src/assets/electrician-professional.jpg",
+      imageAlt: "Equipo de Liventy validando incidencia"
     },
     {
       step: "3",
-      title: "Resolución y cierre", 
-      description: "El profesional resuelve la incidencia y actualizamos el estado para ambas partes"
+      title: "Se coordina un profesional de confianza",
+      description: "Contactamos con el especialista apropiado (fontanero, electricista, etc.) y coordinamos la cita con el inquilino.",
+      icon: Thermometer,
+      image: "/src/assets/plumber-professional.jpg",
+      imageAlt: "Profesional especializado resolviendo incidencia"
+    },
+    {
+      step: "4",
+      title: "El propietario recibe el seguimiento",
+      description: "Mantenemos informado al propietario del progreso, costes y resolución final de cada incidencia.",
+      icon: User,
+      image: "/src/assets/painter-professional.jpg",
+      imageAlt: "Propietario recibiendo seguimiento de incidencia"
     }
   ];
 
@@ -136,14 +153,7 @@ const MantenimientoIncidencias = () => {
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Un único canal, coordinación de profesionales y seguimiento en tiempo real
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/como-gestionamos-incidencias">
-                <Button size="lg" className="text-lg px-8 py-6">
-                  <User className="mr-2 h-5 w-5" />
-                  Cómo gestionamos incidencias
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+            <div className="flex justify-center">
               {getIncidentCTA()}
             </div>
           </div>
@@ -177,19 +187,175 @@ const MantenimientoIncidencias = () => {
         {/* Cómo funciona */}
         <section className="py-16 sm:py-20 bg-muted/50">
           <div className="container mx-auto px-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-4">
               ¿Cómo funciona?
             </h2>
-            <div className="grid sm:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              {howItWorks.map((item, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
-                    {item.step}
+            <p className="text-muted-foreground text-center mb-16 max-w-2xl mx-auto">
+              Cada incidencia sigue un flujo estructurado que garantiza una resolución eficaz y un seguimiento completo para todas las partes.
+            </p>
+
+            <div className="space-y-16">
+              {processSteps.map((step, index) => (
+                <div key={index} className={`flex flex-col ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'} items-center gap-8 lg:gap-12`}>
+                  {/* Contenido */}
+                  <div className="flex-1 space-y-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xl font-bold">
+                        {step.step}
+                      </div>
+                      <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                        <step.icon className="h-6 w-6 text-primary" />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
+                      <p className="text-lg text-muted-foreground leading-relaxed">
+                        {step.description}
+                      </p>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+
+                  {/* Imagen */}
+                  <div className="flex-1">
+                    <Card className="overflow-hidden shadow-lg">
+                      <div className="aspect-video">
+                        <img 
+                          src={step.image} 
+                          alt={step.imageAlt}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               ))}
+            </div>
+
+            {/* Beneficios clave */}
+            <div className="mt-20">
+              <h3 className="text-2xl sm:text-3xl font-bold text-center mb-12">
+                ¿Por qué nuestro sistema funciona?
+              </h3>
+              
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="w-16 h-16 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
+                    </div>
+                    <h4 className="font-semibold mb-2">Profesionales verificados</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Trabajamos solo con especialistas de confianza, verificados y con experiencia.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Wrench className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+                    </div>
+                    <h4 className="font-semibold mb-2">Coordinación centralizada</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Un único punto de contacto gestiona toda la comunicación y seguimiento.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <CardContent className="p-6">
+                    <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <User className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+                    </div>
+                    <h4 className="font-semibold mb-2">Transparencia total</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Propietarios e inquilinos reciben actualizaciones en tiempo real del progreso.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            {/* Tipos de profesionales */}
+            <div className="mt-20">
+              <h3 className="text-2xl sm:text-3xl font-bold text-center mb-4">
+                Nuestros profesionales especializados
+              </h3>
+              <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+                Contamos con una red de especialistas para cubrir todas las necesidades de mantenimiento en tu propiedad.
+              </p>
+              
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <div className="aspect-square overflow-hidden">
+                    <img 
+                      src="/src/assets/electrician-professional.jpg" 
+                      alt="Electricista profesional"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold mb-2">Electricistas</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Instalaciones, reparaciones y mantenimiento eléctrico
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <div className="aspect-square overflow-hidden">
+                    <img 
+                      src="/src/assets/plumber-professional.jpg" 
+                      alt="Fontanero profesional"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold mb-2">Fontaneros</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Tuberías, grifos, desagües y sistemas de agua
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <div className="aspect-square overflow-hidden">
+                    <img 
+                      src="/src/assets/painter-professional.jpg" 
+                      alt="Pintor profesional"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold mb-2">Pintores</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Pintura, retoques y acabados de calidad
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="text-center hover:shadow-md transition-shadow">
+                  <div className="aspect-square overflow-hidden">
+                    <img 
+                      src="/src/assets/handyman-professional.jpg" 
+                      alt="Técnico de mantenimiento"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+                  <CardContent className="p-4">
+                    <h4 className="font-semibold mb-2">Mantenimiento</h4>
+                    <p className="text-muted-foreground text-sm">
+                      Persianas, cerraduras y reparaciones generales
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </section>
@@ -274,14 +440,7 @@ const MantenimientoIncidencias = () => {
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Contacta con nosotros si eres propietario, o accede al área cliente si eres inquilino.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/como-gestionamos-incidencias">
-                <Button size="lg" className="text-lg px-8 py-6">
-                  <User className="mr-2 h-5 w-5" />
-                  Cómo gestionamos incidencias
-                  <ChevronRight className="ml-2 h-5 w-5" />
-                </Button>
-              </Link>
+            <div className="flex justify-center">
               {getIncidentCTA()}
             </div>
           </div>
