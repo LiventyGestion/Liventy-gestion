@@ -10,6 +10,7 @@ import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import ContactFormSection from "@/components/ContactForm";
 import Chatbot from "@/components/Chatbot";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 import SecondaryCTAs from "@/components/SecondaryCTAs";
 import SellCTA from "@/components/SellCTA";
 
@@ -30,6 +31,7 @@ const Index = () => {
       <SellCTA />
       <Footer />
       <Chatbot />
+      <WhatsAppFloat />
     </div>
   );
 };

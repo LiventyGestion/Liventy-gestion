@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LeadMagnet from "@/components/LeadMagnet";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const LeadMagnetPage = () => {
   return (
@@ -10,6 +11,7 @@ const LeadMagnetPage = () => {
         <LeadMagnet />
       </div>
       <Footer />
+      <WhatsAppFloat />
     </div>
   );
 };

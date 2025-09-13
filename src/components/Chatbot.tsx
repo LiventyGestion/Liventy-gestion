@@ -250,7 +250,7 @@ const Chatbot = () => {
     <>
       <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 rounded-full w-14 h-14 shadow-lg z-50 bg-primary hover:bg-primary/90 p-0 overflow-hidden"
+        className="fixed bottom-6 right-6 rounded-full w-14 h-14 sm:w-12 sm:h-12 shadow-lg z-50 bg-primary hover:bg-primary/90 p-0 overflow-hidden"
         size="icon"
         aria-label="Abrir chat de asistencia"
       >
