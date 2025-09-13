@@ -5,8 +5,10 @@ import { ChevronRight, Wrench, Zap, Droplets, Thermometer, Paintbrush, Clock, Ch
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthContext";
 
 const MantenimientoIncidencias = () => {
+  const { user } = useAuth();
   const coverages = [
     {
       icon: Droplets,
@@ -96,6 +98,30 @@ const MantenimientoIncidencias = () => {
     }
   };
 
+  const getIncidentCTA = () => {
+    if (user) {
+      // Si está logado, redirigir directamente al área de incidencias  
+      return (
+        <Link to="/area-clientes/inquilino/incidencias">
+          <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+            <UserCheck className="mr-2 h-5 w-5" />
+            Abrir incidencia (Área Clientes)
+          </Button>
+        </Link>
+      );
+    } else {
+      // Si no está logado, redirigir al login
+      return (
+        <Link to="/auth">
+          <Button variant="outline" size="lg" className="text-lg px-8 py-6">
+            <UserCheck className="mr-2 h-5 w-5" />
+            Abrir incidencia (Área Clientes)
+          </Button>
+        </Link>
+      );
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -111,19 +137,14 @@ const MantenimientoIncidencias = () => {
               Un único canal, coordinación de profesionales y seguimiento en tiempo real
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contacto?tipo=propietario&motivo=incidencias">
+              <Link to="/como-gestionamos-incidencias">
                 <Button size="lg" className="text-lg px-8 py-6">
                   <User className="mr-2 h-5 w-5" />
                   Cómo gestionamos incidencias
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/area-clientes/login">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                  <UserCheck className="mr-2 h-5 w-5" />
-                  Abrir incidencia (Área Clientes)
-                </Button>
-              </Link>
+              {getIncidentCTA()}
             </div>
           </div>
         </section>
@@ -254,19 +275,14 @@ const MantenimientoIncidencias = () => {
               Contacta con nosotros si eres propietario, o accede al área cliente si eres inquilino.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contacto?tipo=propietario&motivo=incidencias">
+              <Link to="/como-gestionamos-incidencias">
                 <Button size="lg" className="text-lg px-8 py-6">
                   <User className="mr-2 h-5 w-5" />
                   Cómo gestionamos incidencias
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>
-              <Link to="/area-clientes/login">
-                <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-                  <UserCheck className="mr-2 h-5 w-5" />
-                  Abrir incidencia (Área Clientes)
-                </Button>
-              </Link>
+              {getIncidentCTA()}
             </div>
           </div>
         </section>
