@@ -135,48 +135,48 @@ const Footer = () => {
         </div>
 
         <div className="border-t mt-8 pt-8">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-center sm:text-left text-muted-foreground text-sm">
+          <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4">
+            <p className="text-center sm:text-left text-muted-foreground text-sm order-2 sm:order-1">
               &copy; 2025 Liventy Gestión. Todos los derechos reservados.
             </p>
             
             {/* Social Media Icons */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center justify-center space-x-3 order-1 sm:order-2 relative z-0">
               <a
                 href="https://www.instagram.com/liventygestion/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring relative z-0"
                 aria-label="Abrir Instagram de Liventy Gestión"
               >
-                <Instagram className="h-6 w-6" />
+                <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="https://x.com/liventygestion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring relative z-0"
                 aria-label="Abrir X (Twitter) de Liventy Gestión"
               >
-                <Twitter className="h-6 w-6" />
+                <Twitter className="h-5 w-5" />
               </a>
               <a
                 href="https://www.facebook.com/liventygestion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring relative z-0"
                 aria-label="Abrir Facebook de Liventy Gestión"
               >
-                <Facebook className="h-6 w-6" />
+                <Facebook className="h-5 w-5" />
               </a>
               <a
                 href="https://www.linkedin.com/company/liventygestion"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-ring relative z-0"
                 aria-label="Abrir LinkedIn de Liventy Gestión"
               >
-                <Linkedin className="h-6 w-6" />
+                <Linkedin className="h-5 w-5" />
               </a>
             </div>
           </div>
