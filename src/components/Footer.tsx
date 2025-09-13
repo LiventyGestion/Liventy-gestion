@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Building2, Mail, Phone, MapPin } from "lucide-react";
+import { Building2, Mail, Phone, MapPin, Instagram, Twitter, Facebook, Linkedin } from "lucide-react";
 import teamTrust from "@/assets/team-trust.jpg";
 
 const Footer = () => {
@@ -134,8 +134,52 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t mt-8 pt-8 text-center text-muted-foreground text-sm">
-          <p>&copy; 2025 Liventy Gestión. Todos los derechos reservados.</p>
+        <div className="border-t mt-8 pt-8">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+            <p className="text-center sm:text-left text-muted-foreground text-sm">
+              &copy; 2025 Liventy Gestión. Todos los derechos reservados.
+            </p>
+            
+            {/* Social Media Icons */}
+            <div className="flex items-center space-x-3">
+              <a
+                href="https://www.instagram.com/liventygestion/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                aria-label="Abrir Instagram de Liventy Gestión"
+              >
+                <Instagram className="h-6 w-6" />
+              </a>
+              <a
+                href="https://x.com/liventygestion"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                aria-label="Abrir X (Twitter) de Liventy Gestión"
+              >
+                <Twitter className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.facebook.com/liventygestion"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                aria-label="Abrir Facebook de Liventy Gestión"
+              >
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/liventygestion"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-muted-foreground hover:text-[#E67E0F] transition-colors duration-300 p-1 rounded-md focus:outline-none focus:ring-2 focus:ring-ring"
+                aria-label="Abrir LinkedIn de Liventy Gestión"
+              >
+                <Linkedin className="h-6 w-6" />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
