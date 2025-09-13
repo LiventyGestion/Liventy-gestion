@@ -73,11 +73,19 @@ const Hero = () => {
           </p>
 
           {/* Benefits List */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10 max-w-4xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10 max-w-5xl mx-auto">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex flex-col items-center text-center p-4 rounded-lg bg-card/30 backdrop-blur-sm border border-border/20">
-                <benefit.icon className="h-8 w-8 text-primary mb-3" />
-                <span className="font-lato text-sm font-medium text-foreground">{benefit.text}</span>
+              <div 
+                key={index} 
+                className="group flex flex-col items-center text-center p-6 sm:p-8 rounded-2xl bg-white/90 backdrop-blur-sm border border-border/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/30 cursor-pointer"
+                aria-label={`Servicio: ${benefit.text}`}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-2xl mb-4 group-hover:bg-primary/20 transition-all duration-300">
+                  <benefit.icon className="h-10 w-10 sm:h-12 sm:w-12 text-primary group-hover:scale-110 transition-all duration-300" />
+                </div>
+                <span className="font-raleway text-base sm:text-lg font-semibold text-gray-800 leading-snug">{benefit.text}</span>
               </div>
             ))}
           </div>
