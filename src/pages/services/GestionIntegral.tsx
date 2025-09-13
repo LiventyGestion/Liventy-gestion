@@ -77,7 +77,7 @@ const GestionIntegral = () => {
             <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Desde la publicación hasta la gestión diaria, nos encargamos de todo para que tú no tengas que preocuparte.
             </p>
-            <Link to="/contacto?tipo=propietario&origen=gestion-integral">
+            <Link to="/empezar-ahora">
               <Button size="lg" className="text-lg px-8 py-6">
                 Quiero gestionarlo con Liventy
                 <ChevronRight className="ml-2 h-5 w-5" />
@@ -184,7 +184,7 @@ const GestionIntegral = () => {
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Contacta con nosotros y te explicaremos cómo podemos ayudarte con la gestión integral de tu alquiler.
             </p>
-            <Link to="/contacto?tipo=propietario&origen=gestion-integral">
+            <Link to="/empezar-ahora">
               <Button size="lg" className="text-lg px-8 py-6">
                 Quiero gestionarlo con Liventy
                 <ChevronRight className="ml-2 h-5 w-5" />
