@@ -81,7 +81,7 @@ const AsesoramientoLegal = () => {
               </div>
             </div>
 
-            <Link to="/contacto?tipo=propietario&motivo=asesoramiento-legal">
+            <Link to="/consultar-mi-caso">
               <Button size="lg" className="text-lg px-8 py-6">
                 Consultar mi caso
                 <ChevronRight className="ml-2 h-5 w-5" />
@@ -170,7 +170,7 @@ const AsesoramientoLegal = () => {
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
               Contacta con nosotros y te ayudaremos a resolver tus consultas de forma rápida y profesional.
             </p>
-            <Link to="/contacto?tipo=propietario&motivo=asesoramiento-legal">
+            <Link to="/consultar-mi-caso">
               <Button size="lg" className="text-lg px-8 py-6">
                 Consultar mi caso
                 <ChevronRight className="ml-2 h-5 w-5" />
