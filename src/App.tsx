@@ -116,7 +116,7 @@ const App = () => (
             <Route path="/guia-gratuita" element={<LeadMagnetPage />} />
             
             {/* Service Pages */}
-            <Route path="/servicios/gestion-integral" element={<GestionIntegral />} />
+            <Route path="/servicios/gestion-de-alquileres" element={<GestionIntegral />} />
             <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
