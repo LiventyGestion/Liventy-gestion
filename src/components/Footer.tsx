@@ -93,7 +93,14 @@ const Footer = () => {
                   Mantenimiento
                 </Link>
               </li>
-              <li className="text-muted-foreground">Asesoría legal</li>
+              <li>
+                <Link 
+                  to="/servicios/asesoria-legal" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Asesoría legal
+                </Link>
+              </li>
             </ul>
           </div>
 

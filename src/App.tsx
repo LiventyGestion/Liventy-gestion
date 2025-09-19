@@ -122,7 +122,7 @@ const App = () => (
             <Route path="/servicios/gestion-de-alquileres" element={<GestionIntegral />} />
             <Route path="/servicios/alquiler-temporada" element={<AlquilerTemporada />} />
             <Route path="/servicios/alquiler-larga-duracion" element={<AlquilerLargaDuracion />} />
-            <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
+            <Route path="/servicios/asesoria-legal" element={<AsesoramientoLegal />} />
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
             <Route path="/servicios/mantenimiento" element={<Mantenimiento />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />

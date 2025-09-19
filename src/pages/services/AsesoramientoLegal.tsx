@@ -1,59 +1,74 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CheckCircle2, AlertTriangle, ChevronRight, Scale, FileText, MessageSquare, RefreshCw } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { CheckCircle2, AlertTriangle, ChevronRight, Scale, FileText, MessageSquare, RefreshCw, Search, Calendar, BookOpen, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import heroImage from "@/assets/property-consultation.jpg";
+import sideImage from "@/assets/property-guide.jpg";
+import contractImage from "@/assets/legal-contract-review.jpg";
+import reviewImage from "@/assets/contract-review.jpg";
+import balanceImage from "@/assets/legal-balance.jpg";
+import timelineImage from "@/assets/legal-timeline.jpg";
+import rightsImage from "@/assets/rights-infographic.jpg";
+import consultationImage from "@/assets/friendly-consultation.jpg";
 
 const AsesoramientoLegal = () => {
-  const coverages = [
+  const [openItems, setOpenItems] = useState<string[]>([]);
+
+  const toggleItem = (value: string) => {
+    setOpenItems(prev => 
+      prev.includes(value) 
+        ? prev.filter(item => item !== value)
+        : [...prev, value]
+    );
+  };
+
+  const services = [
     {
+      id: "contratos",
       icon: FileText,
-      title: "Contratos estándar",
-      description: "Revisión y redacción de contratos de arrendamiento estándar"
+      title: "Contratos ajustados a tu caso",
+      description: "Redacción y personalización de contratos de vivienda y de temporada conforme a la normativa vigente.",
+      image: contractImage,
+      alt: "Redacción y personalización de contratos"
     },
     {
-      icon: MessageSquare,
-      title: "Comunicaciones al inquilino", 
-      description: "Redacción de avisos, notificaciones y comunicaciones oficiales"
+      id: "revision",
+      icon: Search,
+      title: "Revisión legal de contratos",
+      description: "Si ya tienes inquilino/contrato, revisamos cláusulas clave y riesgos habituales.",
+      image: reviewImage,
+      alt: "Revisión legal de contratos"
     },
     {
-      icon: RefreshCw,
-      title: "Prórrogas y renovaciones",
-      description: "Gestión de renovaciones y prórroga de contratos existentes"
-    },
-    {
+      id: "conflictos",
       icon: Scale,
-      title: "Resolución de dudas",
-      description: "Asesoramiento sobre normativa de alquileres y dudas frecuentes"
+      title: "Asesoría ante impagos o conflictos",
+      description: "Orientación de primeros pasos, comunicaciones y pruebas; derivación a abogado si procede.",
+      image: balanceImage,
+      alt: "Asesoría ante impagos o conflictos"
+    },
+    {
+      id: "plazos",
+      icon: Calendar,
+      title: "Finalización, prórrogas y preavisos",
+      description: "Calendario de plazos, modelos de comunicación y checklists de entrega.",
+      image: timelineImage,
+      alt: "Prórrogas y preavisos"
+    },
+    {
+      id: "derechos",
+      icon: BookOpen,
+      title: "Derechos y obligaciones",
+      description: "Información clara y actualizada en lenguaje comprensible, sin tecnicismos.",
+      image: rightsImage,
+      alt: "Información clara y actualizada"
     }
   ];
 
-  const limitations = [
-    "Procedimientos judiciales y desahucios",
-    "Informes periciales y valoraciones técnicas",
-    "Representación legal en tribunales",
-    "Dictámenes profesionales complejos"
-  ];
-
-  const faqs = [
-    {
-      question: "¿Cuál es el tiempo de respuesta?",
-      answer: "Respondemos consultas básicas en 24-48 horas. Para revisiones de contratos, el plazo es de 3-5 días laborables."
-    },
-    {
-      question: "¿Qué documentación debo enviar?",
-      answer: "Envía el contrato actual, documentación de la propiedad y descripción detallada de tu consulta o situación."
-    },
-    {
-      question: "¿Cuáles son los límites del servicio?",
-      answer: "Ofrecemos asesoramiento orientativo, no representación legal. Para casos complejos, te derivamos a abogados colaboradores."
-    },
-    {
-      question: "¿Tiene coste adicional?",
-      answer: "El asesoramiento básico está incluido en nuestros servicios. Te informaremos de cualquier coste adicional antes de proceder."
-    }
-  ];
 
   return (
     <div className="min-h-screen bg-background">
@@ -61,28 +76,26 @@ const AsesoramientoLegal = () => {
       
       <main>
         {/* Hero Section */}
-        <section className="py-16 sm:py-20 bg-gradient-to-br from-blue-50/60 via-blue-100/40 to-blue-50/80 dark:from-blue-950/10 dark:to-blue-900/20">
-          <div className="container mx-auto px-6 text-center">
+        <section className="relative py-16 sm:py-20 overflow-hidden">
+          <div className="absolute inset-0">
+            <img 
+              src={heroImage} 
+              alt="Asesoría legal básica en alquiler residencial — Liventy Gestión"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-black/50"></div>
+          </div>
+          <div className="relative container mx-auto px-6 text-center text-white">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
-              Asesoramiento legal básico para tu alquiler
+              ⚖️ Asesoría legal
             </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-2xl mx-auto">
-              Resolución de dudas frecuentes, contratos estándar, comunicaciones y avisos
+            <p className="text-xl sm:text-2xl font-medium mb-8">
+              Claridad jurídica, sin complicaciones.
             </p>
-            
-            {/* Aclaración visible */}
-            <div className="bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
-              <div className="flex items-start space-x-3">
-                <AlertTriangle className="h-5 w-5 text-orange-500 mt-1 flex-shrink-0" />
-                <p className="text-sm text-orange-700 dark:text-orange-300">
-                  <strong>Importante:</strong> Servicio orientativo. Sin representación jurídica ni dictamen profesional. 
-                  En casos complejos, derivamos a abogados colaboradores.
-                </p>
-              </div>
-            </div>
 
-            <Link to="/consultar-mi-caso">
-              <Button size="lg" className="text-lg px-8 py-6">
+            <Link to="/contacto?tipo=propietario&motivo=asesoria-legal">
+              <Button size="lg" className="text-lg px-8 py-6 bg-white text-black hover:bg-white/90">
                 Consultar mi caso
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
@@ -90,21 +103,96 @@ const AsesoramientoLegal = () => {
           </div>
         </section>
 
-        {/* Coberturas */}
+        {/* Intro Section */}
+        <section className="py-16 sm:py-20">
+          <div className="container mx-auto px-6">
+            <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+              <div>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  El mundo legal del alquiler puede parecer una jungla: normativas autonómicas, derechos del inquilino, límites a la renta, prórrogas, plazos de preaviso… En Liventy lo convertimos en claridad.
+                </p>
+                <p className="text-lg text-muted-foreground leading-relaxed mt-4">
+                  Contamos con experiencia jurídica práctica en alquiler residencial para anticipar riesgos, redactar contratos sólidos y actuar con rapidez si surgen imprevistos.
+                </p>
+              </div>
+              <div className="text-center">
+                <img 
+                  src={sideImage} 
+                  alt="Libro legal con laptop mostrando documentos"
+                  className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Aviso de alcance */}
+        <section className="py-8 bg-muted/50">
+          <div className="container mx-auto px-6">
+            <div className="max-w-4xl mx-auto">
+              <div className="bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6">
+                <div className="flex items-start space-x-3">
+                  <AlertTriangle className="h-6 w-6 text-orange-500 mt-1 flex-shrink-0" />
+                  <p className="text-orange-700 dark:text-orange-300">
+                    <strong>Servicio de asesoría básica/orientativa.</strong> No prestamos representación jurídica ni emitimos dictámenes profesionales. En casos complejos, derivamos a abogados colaboradores de confianza.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Te ofrecemos */}
         <section className="py-16 sm:py-20">
           <div className="container mx-auto px-6">
             <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
-              ¿En qué te podemos ayudar?
+              Te ofrecemos:
             </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-              {coverages.map((item, index) => (
-                <Card key={index} className="text-center hover:shadow-md transition-shadow">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {services.map((service) => (
+                <Card key={service.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+                  <div className="aspect-[3/2] overflow-hidden">
+                    <img 
+                      src={service.image} 
+                      alt={service.alt}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
                   <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <item.icon className="h-8 w-8 text-primary" />
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0">
+                        <service.icon className="h-5 w-5 text-primary" aria-hidden="true" />
+                      </div>
+                      <h3 className="text-lg font-semibold">{service.title}</h3>
                     </div>
-                    <h3 className="text-lg font-semibold mb-3">{item.title}</h3>
-                    <p className="text-muted-foreground text-sm">{item.description}</p>
+                    
+                    <Collapsible>
+                      <CollapsibleTrigger 
+                        className="flex items-center justify-between w-full text-left"
+                        onClick={() => toggleItem(service.id)}
+                        aria-expanded={openItems.includes(service.id)}
+                        aria-controls={`content-${service.id}`}
+                      >
+                        <p className="text-muted-foreground text-sm line-clamp-2">
+                          {service.description}
+                        </p>
+                        <ChevronDown 
+                          className={`h-4 w-4 ml-2 flex-shrink-0 transition-transform ${
+                            openItems.includes(service.id) ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent 
+                        id={`content-${service.id}`}
+                        className="pt-2"
+                      >
+                        <p className="text-muted-foreground text-sm">
+                          {service.description}
+                        </p>
+                      </CollapsibleContent>
+                    </Collapsible>
                   </CardContent>
                 </Card>
               ))}
@@ -112,50 +200,25 @@ const AsesoramientoLegal = () => {
           </div>
         </section>
 
-        {/* Dónde ponemos el límite */}
+        {/* Cierre */}
         <section className="py-16 sm:py-20 bg-muted/50">
           <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
-                Dónde ponemos el límite
-              </h2>
-              <Card className="border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/20">
-                <CardContent className="p-8">
-                  <p className="text-center text-muted-foreground mb-6">
-                    Para estos casos, te ponemos en contacto con abogados colaboradores especializados:
-                  </p>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    {limitations.map((item, index) => (
-                      <div key={index} className="flex items-start space-x-3">
-                        <AlertTriangle className="h-5 w-5 text-red-500 mt-1 flex-shrink-0" />
-                        <span className="text-red-700 dark:text-red-300">{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* FAQ */}
-        <section className="py-16 sm:py-20">
-          <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-2xl sm:text-3xl font-bold text-center mb-12">
-                Preguntas frecuentes
-              </h2>
-              <div className="space-y-6">
-                {faqs.map((faq, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="text-lg">{faq.question}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground">{faq.answer}</p>
-                    </CardContent>
-                  </Card>
-                ))}
+            <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+              <div>
+                <h2 className="text-2xl sm:text-3xl font-bold mb-6">
+                  Siempre disponibles, online o presencialmente
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Tu decisión, con seguridad y claridad.
+                </p>
+              </div>
+              <div className="text-center">
+                <img 
+                  src={consultationImage} 
+                  alt="Atención cercana y clara"
+                  className="w-full max-w-md mx-auto rounded-lg shadow-lg"
+                  loading="lazy"
+                />
               </div>
             </div>
           </div>
@@ -164,13 +227,10 @@ const AsesoramientoLegal = () => {
         {/* CTA Final */}
         <section className="py-16 sm:py-20 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5">
           <div className="container mx-auto px-6 text-center">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-6">
-              ¿Tienes dudas legales sobre tu alquiler?
-            </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Contacta con nosotros y te ayudaremos a resolver tus consultas de forma rápida y profesional.
+            <p className="text-2xl sm:text-3xl font-bold mb-8">
+              👉 Consultar mi caso
             </p>
-            <Link to="/consultar-mi-caso">
+            <Link to="/contacto?tipo=propietario&motivo=asesoria-legal">
               <Button size="lg" className="text-lg px-8 py-6">
                 Consultar mi caso
                 <ChevronRight className="ml-2 h-5 w-5" />
