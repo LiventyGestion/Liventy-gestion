@@ -87,7 +87,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  to="/servicios/mantenimiento-incidencias" 
+                  to="/servicios/mantenimiento" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
                   Mantenimiento

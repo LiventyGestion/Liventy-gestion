@@ -31,6 +31,7 @@ import AsesoramientoLegal from "./pages/services/AsesoramientoLegal";
 import MantenimientoIncidencias from "./pages/services/MantenimientoIncidencias";
 import AlquilerTemporada from "./pages/services/AlquilerTemporada";
 import AlquilerLargaDuracion from "./pages/services/AlquilerLargaDuracion";
+import Mantenimiento from "./pages/services/Mantenimiento";
 import ConsultarMiCaso from "./pages/ConsultarMiCaso";
 
 
@@ -123,6 +124,7 @@ const App = () => (
             <Route path="/servicios/alquiler-larga-duracion" element={<AlquilerLargaDuracion />} />
             <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
+            <Route path="/servicios/mantenimiento" element={<Mantenimiento />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
             
             
