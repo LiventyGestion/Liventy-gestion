@@ -69,9 +69,23 @@ const Footer = () => {
                   Gestión de alquileres
                 </Link>
               </li>
-              <li className="text-muted-foreground">Alquiler temporada</li>
+              <li>
+                <Link 
+                  to="/servicios/alquiler-temporada" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Alquiler temporada
+                </Link>
+              </li>
               <li className="text-muted-foreground">Alquiler larga duración</li>
-              <li className="text-muted-foreground">Mantenimiento</li>
+              <li>
+                <Link 
+                  to="/servicios/mantenimiento-incidencias" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Mantenimiento
+                </Link>
+              </li>
               <li className="text-muted-foreground">Asesoría legal</li>
             </ul>
           </div>
