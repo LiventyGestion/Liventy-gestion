@@ -77,7 +77,14 @@ const Footer = () => {
                   Alquiler temporada
                 </Link>
               </li>
-              <li className="text-muted-foreground">Alquiler larga duración</li>
+              <li>
+                <Link 
+                  to="/servicios/alquiler-larga-duracion" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Alquiler larga duración
+                </Link>
+              </li>
               <li>
                 <Link 
                   to="/servicios/mantenimiento-incidencias" 

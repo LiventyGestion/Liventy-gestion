@@ -30,6 +30,7 @@ import GestionIntegral from "./pages/services/GestionIntegral";
 import AsesoramientoLegal from "./pages/services/AsesoramientoLegal";
 import MantenimientoIncidencias from "./pages/services/MantenimientoIncidencias";
 import AlquilerTemporada from "./pages/services/AlquilerTemporada";
+import AlquilerLargaDuracion from "./pages/services/AlquilerLargaDuracion";
 import ConsultarMiCaso from "./pages/ConsultarMiCaso";
 
 
@@ -119,6 +120,7 @@ const App = () => (
             {/* Service Pages */}
             <Route path="/servicios/gestion-de-alquileres" element={<GestionIntegral />} />
             <Route path="/servicios/alquiler-temporada" element={<AlquilerTemporada />} />
+            <Route path="/servicios/alquiler-larga-duracion" element={<AlquilerLargaDuracion />} />
             <Route path="/servicios/asesoramiento-legal" element={<AsesoramientoLegal />} />
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
