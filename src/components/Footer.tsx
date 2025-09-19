@@ -60,12 +60,19 @@ const Footer = () => {
           {/* Services */}
           <div>
             <h3 className="font-semibold mb-4 text-sm sm:text-base">Servicios</h3>
-            <ul className="space-y-2 text-muted-foreground text-sm">
-              <li>Gestión de alquileres</li>
-              <li>Alquiler temporada</li>
-              <li>Alquiler larga duración</li>
-              <li>Mantenimiento</li>
-              <li>Asesoría legal</li>
+            <ul className="space-y-2 text-sm">
+              <li>
+                <Link 
+                  to="/servicios/gestion-de-alquileres" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Gestión de alquileres
+                </Link>
+              </li>
+              <li className="text-muted-foreground">Alquiler temporada</li>
+              <li className="text-muted-foreground">Alquiler larga duración</li>
+              <li className="text-muted-foreground">Mantenimiento</li>
+              <li className="text-muted-foreground">Asesoría legal</li>
             </ul>
           </div>
 
