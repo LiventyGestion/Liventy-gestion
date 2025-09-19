@@ -8,7 +8,7 @@ const contacts = {
   property_manager: {
     name: "Ana Martínez",
     role: "Gestora de Propiedades",
-    phone: "+34 123 456 789",
+    phone: "+34 944 397 330",
     email: "ana.martinez@liventy.com",
     availability: "Lun-Vie 9:00-18:00",
     photo: "AM"
@@ -16,7 +16,7 @@ const contacts = {
   maintenance: {
     name: "Servicio Técnico",
     role: "Mantenimiento",
-    phone: "+34 987 654 321",
+    phone: "+34 944 397 330",
     email: "mantenimiento@liventy.com",
     availability: "Lun-Vie 9:00-18:00",
     photo: "ST"
@@ -24,14 +24,14 @@ const contacts = {
   emergency: {
     name: "Emergencias 24h",
     role: "Atención de Urgencias",
-    phone: "+34 600 000 000",
+    phone: "+34 944 397 330",
     availability: "24 horas, 7 días",
     photo: "EM"
   },
   general: {
     name: "Atención al Cliente",
     role: "Consultas Generales",
-    phone: "+34 900 123 456",
+    phone: "+34 944 397 330",
     email: "info@liventy.com",
     availability: "Lun-Vie 9:00-20:00, Sáb 10:00-14:00",
     photo: "AC"

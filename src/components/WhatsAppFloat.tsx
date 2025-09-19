@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const WhatsAppFloat = () => {
-  const phoneNumber = "34XXXXXXXXX"; // Replace with actual phone number
+  const phoneNumber = "34944397330";
   const message = "Hola, me gustaría recibir información sobre la gestión de mi vivienda con Liventy Gestión.";
   
   const handleWhatsAppClick = () => {

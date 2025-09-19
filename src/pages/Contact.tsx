@@ -419,12 +419,12 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg">Teléfono</h3>
-                      <a 
-                        href="tel:610835611" 
+                       <a 
+                        href="tel:944397330" 
                         className="text-muted-foreground hover:text-primary transition-colors min-h-[44px] flex items-center"
-                        aria-label="Llamar al 610 835 611"
+                        aria-label="Llamar al 944 397 330"
                       >
-                        610 835 611
+                        944 397 330
                       </a>
                     </div>
                   </div>
