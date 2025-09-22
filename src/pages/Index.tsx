@@ -6,7 +6,6 @@ import OwnerBenefits from "@/components/OwnerBenefits";
 import HowItWorks from "@/components/HowItWorks";
 import PropertySlider from "@/components/PropertySlider";
 import Stats from "@/components/Stats";
-import ComparisonTable from "@/components/ComparisonTable";
 import Testimonials from "@/components/Testimonials";
 import FAQ from "@/components/FAQ";
 import ContactFormSection from "@/components/ContactForm";
@@ -22,7 +21,6 @@ const Index = () => {
       <Hero />
       <WhatWeDo />
       <HowItWorks />
-      <ComparisonTable />
       <SecondaryCTAs />
       <OwnerBenefits />
       <PropertySlider />
