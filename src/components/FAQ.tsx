@@ -42,8 +42,8 @@ const FAQ = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
             <HelpCircle className="h-8 w-8 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="text-3xl font-bold mb-4">Resolvemos tus dudas</h2>
-          <p className="text-muted-foreground text-lg">
+          <h2 className="text-2xl font-bold mb-4">Resolvemos tus dudas</h2>
+          <p className="text-muted-foreground text-base">
             Las preguntas más frecuentes sobre nuestros servicios
           </p>
         </div>
