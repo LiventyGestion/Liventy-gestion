@@ -20,7 +20,7 @@ const Header = () => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center">
             <img 
-              src="/lovable-uploads/5b1ed236-dc4e-465f-a21e-7c3186a1ba0d.png" 
+              src="/icons/logo-source.svg" 
               alt="Liventy Gestión - Volver al inicio" 
               className="h-16 sm:h-20 lg:h-24 w-auto"
             />
