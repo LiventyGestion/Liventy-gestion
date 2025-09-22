@@ -20,10 +20,30 @@ export default {
 		extend: {
 			fontFamily: {
 				'raleway': ['Raleway', 'sans-serif'],
-				'montserrat': ['Montserrat', 'sans-serif'],
-				'lato': ['Lato', 'sans-serif'],
+				'sans': ['Raleway', 'sans-serif'],
+			},
+			spacing: {
+				'base': '8px',
+				'section-mobile': '40px',
+				'section-tablet': '56px', 
+				'section-desktop': '64px',
+				'section-desktop-lg': '96px',
 			},
 			colors: {
+				// Brand colors
+				'brand-charcoal': 'hsl(var(--brand-charcoal))',
+				'brand-orange': 'hsl(var(--brand-orange))',
+				'brand-white': 'hsl(var(--brand-white))',
+				
+				// Neutral grays
+				'neutral-50': 'hsl(var(--neutral-50))',
+				'neutral-100': 'hsl(var(--neutral-100))',
+				'neutral-200': 'hsl(var(--neutral-200))',
+				'neutral-300': 'hsl(var(--neutral-300))',
+				'neutral-400': 'hsl(var(--neutral-400))',
+				'neutral-500': 'hsl(var(--neutral-500))',
+				
+				// Semantic tokens
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -69,9 +89,25 @@ export default {
 				}
 			},
 			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				'none': '0',
+				'sm': '8px',
+				'md': '12px',
+				'lg': '16px',
+				'xl': '20px',
+				'2xl': '24px',
+				'full': '9999px',
+				DEFAULT: '20px',
+			},
+			boxShadow: {
+				'sm': 'var(--shadow-sm)',
+				'md': 'var(--shadow-md)',
+			},
+			letterSpacing: {
+				'heading': '-0.01em',
+			},
+			lineHeight: {
+				'heading': '1.4',
+				'heading-lg': '1.5',
 			},
 			keyframes: {
 				'accordion-down': {

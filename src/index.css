@@ -8,50 +8,53 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Logo-inspired color palette - Black and Orange */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-
-    /* Primary light orange from Liventy logo */
-    --primary: 25 90% 65%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 25 80% 75%;
-
-    /* Warm secondary for subtle backgrounds */
-    --secondary: 25 30% 96%;
-    --secondary-foreground: 0 0% 9%;
-
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 45%;
-
-    /* Orange accent colors */
-    --accent: 25 90% 65%;
-    --accent-foreground: 0 0% 9%;
+    /* Brand Colors */
+    --brand-charcoal: 0 0% 20%;
+    --brand-orange: 33 86% 48%;
+    --brand-white: 0 0% 100%;
     
-    /* Warning/Rating color for stars */
-    --warning: 43 96% 56%;
-    --warning-foreground: 25 26% 11%;
-
+    /* Neutral Grays */
+    --neutral-50: 0 0% 97%;
+    --neutral-100: 0 0% 94%;
+    --neutral-200: 0 0% 90%;
+    --neutral-300: 0 0% 83%;
+    --neutral-400: 0 0% 64%;
+    --neutral-500: 0 0% 45%;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.10);
+    
+    /* Semantic tokens mapped to brand colors */
+    --background: var(--brand-white);
+    --foreground: var(--brand-charcoal);
+    
+    --card: var(--brand-white);
+    --card-foreground: var(--brand-charcoal);
+    
+    --popover: var(--brand-white);
+    --popover-foreground: var(--brand-charcoal);
+    
+    --primary: var(--brand-orange);
+    --primary-foreground: var(--brand-white);
+    
+    --secondary: var(--neutral-50);
+    --secondary-foreground: var(--brand-charcoal);
+    
+    --muted: var(--neutral-100);
+    --muted-foreground: var(--neutral-500);
+    
+    --accent: var(--brand-orange);
+    --accent-foreground: var(--brand-white);
+    
     --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 90%;
-    --input: 0 0% 90%;
-    --ring: 25 90% 65%;
-
-    /* Design tokens for Liventy brand */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-hero: linear-gradient(135deg, hsl(25 90% 65% / 0.95), hsl(25 80% 75% / 0.9));
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.15);
-    --shadow-card: 0 4px 12px -2px hsl(0 0% 9% / 0.08);
+    --destructive-foreground: var(--brand-white);
     
-    --radius: 0.75rem;
+    --border: var(--neutral-200);
+    --input: var(--neutral-200);
+    --ring: var(--brand-orange);
+    
+    --radius: 20px;
 
     --sidebar-background: 0 0% 98%;
 
@@ -71,45 +74,38 @@ All colors MUST be HSL.
   }
 
   .dark {
-    /* Dark mode with logo-inspired orange accents */
-    --background: 0 0% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 25 90% 65%;
-    --primary-foreground: 0 0% 9%;
-    --primary-glow: 25 80% 75%;
-
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 0 0% 14.9%;
-    --muted-foreground: 0 0% 63.9%;
-
-    --accent: 25 90% 65%;
-    --accent-foreground: 0 0% 9%;
+    /* Dark mode with brand colors */
+    --background: 0 0% 5%;
+    --foreground: var(--brand-white);
     
-    /* Warning/Rating color for stars */
-    --warning: 43 96% 56%;
-    --warning-foreground: 25 26% 11%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
-    --ring: 25 90% 65%;
+    --card: 0 0% 8%;
+    --card-foreground: var(--brand-white);
     
-    /* Dark mode gradients with orange */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 3.9% / 0.95), hsl(0 0% 14.9% / 0.9));
-    --shadow-elegant: 0 10px 30px -10px hsl(0 0% 0% / 0.3);
-    --shadow-card: 0 4px 12px -2px hsl(0 0% 0% / 0.25);
+    --popover: 0 0% 8%;
+    --popover-foreground: var(--brand-white);
+    
+    --primary: var(--brand-orange);
+    --primary-foreground: var(--brand-white);
+    
+    --secondary: 0 0% 15%;
+    --secondary-foreground: var(--brand-white);
+    
+    --muted: 0 0% 15%;
+    --muted-foreground: var(--neutral-400);
+    
+    --accent: var(--brand-orange);
+    --accent-foreground: var(--brand-white);
+    
+    --destructive: 0 62% 31%;
+    --destructive-foreground: var(--brand-white);
+    
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: var(--brand-orange);
+    
+    /* Dark mode shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.40);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
@@ -128,14 +124,67 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-raleway;
-    font-feature-settings: "cv01", "cv02", "cv03", "cv04";
+    font-weight: 400;
+    line-height: 1.6;
   }
   
-  /* Raleway font optimization for better readability */
+  /* Typography hierarchy with Raleway */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-raleway;
-    font-feature-settings: "cv01", "cv02", "cv03", "cv04";
-    font-optical-sizing: auto;
+    @apply font-raleway font-bold tracking-heading leading-heading;
+    color: hsl(var(--brand-charcoal));
+  }
+  
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl leading-heading-lg;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+  
+  h5 {
+    @apply text-lg md:text-xl lg:text-2xl;
+  }
+  
+  h6 {
+    @apply text-base md:text-lg lg:text-xl;
+  }
+  
+  /* Body text */
+  p, span, div {
+    color: hsl(var(--brand-charcoal));
+  }
+  
+  /* Section spacing */
+  .section-spacing {
+    @apply py-section-mobile md:py-section-tablet lg:py-section-desktop xl:py-section-desktop-lg;
+  }
+  
+  /* Card styles with new radius and shadows */
+  .card-default {
+    @apply bg-card rounded-xl shadow-sm border border-border;
+  }
+  
+  .card-elevated {
+    @apply bg-card rounded-xl shadow-md border border-border;
+  }
+  
+  /* CTA button styles using brand orange */
+  .btn-cta {
+    @apply bg-brand-orange text-brand-white font-semibold px-6 py-3 rounded-xl shadow-sm;
+    @apply hover:shadow-md transition-all duration-200;
+  }
+  
+  .btn-cta:hover {
+    transform: translateY(-1px);
   }
 }
 
