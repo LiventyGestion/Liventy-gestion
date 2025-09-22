@@ -85,22 +85,22 @@ const Hero = () => {
             </div>
 
             {/* CTAs - Larger and more prominent */}
-            <div className="flex flex-col sm:flex-row gap-6 items-start">
+            <div className="flex flex-col gap-4 items-stretch max-w-md">
               <Button 
                 size="lg" 
-                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-bold px-12 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
+                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-bold px-8 py-4 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 w-full"
                 onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
                 role="button"
                 aria-label="Empezar ahora – ir al formulario de contacto"
               >
                 Empezar ahora
-                <ArrowRight className="ml-3 h-6 w-6" aria-hidden="true" />
+                <ArrowRight className="ml-3 h-5 w-5" aria-hidden="true" />
               </Button>
               
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-bold px-12 py-6 text-lg rounded-xl transition-all duration-200 hover:shadow-lg"
+                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-bold px-8 py-4 text-base rounded-xl transition-all duration-200 hover:shadow-lg w-full"
                 onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
                 aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
                 role="button"
