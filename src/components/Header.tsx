@@ -39,7 +39,7 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="text-foreground hover:text-primary transition-colors bg-transparent hover:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent">
+                  <NavigationMenuTrigger className="text-foreground hover:text-primary transition-colors bg-transparent hover:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent text-base font-normal h-auto p-0">
                     Servicios
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
