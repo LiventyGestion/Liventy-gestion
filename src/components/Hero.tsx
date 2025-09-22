@@ -66,14 +66,6 @@ const Hero = () => {
           
           {/* Left Column - Content (40% width) */}
           <div className="space-y-8 lg:pr-8 lg:col-span-2">
-            {/* Badge */}
-            <div className="flex justify-start">
-              <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-raleway font-semibold rounded-full">
-                <MapPin className="w-4 h-4 mr-2" />
-                Empresa local en Bizkaia
-              </Badge>
-            </div>
-
             {/* Benefits List - 2x2 Grid Layout */}
             <div className="grid grid-cols-2 gap-6">
               {benefits.map((benefit, index) => (
@@ -92,29 +84,37 @@ const Hero = () => {
               ))}
             </div>
 
-            {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 items-start">
+            {/* CTAs - Larger and more prominent */}
+            <div className="flex flex-col sm:flex-row gap-6 items-start">
               <Button 
                 size="lg" 
-                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-semibold px-8 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-bold px-12 py-6 text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5"
                 onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
                 role="button"
                 aria-label="Empezar ahora – ir al formulario de contacto"
               >
                 Empezar ahora
-                <ArrowRight className="ml-3 h-5 w-5" aria-hidden="true" />
+                <ArrowRight className="ml-3 h-6 w-6" aria-hidden="true" />
               </Button>
               
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-semibold px-8 py-4 rounded-xl transition-all duration-200"
+                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-bold px-12 py-6 text-lg rounded-xl transition-all duration-200 hover:shadow-lg"
                 onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
                 aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
                 role="button"
               >
                 Valora gratis mi piso
               </Button>
+            </div>
+
+            {/* Badge - Moved below CTAs */}
+            <div className="flex justify-start">
+              <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-raleway font-semibold rounded-full">
+                <MapPin className="w-4 h-4 mr-2" />
+                Empresa local en Bizkaia
+              </Badge>
             </div>
 
             {/* Discrete line */}
