@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Shield, FileText, Wrench, BarChart3 } from "lucide-react";
-import heroBackground from "@/assets/hero-modern-property.jpg";
+import { ArrowRight, Shield, FileText, Wrench, BarChart3, MapPin } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import bilbaoImage from "@/assets/bizkaia-urban.jpg";
 
 const Hero = () => {
   const handleCTAClick = (location: string, label: string, dest: string) => {
@@ -47,78 +48,96 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-[90vh] flex items-center bg-gradient-to-br from-background via-accent/5 to-primary/5 overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-        <img 
-          src={heroBackground} 
-          alt="" 
-          className="w-full h-full object-cover opacity-80"
-          aria-hidden="true"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-background/90 via-background/85 to-background/90"></div>
-      </div>
-      
+    <section className="relative min-h-screen flex items-center bg-brand-white overflow-hidden section-spacing">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="max-w-5xl mx-auto text-center">
-          <h1 className="font-montserrat text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
-            Gestión integral de alquileres en
-            <span className="text-primary block bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              Bizkaia
-            </span>
-          </h1>
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           
-          <p className="font-lato text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-10 max-w-4xl mx-auto leading-relaxed">
-            Tu vivienda, más rentable y sin preocupaciones.
-          </p>
+          {/* Left Column - Content */}
+          <div className="space-y-8 lg:pr-8">
+            {/* Badge */}
+            <div className="flex justify-start">
+              <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-raleway font-semibold rounded-full">
+                <MapPin className="w-4 h-4 mr-2" />
+                Empresa local en Bizkaia
+              </Badge>
+            </div>
 
-          {/* Benefits List */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-10 max-w-5xl mx-auto">
-            {benefits.map((benefit, index) => (
-              <div 
-                key={index} 
-                className="group flex flex-col items-center text-center p-6 sm:p-8 rounded-2xl bg-white/90 backdrop-blur-sm border border-border/20 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 hover:border-primary/30 cursor-pointer"
-                aria-label={`Servicio: ${benefit.text}`}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-2xl mb-4 group-hover:bg-primary/20 transition-all duration-300">
-                  <benefit.icon className="h-10 w-10 sm:h-12 sm:w-12 text-primary group-hover:scale-110 transition-all duration-300" />
+            {/* Main Heading */}
+            <div className="space-y-6">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
+                Gestión integral de alquileres en Bizkaia.
+              </h1>
+              
+              <p className="text-xl sm:text-2xl lg:text-3xl font-raleway font-normal text-neutral-500 leading-relaxed">
+                Tu vivienda, más rentable y sin preocupaciones.
+              </p>
+            </div>
+
+            {/* Benefits List - Compact horizontal layout */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              {benefits.map((benefit, index) => (
+                <div 
+                  key={index} 
+                  className="flex flex-col items-center text-center p-4 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-all duration-200 cursor-pointer group"
+                  aria-label={`Servicio: ${benefit.text}`}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div className="inline-flex items-center justify-center w-10 h-10 bg-brand-orange/10 rounded-xl mb-3 group-hover:bg-brand-orange/20 transition-all duration-200">
+                    <benefit.icon className="h-5 w-5 text-brand-orange group-hover:scale-110 transition-all duration-200" />
+                  </div>
+                  <span className="font-raleway text-sm font-semibold text-brand-charcoal leading-tight">{benefit.text}</span>
                 </div>
-                <span className="font-raleway text-base sm:text-lg font-semibold text-gray-800 leading-snug">{benefit.text}</span>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* CTAs */}
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <Button 
+                size="lg" 
+                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-semibold px-8 py-4 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+                onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
+                role="button"
+                aria-label="Empezar ahora – ir al formulario de contacto"
+              >
+                Empezar ahora
+                <ArrowRight className="ml-3 h-5 w-5" aria-hidden="true" />
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-semibold px-8 py-4 rounded-xl transition-all duration-200"
+                onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
+                aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
+                role="button"
+              >
+                Valora gratis mi piso
+              </Button>
+            </div>
+
+            {/* Discrete line */}
+            <p className="font-raleway text-sm text-neutral-400 max-w-lg">
+              También ofrecemos alquiler por meses y colaboración con empresas, si lo necesitas.
+            </p>
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-            <Button 
-              size="lg" 
-              className="text-lg px-8 py-6 h-auto bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-              onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
-              role="button"
-              aria-label="Empezar ahora – ir al formulario de contacto"
-            >
-              Empezar ahora
-              <ArrowRight className="ml-3 h-6 w-6" aria-hidden="true" />
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="text-lg px-8 py-6 h-auto border-primary text-primary hover:bg-primary/5 transition-all duration-300"
-              onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
-              aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
-              role="button"
-            >
-              Valora gratis mi piso
-            </Button>
+          {/* Right Column - Image */}
+          <div className="relative lg:order-last order-first">
+            <div className="relative rounded-2xl overflow-hidden shadow-md">
+              <img 
+                src={bilbaoImage} 
+                alt="Vista urbana de Bilbao y Abando, Bizkaia" 
+                className="w-full h-[400px] lg:h-[600px] object-cover object-center"
+                style={{ 
+                  filter: 'saturate(0.85) contrast(1.1)',
+                  clipPath: 'ellipse(100% 95% at 50% 50%)'
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent rounded-2xl"></div>
+            </div>
           </div>
 
-          {/* Discrete line */}
-          <p className="font-lato text-sm text-muted-foreground opacity-75 max-w-2xl mx-auto">
-            También ofrecemos alquiler por meses y colaboración con empresas, si lo necesitas.
-          </p>
         </div>
       </div>
     </section>
