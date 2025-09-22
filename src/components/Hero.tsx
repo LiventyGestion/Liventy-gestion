@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, FileText, Wrench, BarChart3, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import bilbaoImage from "@/assets/bizkaia-urban.jpg";
+import bilbaoImage from "@/assets/bilbao-guggenheim-hero.jpg";
 
 const Hero = () => {
   const handleCTAClick = (location: string, label: string, dest: string) => {
@@ -50,10 +50,10 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center bg-brand-white overflow-hidden section-spacing">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
+        <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           
-          {/* Left Column - Content */}
-          <div className="space-y-8 lg:pr-8">
+          {/* Left Column - Content (40% width) */}
+          <div className="space-y-8 lg:pr-8 lg:col-span-2">
             {/* Badge */}
             <div className="flex justify-start">
               <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-raleway font-semibold rounded-full">
@@ -122,19 +122,26 @@ const Hero = () => {
             </p>
           </div>
 
-          {/* Right Column - Image */}
-          <div className="relative lg:order-last order-first">
+          {/* Right Column - Image (60% width) */}
+          <div className="relative lg:order-last order-first lg:col-span-3">
             <div className="relative rounded-2xl overflow-hidden shadow-md">
               <img 
                 src={bilbaoImage} 
-                alt="Vista urbana de Bilbao y Abando, Bizkaia" 
-                className="w-full h-[400px] lg:h-[600px] object-cover object-center"
+                alt="Gestión de alquiler en Bilbao: Museo Guggenheim y ría al atardecer" 
+                className="w-full h-[400px] lg:h-[600px] object-cover object-left-center"
+                loading="eager"
+                decoding="async"
+                fetchPriority="high"
                 style={{ 
-                  filter: 'saturate(0.85) contrast(1.1)',
                   clipPath: 'ellipse(100% 95% at 50% 50%)'
                 }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent rounded-2xl"></div>
+              <div 
+                className="absolute inset-0 rounded-2xl" 
+                style={{
+                  background: 'linear-gradient(90deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 45%, rgba(0,0,0,0) 70%)'
+                }}
+              />
             </div>
           </div>
 
