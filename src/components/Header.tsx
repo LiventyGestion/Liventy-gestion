@@ -2,6 +2,13 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@/components/ui/navigation-menu";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,14 +40,6 @@ const Header = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link 
-                to="/propietarios" 
-                className="font-montserrat font-medium text-base text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1" 
-                style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
-              >
-                Propietarios
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link 
                 to="/herramientas" 
                 className="font-montserrat font-medium text-base text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1" 
                 style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
@@ -48,20 +47,69 @@ const Header = () => {
                 Herramientas
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
+              
+              {/* Servicios Dropdown */}
+              <NavigationMenu>
+                <NavigationMenuList>
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger 
+                      className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1 bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent hover:bg-transparent" 
+                      style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
+                    >
+                      Servicios
+                      <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="p-4 w-80">
+                        <div className="grid gap-3">
+                          <Link
+                            to="/servicios/gestion-integral"
+                            className="block p-3 rounded-lg hover:bg-accent transition-colors"
+                          >
+                            <div className="font-medium">Gestión Integral</div>
+                            <div className="text-sm text-muted-foreground">Gestión completa de tu propiedad</div>
+                          </Link>
+                          <Link
+                            to="/servicios/alquiler-larga-duracion"
+                            className="block p-3 rounded-lg hover:bg-accent transition-colors"
+                          >
+                            <div className="font-medium">Alquiler Larga Duración</div>
+                            <div className="text-sm text-muted-foreground">Gestión de alquileres por meses</div>
+                          </Link>
+                          <Link
+                            to="/servicios/alquiler-temporada"
+                            className="block p-3 rounded-lg hover:bg-accent transition-colors"
+                          >
+                            <div className="font-medium">Alquiler Temporada</div>
+                            <div className="text-sm text-muted-foreground">Gestión de alquileres turísticos</div>
+                          </Link>
+                          <Link
+                            to="/servicios/mantenimiento"
+                            className="block p-3 rounded-lg hover:bg-accent transition-colors"
+                          >
+                            <div className="font-medium">Mantenimiento</div>
+                            <div className="text-sm text-muted-foreground">Mantenimiento y reparaciones</div>
+                          </Link>
+                          <Link
+                            to="/servicios/asesoramiento-legal"
+                            className="block p-3 rounded-lg hover:bg-accent transition-colors"
+                          >
+                            <div className="font-medium">Asesoramiento Legal</div>
+                            <div className="text-sm text-muted-foreground">Consultoría jurídica especializada</div>
+                          </Link>
+                        </div>
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                </NavigationMenuList>
+              </NavigationMenu>
+
               <Link 
-                to="/servicios/alquiler-larga-duracion" 
+                to="/about" 
                 className="font-montserrat font-medium text-base text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1" 
                 style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
               >
-                Alquiler por meses
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
-              </Link>
-              <Link 
-                to="/empresas" 
-                className="font-montserrat font-medium text-base text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1" 
-                style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
-              >
-                Empresas
+                Sobre Nosotros
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link 
@@ -69,7 +117,7 @@ const Header = () => {
                 className="font-montserrat font-medium text-base text-gray-800 hover:text-primary transition-colors relative group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-sm px-1 py-1" 
                 style={{ fontSize: '16px', letterSpacing: '-0.02em' }}
               >
-                Blog
+                Liventy Insights
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
               </Link>
               <Link 
@@ -129,39 +177,66 @@ const Header = () => {
                   Inicio
                 </Link>
                 <Link 
-                  to="/propietarios" 
-                  className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Propietarios
-                </Link>
-                <Link 
                   to="/herramientas" 
                   className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Herramientas
                 </Link>
+                
+                {/* Servicios submenu for mobile */}
+                <div className="pl-4 space-y-2">
+                  <div className="font-montserrat font-medium text-gray-600 text-sm">Servicios:</div>
+                  <Link 
+                    to="/servicios/gestion-integral" 
+                    className="block font-montserrat text-gray-800 hover:text-primary transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Gestión Integral
+                  </Link>
+                  <Link 
+                    to="/servicios/alquiler-larga-duracion" 
+                    className="block font-montserrat text-gray-800 hover:text-primary transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Alquiler Larga Duración
+                  </Link>
+                  <Link 
+                    to="/servicios/alquiler-temporada" 
+                    className="block font-montserrat text-gray-800 hover:text-primary transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Alquiler Temporada
+                  </Link>
+                  <Link 
+                    to="/servicios/mantenimiento" 
+                    className="block font-montserrat text-gray-800 hover:text-primary transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Mantenimiento
+                  </Link>
+                  <Link 
+                    to="/servicios/asesoramiento-legal" 
+                    className="block font-montserrat text-gray-800 hover:text-primary transition-colors py-1 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Asesoramiento Legal
+                  </Link>
+                </div>
+                
                 <Link 
-                  to="/servicios/alquiler-larga-duracion" 
+                  to="/about" 
                   className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Alquiler por meses
-                </Link>
-                <Link 
-                  to="/empresas" 
-                  className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Empresas
+                  Sobre Nosotros
                 </Link>
                 <Link 
                   to="/blog" 
                   className="font-montserrat font-medium text-gray-800 hover:text-primary transition-colors py-2 px-1 rounded focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Blog
+                  Liventy Insights
                 </Link>
                 <Link 
                   to="/contact" 
