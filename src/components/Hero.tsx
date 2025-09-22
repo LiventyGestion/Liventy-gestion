@@ -50,6 +50,18 @@ const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center bg-brand-white overflow-hidden section-spacing">
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        
+        {/* Title and Subtitle - Above everything */}
+        <div className="text-center space-y-6 mb-16 max-w-4xl mx-auto">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
+            Gestión integral de alquileres en <span className="text-brand-orange">Bizkaia</span>.
+          </h1>
+          
+          <p className="text-xl sm:text-2xl lg:text-3xl font-raleway font-normal text-neutral-500 leading-relaxed">
+            Tu vivienda, más rentable y sin preocupaciones.
+          </p>
+        </div>
+
         <div className="grid lg:grid-cols-5 gap-12 lg:gap-16 items-center max-w-7xl mx-auto">
           
           {/* Left Column - Content (40% width) */}
@@ -62,31 +74,20 @@ const Hero = () => {
               </Badge>
             </div>
 
-            {/* Main Heading */}
-            <div className="space-y-6">
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
-                Gestión integral de alquileres en Bizkaia.
-              </h1>
-              
-              <p className="text-xl sm:text-2xl lg:text-3xl font-raleway font-normal text-neutral-500 leading-relaxed">
-                Tu vivienda, más rentable y sin preocupaciones.
-              </p>
-            </div>
-
-            {/* Benefits List - Compact horizontal layout */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Benefits List - 2x2 Grid Layout */}
+            <div className="grid grid-cols-2 gap-6">
               {benefits.map((benefit, index) => (
                 <div 
                   key={index} 
-                  className="flex flex-col items-center text-center p-4 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-all duration-200 cursor-pointer group"
+                  className="flex flex-col items-center text-center p-6 rounded-xl bg-neutral-50 hover:bg-neutral-100 transition-all duration-200 cursor-pointer group"
                   aria-label={`Servicio: ${benefit.text}`}
                   role="button"
                   tabIndex={0}
                 >
-                  <div className="inline-flex items-center justify-center w-10 h-10 bg-brand-orange/10 rounded-xl mb-3 group-hover:bg-brand-orange/20 transition-all duration-200">
-                    <benefit.icon className="h-5 w-5 text-brand-orange group-hover:scale-110 transition-all duration-200" />
+                  <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-orange/10 rounded-xl mb-4 group-hover:bg-brand-orange/20 transition-all duration-200">
+                    <benefit.icon className="h-6 w-6 text-brand-orange group-hover:scale-110 transition-all duration-200" />
                   </div>
-                  <span className="font-raleway text-sm font-semibold text-brand-charcoal leading-tight">{benefit.text}</span>
+                  <span className="font-raleway text-base font-semibold text-brand-charcoal leading-tight">{benefit.text}</span>
                 </div>
               ))}
             </div>
