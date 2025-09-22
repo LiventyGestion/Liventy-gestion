@@ -1,15 +1,4 @@
-import { Check, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 
 const ComparisonTable = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -35,9 +24,10 @@ const ComparisonTable = () => {
   }, []);
 
   const handleCTAClick = () => {
-    // GA4 tracking
-    if (typeof (window as any).gtag !== 'undefined') {
-      (window as any).gtag('event', 'cta_click', {
+    // GA4 tracking via dataLayer
+    if (typeof (window as any).dataLayer !== 'undefined') {
+      (window as any).dataLayer.push({
+        event: 'cta_click',
         cta_id: 'cta_sticky_comparativa',
         page: location.pathname
       });
@@ -80,121 +70,259 @@ const ComparisonTable = () => {
     }
   ];
 
+  const styles = {
+    section: {
+      background: '#fff',
+      padding: '64px 16px',
+      color: '#323232',
+    },
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+    },
+    header: {
+      textAlign: 'center' as const,
+      marginBottom: '40px',
+    },
+    kicker: {
+      fontWeight: 600,
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase' as const,
+      color: '#666',
+      margin: '0 0 8px',
+      fontSize: '0.875rem',
+    },
+    title: {
+      fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+      lineHeight: 1.2,
+      margin: 0,
+      fontWeight: 700,
+      color: '#323232',
+    },
+    tableWrap: {
+      overflow: 'auto',
+      border: '1px solid #E6E6E6',
+      borderRadius: '20px',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
+      background: 'white',
+      transition: 'all 0.3s ease',
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'separate' as const,
+      borderSpacing: 0,
+    },
+    thead: {
+      fontWeight: 700,
+      textAlign: 'center' as const,
+      padding: '20px 16px',
+      background: '#F7F7F7',
+      borderBottom: '2px solid #E6E6E6',
+      color: '#323232',
+      fontSize: '1rem',
+    },
+    theadFirst: {
+      textAlign: 'left' as const,
+      borderTopLeftRadius: '20px',
+    },
+    theadLast: {
+      borderTopRightRadius: '20px',
+    },
+    td: {
+      padding: '24px 20px',
+      verticalAlign: 'middle' as const,
+      textAlign: 'center' as const,
+    },
+    thFeature: {
+      width: '44%',
+      fontWeight: 600,
+      color: '#323232',
+      textAlign: 'left' as const,
+      padding: '24px 20px',
+      verticalAlign: 'middle' as const,
+    },
+    flag: {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      marginBottom: '8px',
+      transition: 'all 0.3s ease',
+    },
+    flagYes: {
+      background: 'rgba(230, 126, 15, 0.15)',
+      color: '#0A7A31',
+      border: '2px solid rgba(230, 126, 15, 0.3)',
+    },
+    flagNo: {
+      background: '#fff',
+      color: '#B00020',
+      border: '2px solid #E6E6E6',
+    },
+    note: {
+      color: '#3a3a3a',
+      fontSize: '0.95rem',
+      fontWeight: 500,
+      display: 'block',
+    },
+    stickyCtaMobile: {
+      position: 'fixed' as const,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      display: isMobile && !isFooterVisible ? 'block' : 'none',
+      padding: '16px',
+      background: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 20%, #fff 50%)',
+      zIndex: 9999,
+      borderTop: '1px solid #E6E6E6',
+      backdropFilter: 'blur(10px)',
+    },
+    stickyBtn: {
+      display: 'block',
+      textAlign: 'center' as const,
+      background: '#E67E0F',
+      color: '#fff',
+      padding: '16px 24px',
+      borderRadius: '16px',
+      fontWeight: 700,
+      textDecoration: 'none',
+      boxShadow: '0 8px 32px rgba(230, 126, 15, 0.4)',
+      transition: 'all 0.3s ease',
+      border: 'none',
+      cursor: 'pointer',
+      width: '100%',
+      fontSize: '1.1rem',
+    },
+    srOnly: {
+      position: 'absolute' as const,
+      width: '1px',
+      height: '1px',
+      padding: 0,
+      margin: '-1px',
+      overflow: 'hidden',
+      clip: 'rect(0,0,0,0)',
+      whiteSpace: 'nowrap' as const,
+      border: 0,
+    }
+  };
+
   return (
-    <section className="py-16 lg:py-20 bg-background">
-      <div className="container mx-auto px-4 lg:px-6">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl lg:text-4xl font-bold text-foreground mb-4">
-            Comparativa
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Tú solo vs. Liventy
-          </p>
-        </div>
+    <>
+      <section style={styles.section} aria-labelledby="cmp-title">
+        <div style={styles.container}>
+          <header style={styles.header}>
+            <p style={styles.kicker}>Comparativa</p>
+            <h2 id="cmp-title" style={styles.title}>Tú solo vs. Liventy</h2>
+          </header>
 
-        {/* Table */}
-        <div className="max-w-4xl mx-auto">
-          <Table className="w-full">
-            <TableCaption className="sr-only">
-              Comparativa entre gestionar tu propiedad tú solo versus con Liventy
-            </TableCaption>
-            <TableHeader>
-              <TableRow className="border-b border-border hover:bg-transparent">
-                <TableHead 
-                  scope="col"
-                  className="text-left font-semibold text-foreground w-2/5"
-                >
-                  Aspecto
-                </TableHead>
-                <TableHead 
-                  scope="col"
-                  className="text-center font-semibold text-foreground w-1/4"
-                >
-                  Tú solo
-                </TableHead>
-                <TableHead 
-                  scope="col"
-                  className="text-center font-semibold text-foreground w-1/4"
-                >
-                  Liventy
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {comparisonData.map((row, index) => (
-                <TableRow 
-                  key={index}
-                  className={`border-b border-border hover:bg-muted/30 transition-colors ${
-                    index % 2 === 1 ? 'bg-muted/20' : 'bg-background'
-                  }`}
-                >
-                  <TableHead 
-                    scope="row"
-                    className="text-left font-medium text-foreground py-6"
-                    style={{ color: '#323232' }}
+          <div 
+            style={styles.tableWrap} 
+            role="region" 
+            aria-labelledby="cmp-title"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow = '0 12px 40px rgba(0,0,0,0.12)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.08)';
+            }}
+          >
+            <table style={styles.table}>
+              <caption style={styles.srOnly}>
+                Comparativa de servicios entre gestionarlo tú solo y Liventy
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col" style={{...styles.thead, ...styles.theadFirst}}>Aspecto</th>
+                  <th scope="col" style={styles.thead}>Tú solo</th>
+                  <th scope="col" style={{...styles.thead, ...styles.theadLast}}>Liventy</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonData.map((row, index) => (
+                  <tr 
+                    key={index}
+                    style={{
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer',
+                      background: index % 2 === 1 ? '#F7F7F7' : 'white'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f0f9ff';
+                      e.currentTarget.style.transform = 'scale(1.01)';
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(230, 126, 15, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = index % 2 === 1 ? '#F7F7F7' : 'white';
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.boxShadow = 'none';
+                    }}
                   >
-                    {row.label}
-                  </TableHead>
-                  <TableCell className="text-center py-6">
-                    <div className="flex flex-col items-center gap-2">
-                      <X 
-                        className="h-5 w-5 text-destructive stroke-2" 
-                        aria-label="No disponible"
-                      />
-                      <span className="text-sm text-muted-foreground">
-                        <span className="sr-only">No: </span>
-                        {row.soloYou.text}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-center py-6">
-                    <div className="flex flex-col items-center gap-2">
-                      <Check 
-                        className="h-5 w-5 text-green-600 stroke-2" 
-                        aria-label="Disponible"
-                      />
-                      <span className="text-sm text-foreground font-medium">
-                        <span className="sr-only">Sí: </span>
-                        {row.liventy.text}
-                      </span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </div>
-
-      {/* Sticky CTA for mobile */}
-      {isMobile && (
-        <div 
-          className={`fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-border shadow-lg transition-transform duration-300 ${
-            isFooterVisible ? 'translate-y-full' : 'translate-y-0'
-          }`}
-          style={{ 
-            paddingBottom: `calc(16px + env(safe-area-inset-bottom, 0px))`
-          }}
-        >
-          <div className="p-4">
-            <Button
-              onClick={handleCTAClick}
-              className="w-full bg-brand-orange hover:bg-brand-orange/90 text-white font-semibold py-3 px-6 rounded-xl shadow-lg transition-all duration-200"
-              data-analytics="cta_sticky_comparativa"
-              aria-label="Valora tu piso gratis - ir a calculadora de valoración"
-            >
-              Valora tu piso gratis
-            </Button>
+                    <th scope="row" style={styles.thFeature}>{row.label}</th>
+                    <td style={styles.td} data-label="Tú solo">
+                      <div
+                        style={{...styles.flag, ...styles.flagNo}}
+                        aria-label="No"
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                          <path fill="currentColor" d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12l-4.9 4.89a1 1 0 1 0 1.41 1.41L12 13.41l4.89 4.9a1 1 0 0 0 1.41-1.41L13.41 12l4.9-4.89a1 1 0 0 0-.01-1.4Z"/>
+                        </svg>
+                        <span style={styles.srOnly}>No</span>
+                      </div>
+                      <span style={styles.note}>{row.soloYou.text}</span>
+                    </td>
+                    <td style={styles.td} data-label="Liventy">
+                      <div
+                        style={{...styles.flag, ...styles.flagYes}}
+                        aria-label="Sí"
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                          <path fill="currentColor" d="M9 16.17 4.83 12A1 1 0 1 0 3.41 13.41l5.3 5.29a1 1 0 0 0 1.41 0l10.17-10.17a1 1 0 0 0-1.41-1.41Z"/>
+                        </svg>
+                        <span style={styles.srOnly}>Sí</span>
+                      </div>
+                      <span style={styles.note}>{row.liventy.text}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
-      )}
-      
+
+        {/* Sticky CTA for mobile */}
+        <div style={styles.stickyCtaMobile} role="region" aria-label="Acción rápida">
+          <button
+            onClick={handleCTAClick}
+            style={styles.stickyBtn}
+            data-analytics="cta_sticky_comparativa"
+            aria-label="Valora tu piso gratis - ir a calculadora de valoración"
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 12px 40px rgba(230, 126, 15, 0.5)';
+              e.currentTarget.style.background = '#d16e00';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(230, 126, 15, 0.4)';
+              e.currentTarget.style.background = '#E67E0F';
+            }}
+          >
+            Valora tu piso gratis
+          </button>
+        </div>
+      </section>
+
       {/* Add bottom padding when sticky CTA is visible */}
       {isMobile && !isFooterVisible && (
-        <div className="h-20" aria-hidden="true" />
+        <div style={{ height: '100px' }} aria-hidden="true" />
       )}
-    </section>
+    </>
   );
 };
 
