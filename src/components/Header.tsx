@@ -30,10 +30,14 @@ const Header = () => {
         className={`
           fixed top-0 left-0 right-0 z-50 transition-all duration-200 ease-out
           ${isScrolled 
-            ? 'bg-white/96 backdrop-blur-md shadow-[0_6px_20px_rgba(0,0,0,0.08)] py-2' 
-            : 'bg-white/96 backdrop-blur-sm shadow-[0_4px_16px_rgba(0,0,0,0.06)] py-3'
+            ? 'py-2 shadow-[0_6px_20px_rgba(0,0,0,0.08)]' 
+            : 'py-3 shadow-[0_4px_16px_rgba(0,0,0,0.06)]'
           }
         `}
+        style={{
+          background: 'rgba(255,255,255,0.96)',
+          backdropFilter: 'blur(8px)'
+        }}
       >
         <nav className="container mx-auto px-4">
           <div className="flex items-center justify-between">
@@ -51,7 +55,7 @@ const Header = () => {
               <Link 
                 to="/" 
                 className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2" 
-                style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                style={{ fontSize: '16px' }}
               >
                 Inicio
                 <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -59,7 +63,7 @@ const Header = () => {
               <Link 
                 to="/herramientas" 
                 className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2" 
-                style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                style={{ fontSize: '16px' }}
               >
                 Herramientas
                 <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -71,7 +75,7 @@ const Header = () => {
                   <NavigationMenuItem>
                     <NavigationMenuTrigger 
                       className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2 bg-transparent data-[state=open]:bg-transparent data-[active]:bg-transparent hover:bg-transparent" 
-                      style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                      style={{ fontSize: '16px' }}
                     >
                       Servicios
                       <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -124,7 +128,7 @@ const Header = () => {
               <Link 
                 to="/about" 
                 className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2" 
-                style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                style={{ fontSize: '16px' }}
               >
                 Sobre Nosotros
                 <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -132,7 +136,7 @@ const Header = () => {
               <Link 
                 to="/blog" 
                 className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2" 
-                style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                style={{ fontSize: '16px' }}
               >
                 Liventy Insights
                 <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -140,7 +144,7 @@ const Header = () => {
               <Link 
                 to="/contact" 
                 className="font-montserrat font-medium text-[#323232] hover:text-[#323232] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] relative group focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2 rounded-sm px-[18px] py-2" 
-                style={{ fontSize: '16px', letterSpacing: '-0.2px' }}
+                style={{ fontSize: '16px' }}
               >
                 Contacto
                 <span className="absolute -bottom-1 left-[18px] right-[18px] w-0 h-0.5 bg-[#D8771A] transition-all duration-[180ms] ease-[cubic-bezier(0.4,0,0.2,1)] group-hover:w-[calc(100%-36px)]"></span>
@@ -151,7 +155,7 @@ const Header = () => {
             <div className="hidden lg:flex items-center space-x-3">
               <Link 
                 to="/login"
-                className="font-montserrat font-medium px-[18px] py-[10px] bg-[#D8771A] text-white rounded-[12px] transition-all duration-200 shadow-[0_4px_10px_rgba(216,119,26,0.25)] hover:bg-white hover:text-[#D8771A] hover:border-2 hover:border-[#D8771A] hover:px-[16px] focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2"
+                className="font-montserrat font-medium px-[18px] py-[10px] bg-transparent text-[#323232] border-2 border-[#D8771A] rounded-[12px] transition-all duration-200 hover:bg-[#D8771A] hover:text-white focus:outline-none focus:ring-2 focus:ring-[#323232] focus:ring-offset-2"
                 style={{ fontSize: '15px' }}
                 aria-label="Acceder al área de clientes"
               >
@@ -275,7 +279,7 @@ const Header = () => {
                 <div className="pt-4 border-t border-gray-200 space-y-3">
                   <Link
                     to="/login"
-                    className="block font-montserrat font-medium px-4 py-3 min-h-[44px] flex items-center justify-center text-center bg-[#D8771A] text-white rounded-[12px] shadow-[0_4px_10px_rgba(216,119,26,0.25)] hover:bg-white hover:text-[#D8771A] hover:border-2 hover:border-[#D8771A] transition-all duration-200"
+                    className="block font-montserrat font-medium px-4 py-3 min-h-[44px] flex items-center justify-center text-center bg-transparent text-[#323232] border-2 border-[#D8771A] rounded-[12px] hover:bg-[#D8771A] hover:text-white transition-all duration-200"
                     onClick={() => setIsMenuOpen(false)}
                     aria-label="Acceder al área de clientes"
                   >
