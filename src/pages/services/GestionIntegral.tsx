@@ -168,7 +168,7 @@ const GestionIntegral = () => {
                   <p className="text-xl text-muted-foreground mb-8">
                     Tu tiempo, para ti.
                   </p>
-                  <Link to="/contacto?tipo=propietario&motivo=gestion-integral">
+                  <Link to="/empezar-ahora">
                     <Button size="lg" className="text-lg px-8 py-6">
                       ¿Quieres vivir sin preocuparte por tu alquiler?
                       <ChevronRight className="ml-2 h-5 w-5" />
