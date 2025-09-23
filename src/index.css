@@ -159,7 +159,8 @@ All colors MUST be HSL.
   }
   
   /* Body text */
-  p, span, div {
+  p, span, div, li, a, label, button, input, textarea, select {
+    @apply font-raleway;
     color: hsl(var(--brand-charcoal));
   }
   
