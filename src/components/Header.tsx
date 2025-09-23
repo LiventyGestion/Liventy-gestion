@@ -59,7 +59,7 @@ const Header = () => {
                       <div className="grid gap-3">
                         <NavigationMenuLink asChild>
                           <Link 
-                            to="/servicios/gestion-integral"
+                            to="/servicios/gestion-de-alquileres"
                             className="block select-none space-y-1 rounded-xl p-3 leading-none no-underline outline-none transition-colors hover:bg-neutral-50 hover:text-brand-charcoal focus:bg-neutral-50 focus:text-brand-charcoal"
                           >
                             <div className="text-sm font-semibold leading-none text-brand-charcoal">Gestión Integral</div>
@@ -190,7 +190,7 @@ const Header = () => {
                 <div className="text-brand-charcoal font-raleway font-bold text-base py-3 px-2">Servicios</div>
                 <div className="pl-4 space-y-2">
                   <Link 
-                    to="/servicios/gestion-integral"
+                    to="/servicios/gestion-de-alquileres"
                     className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >

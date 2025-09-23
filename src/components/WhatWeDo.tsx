@@ -11,7 +11,7 @@ const WhatWeDo = () => {
       description: "Publicamos tu vivienda, preseleccionamos inquilinos, formalizamos contratos con firma digital, coordinamos cobros y atención diaria, y resolvemos mantenimiento menor e incidencias.",
       note: "No garantizamos el cobro de rentas; actuamos como intermediarios para el propietario.",
       cta: "Quiero gestionarlo con Liventy",
-      link: "/servicios/gestion-integral"
+      link: "/servicios/gestion-de-alquileres"
     },
     {
       icon: Scale,
@@ -19,7 +19,7 @@ const WhatWeDo = () => {
       description: "Redacción y revisión de contratos estándar, comunicaciones y avisos. Resolución de dudas frecuentes sobre el alquiler.",
       note: "En casos complejos, te ponemos en contacto con abogados colaboradores de confianza.",
       cta: "Consultar mi caso",
-      link: "/servicios/asesoramiento-legal"
+      link: "/servicios/asesoria-legal"
     },
     {
       icon: Wrench,
