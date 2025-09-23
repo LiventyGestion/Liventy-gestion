@@ -292,10 +292,10 @@ const Herramientas = () => {
             <div className="flex justify-center mb-6">
               <Calculator className="h-16 w-16 text-primary" />
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 font-['Montserrat']">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
               Herramientas para propietarios
             </h1>
-            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed font-['Lato']">
+            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed">
               Decide con datos en 2 minutos: precio, rentabilidad y la modalidad que más te conviene.
             </p>
           </div>
@@ -307,8 +307,8 @@ const Herramientas = () => {
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <Euro className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Precio recomendado</h3>
-                <p className="text-muted-foreground mb-6 font-['Lato']">
+                <h3 className="text-xl font-semibold mb-2">Precio recomendado</h3>
+                <p className="text-muted-foreground mb-6">
                   Rango óptimo de publicación
                 </p>
                 <Button 
@@ -325,8 +325,8 @@ const Herramientas = () => {
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Rentabilidad neta</h3>
-                <p className="text-muted-foreground mb-6 font-['Lato']">
+                <h3 className="text-xl font-semibold mb-2">Rentabilidad neta</h3>
+                <p className="text-muted-foreground mb-6">
                   Cashflow y yield anual
                 </p>
                 <Button 
@@ -343,8 +343,8 @@ const Herramientas = () => {
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardContent className="p-8">
                 <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2 font-['Montserrat']">Larga vs. Temporal</h3>
-                <p className="text-muted-foreground mb-6 font-['Lato']">
+                <h3 className="text-xl font-semibold mb-2">Larga vs. Temporal</h3>
+                <p className="text-muted-foreground mb-6">
                   Qué te conviene más
                 </p>
                 <Button 
@@ -366,8 +366,8 @@ const Herramientas = () => {
           <section id="calc-precio" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Precio</h2>
-                <p className="text-lg text-muted-foreground font-['Lato']">
+                <h2 className="text-3xl font-bold mb-4">Calculadora de Precio</h2>
+                <p className="text-lg text-muted-foreground">
                   Obtén el rango óptimo de precio para publicar tu propiedad
                 </p>
               </div>
@@ -525,8 +525,8 @@ const Herramientas = () => {
           <section id="calc-rentabilidad" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Calculadora de Rentabilidad</h2>
-                <p className="text-lg text-muted-foreground font-['Lato']">
+                <h2 className="text-3xl font-bold mb-4">Calculadora de Rentabilidad</h2>
+                <p className="text-lg text-muted-foreground">
                   Analiza el cashflow mensual y yield anual de tu inversión
                 </p>
               </div>
@@ -655,8 +655,8 @@ const Herramientas = () => {
           <section id="calc-comparador" className="scroll-mt-24 mb-20">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-12">
-                <h2 className="text-3xl font-bold mb-4 font-['Montserrat']">Comparador: Larga vs. Temporal</h2>
-                <p className="text-lg text-muted-foreground font-['Lato']">
+                <h2 className="text-3xl font-bold mb-4">Comparador: Larga vs. Temporal</h2>
+                <p className="text-lg text-muted-foreground">
                   Descubre qué modalidad de alquiler te conviene más
                 </p>
               </div>
@@ -812,7 +812,7 @@ const Herramientas = () => {
 
         {/* Enlaces internos */}
         <section className="text-center mb-12">
-          <h3 className="text-2xl font-bold mb-6 font-['Montserrat']">¿Necesitas más información?</h3>
+          <h3 className="text-2xl font-bold mb-6">¿Necesitas más información?</h3>
           <div className="flex flex-wrap justify-center gap-4">
             <Button variant="outline" asChild>
               <Link to="/propietarios">Servicios para propietarios</Link>
