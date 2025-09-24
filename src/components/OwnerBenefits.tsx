@@ -198,7 +198,7 @@ const OwnerBenefits = () => {
                   key={index} 
                   className="flex-none w-full sm:w-1/2 lg:w-1/3 min-w-0"
                 >
-                  <Card className="h-full hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 bg-white/92 backdrop-blur-sm border-0">
+                  <Card className="h-full hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 bg-white border-0 shadow-lg">
                     <CardContent className="p-6 h-full flex flex-col">
                       <div className="flex items-start space-x-4 flex-1">
                         <div className="flex-shrink-0">
