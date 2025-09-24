@@ -48,10 +48,8 @@ const OwnerBenefits = () => {
     { 
       align: 'start',
       slidesToScroll: 1,
-      breakpoints: {
-        '(min-width: 768px)': { slidesToScroll: 2 },
-        '(min-width: 1024px)': { slidesToScroll: 3 }
-      }
+      containScroll: 'trimSnaps',
+      dragFree: false
     },
     [autoplayRef.current]
   );
@@ -190,13 +188,13 @@ const OwnerBenefits = () => {
         </div>
 
         {/* Carousel */}
-        <div className="why-slider relative">
-          <div className="overflow-hidden" ref={emblaRef}>
-            <div className="flex gap-6">
+        <div className="why-slider relative max-w-7xl mx-auto">
+          <div className="overflow-hidden px-4" ref={emblaRef}>
+            <div className="flex gap-4 sm:gap-6">
               {benefits.map((benefit, index) => (
                 <div 
                   key={index} 
-                  className="flex-none w-full sm:w-1/2 lg:w-1/3 min-w-0"
+                  className="flex-none w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] min-w-0"
                 >
                   <Card className="h-full hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 bg-white border-0 shadow-lg">
                     <CardContent className="p-6 h-full flex flex-col">
@@ -229,7 +227,7 @@ const OwnerBenefits = () => {
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
+            className="absolute -left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
             onClick={scrollPrev}
             disabled={prevBtnDisabled}
             aria-label="Ventaja anterior"
@@ -240,7 +238,7 @@ const OwnerBenefits = () => {
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
+            className="absolute -right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
             onClick={scrollNext}
             disabled={nextBtnDisabled}
             aria-label="Siguiente ventaja"
