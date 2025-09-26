@@ -39,230 +39,67 @@ const Stats = () => {
             </p>
           </div>
 
-          {/* Diagonal Comparison - Desktop */}
-          <div className="mb-16 hidden md:block">
+          {/* Before After Section - 2x2 Grid */}
+          <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
             <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
-            <div className="relative w-full aspect-square max-w-4xl mx-auto">
-              {/* Top Left Diagonal - Antes de Liventy */}
-              <div 
-                className="absolute top-0 left-0 w-full h-full transition-all duration-200 hover:scale-[1.02] cursor-pointer group"
-                style={{
-                  clipPath: 'polygon(0 0, 100% 0, 0 100%)'
-                }}
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <img 
-                    src={worriedWoman} 
-                    alt="Mujer preocupada con manos en la cabeza representando problemas al alquilar por tu cuenta" 
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                  />
-                </div>
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-white bg-opacity-85 group-hover:bg-opacity-80 transition-opacity duration-200"></div>
-                
-                {/* Content */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-start items-start">
-                  <div className="max-w-sm">
-                    <div className="mb-6">
-                      <AlertTriangle className="h-8 w-8 text-muted-foreground mb-4" strokeWidth={1.5} />
-                      <h4 className="text-2xl font-semibold mb-2 text-foreground" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                        Problemas al alquilar por tu cuenta
-                      </h4>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-3">
-                        <ArrowDown className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Bajas ocupaciones" />
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Bajas ocupaciones
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <Euro className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Sin ingresos" />
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Meses sin ingresos
-                        </span>
-                      </div>
-                      <div className="flex items-center space-x-3">
-                        <AlertTriangle className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Estrés" />
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Estrés continuo
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="before-after-grid">
+              {/* Top-left: Antes Image */}
+              <article className="before-after-card image before" aria-hidden="false">
+                <img 
+                  src={worriedWoman}
+                  alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta"
+                  loading="lazy"
+                />
+              </article>
 
-              {/* Bottom Right Diagonal - Con Liventy */}
-              <div 
-                className="absolute bottom-0 right-0 w-full h-full transition-all duration-200 hover:scale-[1.02] cursor-pointer group"
-                style={{
-                  clipPath: 'polygon(100% 0, 100% 100%, 0 100%)'
-                }}
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <img 
-                    src={relaxedMan} 
-                    alt="Hombre relajado disfrutando de la tranquilidad gracias a Liventy" 
-                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                  />
-                </div>
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-white bg-opacity-85 group-hover:bg-opacity-80 transition-opacity duration-200"></div>
-                
-                {/* Content */}
-                <div className="absolute inset-0 p-8 flex flex-col justify-end items-end">
-                  <div className="max-w-sm text-right">
-                    <div className="mb-6">
-                      <Heart className="h-8 w-8 text-primary mb-4 ml-auto" strokeWidth={1.5} />
-                      <h4 className="text-2xl font-semibold mb-2 text-primary" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                        Con Liventy, tranquilidad total
-                      </h4>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-end space-x-3">
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Ocupación garantizada
-                        </span>
-                        <Shield className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Ocupación garantizada" />
-                      </div>
-                      <div className="flex items-center justify-end space-x-3">
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Más rentabilidad
-                        </span>
-                        <TrendingUp className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Más rentabilidad" />
-                      </div>
-                      <div className="flex items-center justify-end space-x-3">
-                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Nosotros nos encargamos de todo
-                        </span>
-                        <Zap className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Gestión completa" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Top-right: Antes Copy */}
+              <article className="before-after-card copy before">
+                <h4 style={{ fontFamily: 'Montserrat, sans-serif' }}>Problemas al alquilar por tu cuenta</h4>
+                <ul className="bullets">
+                  <li>
+                    <ArrowDown className="bullet-icon" strokeWidth={1.75} aria-label="Bajas ocupaciones" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Bajas ocupaciones</span>
+                  </li>
+                  <li>
+                    <Euro className="bullet-icon" strokeWidth={1.75} aria-label="Sin ingresos" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Meses sin ingresos</span>
+                  </li>
+                  <li>
+                    <AlertTriangle className="bullet-icon" strokeWidth={1.75} aria-label="Estrés" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Estrés continuo</span>
+                  </li>
+                </ul>
+              </article>
 
-              {/* Diagonal Border Line */}
-              <div 
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(135deg, transparent 49%, #E67E0F 49%, #E67E0F 51%, transparent 51%)'
-                }}
-              ></div>
+              {/* Bottom-left: Con Liventy Copy */}
+              <article className="before-after-card copy after">
+                <h4 style={{ fontFamily: 'Montserrat, sans-serif' }}>Con Liventy, tranquilidad total</h4>
+                <ul className="bullets">
+                  <li>
+                    <Shield className="bullet-icon accent" strokeWidth={1.75} aria-label="Ocupación garantizada" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Ocupación garantizada</span>
+                  </li>
+                  <li>
+                    <TrendingUp className="bullet-icon accent" strokeWidth={1.75} aria-label="Más rentabilidad" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Más rentabilidad</span>
+                  </li>
+                  <li>
+                    <Zap className="bullet-icon accent" strokeWidth={1.75} aria-label="Gestión completa" />
+                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Nosotros nos encargamos de todo</span>
+                  </li>
+                </ul>
+              </article>
+
+              {/* Bottom-right: Con Liventy Image */}
+              <article className="before-after-card image after" aria-hidden="false">
+                <img 
+                  src={relaxedMan}
+                  alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy"
+                  loading="lazy"
+                />
+              </article>
             </div>
-
-            {/* CTA Button */}
-            <div className="text-center mt-8">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
-              >
-                Quiero tranquilidad con Liventy
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Stack Version */}
-          <div className="mb-16 md:hidden">
-            <h3 className="text-3xl font-bold text-center mb-8 text-foreground">La Diferencia Liventy</h3>
-            
-            {/* Antes de Liventy - Mobile */}
-            <div className="mb-8">
-              <div className="relative overflow-hidden rounded-lg">
-                <div className="aspect-video">
-                  <img 
-                    src={worriedWoman} 
-                    alt="Mujer preocupada con manos en la cabeza representando problemas al alquilar por tu cuenta" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              <div className="p-6 bg-card rounded-b-lg">
-                <div className="mb-4">
-                  <AlertTriangle className="h-6 w-6 text-muted-foreground mb-3" strokeWidth={1.5} />
-                  <h4 className="text-xl font-semibold text-foreground" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                    Problemas al alquilar por tu cuenta
-                  </h4>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <ArrowDown className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Bajas ocupaciones
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Euro className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Meses sin ingresos
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <AlertTriangle className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Estrés continuo
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Con Liventy - Mobile */}
-            <div className="mb-8">
-              <div className="relative overflow-hidden rounded-lg">
-                <div className="aspect-video">
-                  <img 
-                    src={relaxedMan} 
-                    alt="Hombre relajado disfrutando de la tranquilidad gracias a Liventy" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </div>
-              <div className="p-6 bg-card rounded-b-lg border-2 border-primary/20">
-                <div className="mb-4">
-                  <Heart className="h-6 w-6 text-primary mb-3" strokeWidth={1.5} />
-                  <h4 className="text-xl font-semibold text-primary" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                    Con Liventy, tranquilidad total
-                  </h4>
-                </div>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <Shield className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Ocupación garantizada
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <TrendingUp className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Más rentabilidad
-                    </span>
-                  </div>
-                  <div className="flex items-center space-x-3">
-                    <Zap className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
-                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      Nosotros nos encargamos de todo
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* CTA Button - Mobile */}
-            <div className="text-center">
-              <Button 
-                size="lg" 
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-3 w-full"
-                style={{ fontFamily: 'Montserrat, sans-serif' }}
-              >
-                Quiero tranquilidad con Liventy
-              </Button>
-            </div>
-          </div>
+          </section>
 
           {/* 5 Métricas adicionales como bonus */}
           <div className="mb-8">
