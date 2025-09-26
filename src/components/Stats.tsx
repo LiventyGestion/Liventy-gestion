@@ -1,8 +1,9 @@
-import { TrendingUp, TrendingDown, Euro, Heart, Award, AlertTriangle, Wrench, PhoneOff } from "lucide-react";
+import { TrendingUp, TrendingDown, Euro, Heart, Award, AlertTriangle, Wrench, PhoneOff, ArrowDown, Zap, Shield } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import dataAnalytics from "@/assets/data-analytics.jpg";
-import emptyApartment from "@/assets/empty-apartment-worry.jpg";
-import modernLivingroom from "@/assets/modern-bright-livingroom.jpg";
+import worriedWoman from "@/assets/worried-woman.jpg";
+import relaxedMan from "@/assets/relaxed-man.jpg";
 
 const Stats = () => {
   // Static values without animations
@@ -38,183 +39,228 @@ const Stats = () => {
             </p>
           </div>
 
-          {/* Antes vs Después */}
-          <div className="mb-16">
+          {/* Diagonal Comparison - Desktop */}
+          <div className="mb-16 hidden md:block">
             <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-6xl mx-auto">
-              {/* Left Card - Neumorphic Style with Background */}
+            <div className="relative w-full aspect-square max-w-4xl mx-auto">
+              {/* Top Left Diagonal - Antes de Liventy */}
               <div 
-                className="rounded-[30px] transition-all duration-200 hover:translate-y-[-2px] cursor-pointer relative overflow-hidden group"
+                className="absolute top-0 left-0 w-full h-full transition-all duration-200 hover:scale-[1.02] cursor-pointer group"
                 style={{
-                  background: '#e0e0e0',
-                  boxShadow: '15px 15px 30px #bebebe, -15px -15px 30px #ffffff'
+                  clipPath: 'polygon(0 0, 100% 0, 0 100%)'
                 }}
               >
                 {/* Background Image */}
                 <div className="absolute inset-0">
                   <img 
-                    src={emptyApartment} 
-                    alt="Piso vacío con cajas" 
+                    src={worriedWoman} 
+                    alt="Mujer preocupada con manos en la cabeza representando problemas al alquilar por tu cuenta" 
                     className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                   />
                 </div>
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-white bg-opacity-85"></div>
+                <div className="absolute inset-0 bg-white bg-opacity-85 group-hover:bg-opacity-80 transition-opacity duration-200"></div>
                 
                 {/* Content */}
-                <div className="relative z-10 p-8">
-                  <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 rounded-full mb-4" style={{
-                      background: '#e0e0e0',
-                      boxShadow: 'inset 8px 8px 16px #bebebe, inset -8px -8px 16px #ffffff'
-                    }}>
-                      <AlertTriangle className="h-10 w-10 text-[#666666]" strokeWidth={1.5} />
+                <div className="absolute inset-0 p-8 flex flex-col justify-start items-start">
+                  <div className="max-w-sm">
+                    <div className="mb-6">
+                      <AlertTriangle className="h-8 w-8 text-muted-foreground mb-4" strokeWidth={1.5} />
+                      <h4 className="text-2xl font-semibold mb-2 text-foreground" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        Problemas al alquilar por tu cuenta
+                      </h4>
                     </div>
-                    <h4 className="text-2xl font-semibold mb-2" style={{ fontFamily: 'Montserrat, sans-serif', color: '#323232' }}>
-                      Antes de Liventy
-                    </h4>
-                    <p className="text-[#666666] text-sm" style={{ fontFamily: 'Lato, sans-serif' }}>
-                      La realidad del mercado tradicional
-                    </p>
-                  </div>
-                  <div className="space-y-4">
-                    <div className="flex items-start space-x-4">
-                      <TrendingDown className="h-6 w-6 text-[#666666] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Tendencia negativa" />
-                      <div>
-                        <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                          70% ocupación media
-                        </p>
-                        <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Periodos largos sin inquilinos
-                        </p>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <ArrowDown className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Bajas ocupaciones" />
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Bajas ocupaciones
+                        </span>
                       </div>
-                    </div>
-                    <div className="flex items-start space-x-4">
-                      <AlertTriangle className="h-6 w-6 text-[#666666] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Advertencia" />
-                      <div>
-                        <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                          Meses vacíos sin ingresos
-                        </p>
-                        <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Pérdidas económicas frecuentes
-                        </p>
+                      <div className="flex items-center space-x-3">
+                        <Euro className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Sin ingresos" />
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Meses sin ingresos
+                        </span>
                       </div>
-                    </div>
-                    <div className="flex items-start space-x-4">
-                      <Wrench className="h-6 w-6 text-[#666666] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Herramientas" />
-                      <div>
-                        <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                          Gestión propia estresante
-                        </p>
-                        <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Problemas constantes sin resolver
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start space-x-4">
-                      <PhoneOff className="h-6 w-6 text-[#666666] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Sin soporte" />
-                      <div>
-                        <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                          Sin soporte especializado
-                        </p>
-                        <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                          Resuelve todo por tu cuenta
-                        </p>
+                      <div className="flex items-center space-x-3">
+                        <AlertTriangle className="h-5 w-5 text-muted-foreground flex-shrink-0" strokeWidth={1.75} aria-label="Estrés" />
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Estrés continuo
+                        </span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Right Card - Animated Border with Background */}
+              {/* Bottom Right Diagonal - Con Liventy */}
               <div 
-                className="rounded-[30px] p-1 transition-all duration-200 hover:scale-[1.02] cursor-pointer relative animate-border-glow group overflow-hidden"
+                className="absolute bottom-0 right-0 w-full h-full transition-all duration-200 hover:scale-[1.02] cursor-pointer group"
                 style={{
-                  background: 'linear-gradient(45deg, #E67E0F, #ff9500, #E67E0F, #ff9500)',
-                  backgroundSize: '300% 300%',
-                  animation: 'border-glow 4s ease-in-out infinite'
+                  clipPath: 'polygon(100% 0, 100% 100%, 0 100%)'
                 }}
               >
-                <div 
-                  className="rounded-[26px] h-full relative overflow-hidden"
-                  style={{
-                    background: '#ffffff',
-                    boxShadow: '0 8px 32px rgba(230, 126, 15, 0.15)'
-                  }}
-                >
-                  {/* Background Image */}
-                  <div className="absolute inset-0">
-                    <img 
-                      src={modernLivingroom} 
-                      alt="Salón moderno luminoso" 
-                      className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
-                    />
-                  </div>
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-white bg-opacity-85"></div>
-                  
-                  {/* Content */}
-                  <div className="relative z-10 p-7">
-                    <div className="text-center mb-8">
-                      <div className="inline-flex items-center justify-center w-20 h-20 bg-[#E67E0F]/10 rounded-full mb-4 shadow-lg">
-                        <Heart className="h-10 w-10 text-[#E67E0F]" strokeWidth={1.5} />
-                      </div>
-                      <h4 className="text-2xl font-semibold text-[#E67E0F] mb-2" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                        Con Liventy
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                  <img 
+                    src={relaxedMan} 
+                    alt="Hombre relajado disfrutando de la tranquilidad gracias a Liventy" 
+                    className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-[1.02]"
+                  />
+                </div>
+                {/* Overlay */}
+                <div className="absolute inset-0 bg-white bg-opacity-85 group-hover:bg-opacity-80 transition-opacity duration-200"></div>
+                
+                {/* Content */}
+                <div className="absolute inset-0 p-8 flex flex-col justify-end items-end">
+                  <div className="max-w-sm text-right">
+                    <div className="mb-6">
+                      <Heart className="h-8 w-8 text-primary mb-4 ml-auto" strokeWidth={1.5} />
+                      <h4 className="text-2xl font-semibold mb-2 text-primary" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                        Con Liventy, tranquilidad total
                       </h4>
-                      <p className="text-[#E67E0F]/70 text-sm" style={{ fontFamily: 'Lato, sans-serif' }}>
-                        La tranquilidad que mereces
-                      </p>
                     </div>
-                    <div className="space-y-4">
-                      <div className="flex items-start space-x-4">
-                        <TrendingUp className="h-6 w-6 text-[#E67E0F] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Tendencia positiva" />
-                        <div>
-                          <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                            87% ocupación garantizada
-                          </p>
-                          <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                            Tu propiedad siempre rentable
-                          </p>
-                        </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-end space-x-3">
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Ocupación garantizada
+                        </span>
+                        <Shield className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Ocupación garantizada" />
                       </div>
-                      <div className="flex items-start space-x-4">
-                        <Euro className="h-6 w-6 text-[#E67E0F] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Rentabilidad" />
-                        <div>
-                          <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                            +15% más rentabilidad
-                          </p>
-                          <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                            Optimización garantizada
-                          </p>
-                        </div>
+                      <div className="flex items-center justify-end space-x-3">
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Más rentabilidad
+                        </span>
+                        <TrendingUp className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Más rentabilidad" />
                       </div>
-                      <div className="flex items-start space-x-4">
-                        <Heart className="h-6 w-6 text-[#E67E0F] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Tranquilidad" />
-                        <div>
-                          <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                            Tranquilidad total
-                          </p>
-                          <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                            Nosotros nos ocupamos de todo
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start space-x-4">
-                        <Award className="h-6 w-6 text-[#E67E0F] mt-1 flex-shrink-0" strokeWidth={1.5} aria-label="Soporte premium" />
-                        <div>
-                          <p className="font-medium text-[#323232]" style={{ fontFamily: 'Montserrat, sans-serif' }}>
-                            Soporte experto 24/7
-                          </p>
-                          <p className="text-sm text-[#666666]" style={{ fontFamily: 'Lato, sans-serif' }}>
-                            Atención profesional siempre
-                          </p>
-                        </div>
+                      <div className="flex items-center justify-end space-x-3">
+                        <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                          Nosotros nos encargamos de todo
+                        </span>
+                        <Zap className="h-5 w-5 text-primary flex-shrink-0" strokeWidth={1.75} aria-label="Gestión completa" />
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+
+              {/* Diagonal Border Line */}
+              <div 
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: 'linear-gradient(135deg, transparent 49%, #E67E0F 49%, #E67E0F 51%, transparent 51%)'
+                }}
+              ></div>
+            </div>
+
+            {/* CTA Button */}
+            <div className="text-center mt-8">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-3"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
+              >
+                Quiero tranquilidad con Liventy
+              </Button>
+            </div>
+          </div>
+
+          {/* Mobile Stack Version */}
+          <div className="mb-16 md:hidden">
+            <h3 className="text-3xl font-bold text-center mb-8 text-foreground">La Diferencia Liventy</h3>
+            
+            {/* Antes de Liventy - Mobile */}
+            <div className="mb-8">
+              <div className="relative overflow-hidden rounded-lg">
+                <div className="aspect-video">
+                  <img 
+                    src={worriedWoman} 
+                    alt="Mujer preocupada con manos en la cabeza representando problemas al alquilar por tu cuenta" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="p-6 bg-card rounded-b-lg">
+                <div className="mb-4">
+                  <AlertTriangle className="h-6 w-6 text-muted-foreground mb-3" strokeWidth={1.5} />
+                  <h4 className="text-xl font-semibold text-foreground" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                    Problemas al alquilar por tu cuenta
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3">
+                    <ArrowDown className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Bajas ocupaciones
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Euro className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Meses sin ingresos
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <AlertTriangle className="h-4 w-4 text-muted-foreground flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Estrés continuo
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Con Liventy - Mobile */}
+            <div className="mb-8">
+              <div className="relative overflow-hidden rounded-lg">
+                <div className="aspect-video">
+                  <img 
+                    src={relaxedMan} 
+                    alt="Hombre relajado disfrutando de la tranquilidad gracias a Liventy" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              <div className="p-6 bg-card rounded-b-lg border-2 border-primary/20">
+                <div className="mb-4">
+                  <Heart className="h-6 w-6 text-primary mb-3" strokeWidth={1.5} />
+                  <h4 className="text-xl font-semibold text-primary" style={{ fontFamily: 'Montserrat, sans-serif' }}>
+                    Con Liventy, tranquilidad total
+                  </h4>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3">
+                    <Shield className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Ocupación garantizada
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <TrendingUp className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Más rentabilidad
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-3">
+                    <Zap className="h-4 w-4 text-primary flex-shrink-0" strokeWidth={1.75} />
+                    <span className="text-sm text-muted-foreground" style={{ fontFamily: 'Lato, sans-serif' }}>
+                      Nosotros nos encargamos de todo
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Button - Mobile */}
+            <div className="text-center">
+              <Button 
+                size="lg" 
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-6 py-3 w-full"
+                style={{ fontFamily: 'Montserrat, sans-serif' }}
+              >
+                Quiero tranquilidad con Liventy
+              </Button>
             </div>
           </div>
 
