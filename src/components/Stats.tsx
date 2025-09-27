@@ -43,11 +43,11 @@ const Stats = () => {
           <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
             <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
             <div className="before-after-grid">
-              {/* Top-left: Antes Image */}
-              <article className="before-after-card image before" aria-hidden="false">
+              {/* Top-left: Con Liventy Image */}
+              <article className="before-after-card image after" aria-hidden="false">
                 <img 
-                  src={worriedWoman}
-                  alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta"
+                  src={relaxedMan}
+                  alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy"
                   loading="lazy"
                 />
               </article>
@@ -90,11 +90,11 @@ const Stats = () => {
                 </ul>
               </article>
 
-              {/* Bottom-right: Con Liventy Image */}
-              <article className="before-after-card image after" aria-hidden="false">
+              {/* Bottom-right: Antes Image */}
+              <article className="before-after-card image before" aria-hidden="false">
                 <img 
-                  src={relaxedMan}
-                  alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy"
+                  src={worriedWoman}
+                  alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta"
                   loading="lazy"
                 />
               </article>
