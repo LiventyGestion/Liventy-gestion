@@ -14,7 +14,7 @@ const Stats = () => {
   const revenueCount = 25;
   return <div className="bg-background">
       {/* Main Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img src={dataAnalytics} alt="" className="w-full h-full object-cover opacity-5" aria-hidden="true" loading="lazy" />
@@ -28,10 +28,10 @@ const Stats = () => {
                 ✨ Comprometidos con la rentabilidad y tranquilidad de nuestros clientes
               </p>
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-foreground">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
               Resultados que Hablan por Sí Solos
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               Nuestros datos y la experiencia de nuestros clientes demuestran el impacto real de trabajar con Liventy
             </p>
           </div>
@@ -120,27 +120,27 @@ const Stats = () => {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6 max-w-6xl mx-auto">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">{propertiesCount}+</div>
-                <p className="text-sm text-muted-foreground">Propiedades Gestionadas</p>
+                <p className="text-sm text-gray-300">Propiedades Gestionadas</p>
               </div>
               
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">{clientsCount}+</div>
-                <p className="text-sm text-muted-foreground">Propietarios Tranquilos</p>
+                <p className="text-sm text-gray-300">Propietarios Tranquilos</p>
               </div>
               
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">€{revenueCount / 10}M+</div>
-                <p className="text-sm text-muted-foreground">Generados para Propietarios</p>
+                <p className="text-sm text-gray-300">Generados para Propietarios</p>
               </div>
               
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">5⭐</div>
-                <p className="text-sm text-muted-foreground">Valoración Media</p>
+                <p className="text-sm text-gray-300">Valoración Media</p>
               </div>
               
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-1">48h</div>
-                <p className="text-sm text-muted-foreground">Tiempo Medio de Respuesta</p>
+                <p className="text-sm text-gray-300">Tiempo Medio de Respuesta</p>
               </div>
             </div>
           </div>
