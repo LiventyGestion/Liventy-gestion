@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import dataAnalytics from "@/assets/data-analytics.jpg";
 import worriedWoman from "@/assets/worried-woman.jpg";
 import relaxedMan from "@/assets/relaxed-man.jpg";
-
 const Stats = () => {
   // Static values without animations
   const occupancyRate = 87;
@@ -13,9 +12,7 @@ const Stats = () => {
   const propertiesCount = 500;
   const clientsCount = 1200;
   const revenueCount = 25;
-  
-  return (
-    <div className="bg-background">
+  return <div className="bg-background">
       {/* Main Stats Section */}
       <section className="py-20 bg-gradient-to-br from-orange-50 via-white to-orange-50 relative overflow-hidden">
         {/* Background Image */}
@@ -41,15 +38,12 @@ const Stats = () => {
 
           {/* Before After Section - 2x2 Grid */}
           <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
-            <h3 className="text-3xl font-bold text-center mb-12 text-foreground">La Diferencia Liventy</h3>
+            <h3 className="text-3xl font-bold text-center mb-12 text-foreground">
+          </h3>
             <div className="before-after-grid">
               {/* Top-left: Con Liventy Image */}
               <article className="before-after-card image after" aria-hidden="false">
-                <img 
-                  src={relaxedMan}
-                  alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy"
-                  loading="lazy"
-                />
+                <img src={relaxedMan} alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy" loading="lazy" />
               </article>
 
               {/* Top-right: Problems Copy */}
@@ -116,11 +110,7 @@ const Stats = () => {
 
               {/* Bottom-right: Antes Image */}
               <article className="before-after-card image before" aria-hidden="false">
-                <img 
-                  src={worriedWoman}
-                  alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta"
-                  loading="lazy"
-                />
+                <img src={worriedWoman} alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta" loading="lazy" />
               </article>
             </div>
           </section>
@@ -156,8 +146,6 @@ const Stats = () => {
           </div>
         </div>
       </section>
-    </div>
-  );
+    </div>;
 };
-
 export default Stats;
