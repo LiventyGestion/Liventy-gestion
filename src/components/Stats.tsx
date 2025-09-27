@@ -52,42 +52,66 @@ const Stats = () => {
                 />
               </article>
 
-              {/* Top-right: Antes Copy */}
-              <article className="before-after-card copy before">
-                <h4 style={{ fontFamily: 'Montserrat, sans-serif' }}>Problemas al alquilar por tu cuenta</h4>
-                <ul className="bullets">
-                  <li>
-                    <ArrowDown className="bullet-icon" strokeWidth={1.75} aria-label="Bajas ocupaciones" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Bajas ocupaciones</span>
-                  </li>
-                  <li>
-                    <Euro className="bullet-icon" strokeWidth={1.75} aria-label="Sin ingresos" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Meses sin ingresos</span>
-                  </li>
-                  <li>
-                    <AlertTriangle className="bullet-icon" strokeWidth={1.75} aria-label="Estrés" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Estrés continuo</span>
-                  </li>
-                </ul>
+              {/* Top-right: Con Liventy Copy */}
+              <article className="before-after-card copy after">
+                <div className="content-wrapper">
+                  <h4 className="modern-title">Con Liventy, tranquilidad total</h4>
+                  <p className="subtitle">Tu inversión en las mejores manos</p>
+                  <ul className="bullets modern-bullets">
+                    <li className="bullet-item success">
+                      <Shield className="bullet-icon accent" strokeWidth={2} aria-label="Ocupación garantizada" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Ocupación garantizada</span>
+                        <span className="bullet-detail">Contratos seguros y estables</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item success">
+                      <TrendingUp className="bullet-icon accent" strokeWidth={2} aria-label="Más rentabilidad" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Más rentabilidad</span>
+                        <span className="bullet-detail">Hasta +15% de ingresos</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item success">
+                      <Zap className="bullet-icon accent" strokeWidth={2} aria-label="Gestión completa" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Nosotros nos encargamos de todo</span>
+                        <span className="bullet-detail">Gestión 100% profesional</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </article>
 
-              {/* Bottom-left: Con Liventy Copy */}
-              <article className="before-after-card copy after">
-                <h4 style={{ fontFamily: 'Montserrat, sans-serif' }}>Con Liventy, tranquilidad total</h4>
-                <ul className="bullets">
-                  <li>
-                    <Shield className="bullet-icon accent" strokeWidth={1.75} aria-label="Ocupación garantizada" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Ocupación garantizada</span>
-                  </li>
-                  <li>
-                    <TrendingUp className="bullet-icon accent" strokeWidth={1.75} aria-label="Más rentabilidad" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Más rentabilidad</span>
-                  </li>
-                  <li>
-                    <Zap className="bullet-icon accent" strokeWidth={1.75} aria-label="Gestión completa" />
-                    <span style={{ fontFamily: 'Lato, sans-serif' }}>Nosotros nos encargamos de todo</span>
-                  </li>
-                </ul>
+              {/* Bottom-left: Antes Copy */}
+              <article className="before-after-card copy before">
+                <div className="content-wrapper">
+                  <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
+                  <p className="subtitle problems-subtitle">La realidad de gestionar solo</p>
+                  <ul className="bullets modern-bullets">
+                    <li className="bullet-item problem">
+                      <ArrowDown className="bullet-icon problem-icon" strokeWidth={2} aria-label="Bajas ocupaciones" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Bajas ocupaciones</span>
+                        <span className="bullet-detail">Periodos largos vacío</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item problem">
+                      <Euro className="bullet-icon problem-icon" strokeWidth={2} aria-label="Sin ingresos" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Meses sin ingresos</span>
+                        <span className="bullet-detail">Pérdidas económicas</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item problem">
+                      <AlertTriangle className="bullet-icon problem-icon" strokeWidth={2} aria-label="Estrés" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Estrés continuo</span>
+                        <span className="bullet-detail">Preocupación constante</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
               </article>
 
               {/* Bottom-right: Antes Image */}
