@@ -52,38 +52,7 @@ const Stats = () => {
                 />
               </article>
 
-              {/* Top-right: Con Liventy Copy */}
-              <article className="before-after-card copy after">
-                <div className="content-wrapper">
-                  <h4 className="modern-title">Con Liventy, tranquilidad total</h4>
-                  <p className="subtitle">Tu inversión en las mejores manos</p>
-                  <ul className="bullets modern-bullets">
-                    <li className="bullet-item success">
-                      <Shield className="bullet-icon accent" strokeWidth={2} aria-label="Ocupación garantizada" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Ocupación garantizada</span>
-                        <span className="bullet-detail">Contratos seguros y estables</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item success">
-                      <TrendingUp className="bullet-icon accent" strokeWidth={2} aria-label="Más rentabilidad" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Más rentabilidad</span>
-                        <span className="bullet-detail">Hasta +15% de ingresos</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item success">
-                      <Zap className="bullet-icon accent" strokeWidth={2} aria-label="Gestión completa" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Nosotros nos encargamos de todo</span>
-                        <span className="bullet-detail">Gestión 100% profesional</span>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </article>
-
-              {/* Bottom-left: Antes Copy */}
+              {/* Top-right: Problems Copy */}
               <article className="before-after-card copy before">
                 <div className="content-wrapper">
                   <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
@@ -108,6 +77,37 @@ const Stats = () => {
                       <div className="bullet-content">
                         <span className="bullet-text">Estrés continuo</span>
                         <span className="bullet-detail">Preocupación constante</span>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </article>
+
+              {/* Bottom-left: Con Liventy Copy */}
+              <article className="before-after-card copy after">
+                <div className="content-wrapper">
+                  <h4 className="modern-title">Con Liventy, tranquilidad total</h4>
+                  <p className="subtitle">Tu inversión en las mejores manos</p>
+                  <ul className="bullets modern-bullets">
+                    <li className="bullet-item success">
+                      <Shield className="bullet-icon accent" strokeWidth={2} aria-label="Ocupación garantizada" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Ocupación garantizada</span>
+                        <span className="bullet-detail">Contratos seguros y estables</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item success">
+                      <TrendingUp className="bullet-icon accent" strokeWidth={2} aria-label="Más rentabilidad" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Más rentabilidad</span>
+                        <span className="bullet-detail">Hasta +15% de ingresos</span>
+                      </div>
+                    </li>
+                    <li className="bullet-item success">
+                      <Zap className="bullet-icon accent" strokeWidth={2} aria-label="Gestión completa" />
+                      <div className="bullet-content">
+                        <span className="bullet-text">Nosotros nos encargamos de todo</span>
+                        <span className="bullet-detail">Gestión 100% profesional</span>
                       </div>
                     </li>
                   </ul>
