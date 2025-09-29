@@ -30,8 +30,21 @@ export const validatePassword = (password: string): PasswordValidation => {
     errors.push('Debe contener al menos un número');
   }
 
-  // Special character check (optional but recommended)
+  // Special character check (required for strong passwords)
   const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+  if (!hasSpecialChar) {
+    errors.push('Debe contener al menos un carácter especial');
+  }
+
+  // Check for common patterns
+  if (/(123|abc|password|admin|user)/i.test(password)) {
+    errors.push('No debe contener patrones comunes');
+  }
+
+  // Check for repeated characters
+  if (/(.)\1{2,}/.test(password)) {
+    errors.push('No debe tener más de 2 caracteres repetidos consecutivos');
+  }
 
   // Calculate strength
   const criteria = [
@@ -40,21 +53,83 @@ export const validatePassword = (password: string): PasswordValidation => {
     /[a-z]/.test(password),
     /\d/.test(password),
     hasSpecialChar,
-    password.length >= 12
+    password.length >= 12,
+    !/(123|abc|password|admin|user)/i.test(password),
+    !/(.)\1{2,}/.test(password)
   ];
 
   const score = criteria.filter(Boolean).length;
 
-  if (score >= 5) {
+  if (score >= 6) {
     strength = 'strong';
-  } else if (score >= 3) {
+  } else if (score >= 4) {
     strength = 'medium';
   }
 
   return {
-    isValid: errors.length === 0,
+    isValid: errors.length === 0 && score >= 5, // Raised minimum requirement
     errors,
     strength
+  };
+};
+
+// Enhanced password strength validation with detailed feedback
+export const validatePasswordStrength = (password: string) => {
+  const minLength = 8;
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+  const hasNoCommonPatterns = !/(123|abc|password|admin|user)/i.test(password);
+  const hasNoRepeatedChars = !/(.)\1{2,}/.test(password);
+
+  const score = [
+    password.length >= minLength,
+    hasUpperCase,
+    hasLowerCase,
+    hasNumbers,
+    hasSpecialChar,
+    hasNoCommonPatterns,
+    hasNoRepeatedChars,
+    password.length >= 12
+  ].reduce((acc, curr) => acc + (curr ? 1 : 0), 0);
+
+  let strength = '';
+  let color = '';
+  
+  if (score < 4) {
+    strength = 'Muy Débil';
+    color = 'text-red-600';
+  } else if (score < 6) {
+    strength = 'Débil';
+    color = 'text-red-500';
+  } else if (score < 7) {
+    strength = 'Media';
+    color = 'text-yellow-500';
+  } else if (score < 8) {
+    strength = 'Fuerte';
+    color = 'text-green-500';
+  } else {
+    strength = 'Muy Fuerte';
+    color = 'text-green-600';
+  }
+
+  const requirements = [
+    { met: password.length >= minLength, text: `Mínimo ${minLength} caracteres` },
+    { met: hasUpperCase, text: 'Una mayúscula' },
+    { met: hasLowerCase, text: 'Una minúscula' },
+    { met: hasNumbers, text: 'Un número' },
+    { met: hasSpecialChar, text: 'Un carácter especial' },
+    { met: hasNoCommonPatterns, text: 'Sin patrones comunes' },
+    { met: hasNoRepeatedChars, text: 'Sin caracteres repetidos' }
+  ];
+
+  return { 
+    score, 
+    strength, 
+    color, 
+    isValid: score >= 5,
+    requirements 
   };
 };
 
@@ -210,4 +285,50 @@ export const enhancedInputSanitization = (input: string, options: {
   sanitized = sanitized.replace(/\x00/g, '');
   
   return sanitized;
+};
+
+// Role-based access control utilities
+export const hasRole = (userRole: string, requiredRoles: string[]): boolean => {
+  return requiredRoles.includes(userRole);
+};
+
+export const isAdmin = (userRole: string): boolean => {
+  return userRole === 'admin';
+};
+
+export const canAccessAdminFeatures = (userRole: string): boolean => {
+  return hasRole(userRole, ['admin']);
+};
+
+// Enhanced security validation
+export const validateEmailDomain = (email: string): boolean => {
+  const suspiciousDomains = [
+    'disposablemail.com', 'tempmail.org', '10minutemail.com', 
+    'guerrillamail.com', 'mailinator.com', 'throwaway.email'
+  ];
+  
+  const domain = email.split('@')[1];
+  return !suspiciousDomains.includes(domain?.toLowerCase());
+};
+
+export const detectSuspiciousActivity = (userAgent: string, ipAddress?: string): boolean => {
+  const suspiciousPatterns = [
+    /bot/i, /crawler/i, /scraper/i, /spider/i, /automated/i
+  ];
+  
+  return suspiciousPatterns.some(pattern => pattern.test(userAgent));
+};
+
+// Session security
+export const validateSessionToken = (token: string): boolean => {
+  if (!token || token.length < 16) return false;
+  
+  // Check for suspicious patterns in session tokens
+  const suspiciousPatterns = [
+    /^[0]{10,}/, // Too many zeros
+    /^[1]{10,}/, // Too many ones
+    /(.)\1{10,}/ // Too many repeated characters
+  ];
+  
+  return !suspiciousPatterns.some(pattern => pattern.test(token));
 };

@@ -920,6 +920,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_update_user_role: {
+        Args: { p_new_role: string; p_user_id: string }
+        Returns: boolean
+      }
       check_anonymous_lead_limits: {
         Args: { p_email: string; p_session_id?: string }
         Returns: boolean
@@ -1077,6 +1081,10 @@ export type Database = {
       }
       validate_session_access: {
         Args: { p_session_id: string; p_user_id?: string }
+        Returns: boolean
+      }
+      validate_user_input: {
+        Args: { p_email?: string; p_nombre?: string; p_rol?: string }
         Returns: boolean
       }
     }

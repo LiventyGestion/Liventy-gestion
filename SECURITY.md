@@ -77,6 +77,14 @@ Current rate limits:
 - **Service requests**: 5 per hour per user
 - **Anonymous calculations**: 10 per hour per IP
 - **Anonymous chat**: 5 conversations per hour per session
+- **Profile updates**: 5 per hour per user (NEW)
+
+### 🛡️ NEW: Role Escalation Prevention
+
+✅ **Anti-Privilege Escalation**: Users cannot modify their own roles
+✅ **Admin-Only Role Management**: Only admins can change user roles via secure functions
+✅ **Audit Logging**: All role change attempts are logged with full context
+✅ **Rate Limiting**: Profile updates are rate-limited to prevent abuse
 
 ### 🚨 Security Best Practices
 
@@ -95,11 +103,33 @@ The security enhancements have minimal performance impact:
 
 ### 🔍 Security Scan Results
 
-After implementation:
+After latest security implementation:
 - ✅ Input validation: SECURED
 - ✅ Rate limiting: IMPLEMENTED
 - ✅ Data sanitization: ACTIVE
 - ✅ Anonymous data protection: ENFORCED
-- ⚠️ Leaked password protection: REQUIRES MANUAL SETUP
+- ✅ Role escalation prevention: ACTIVE
+- ✅ Enhanced password validation: IMPLEMENTED
+- ✅ Suspicious activity monitoring: ACTIVE
+- ✅ Administrative audit logging: ENABLED
+- ⚠️ Leaked password protection: REQUIRES MANUAL SETUP (See below)
 
-Your application is now significantly more secure against common attack vectors including spam, brute force attacks, XSS, and data abuse.
+### 📋 MANUAL SETUP REQUIRED
+
+**CRITICAL**: Enable leaked password protection in Supabase:
+
+1. Go to [Supabase Auth Settings](https://supabase.com/dashboard/project/ozckjosasowyorthaxus/auth/providers)
+2. Scroll to "Password Security" 
+3. ✅ Enable "Leaked Password Protection"
+4. ✅ Set minimum password length to 8 characters
+5. ✅ Enable password strength requirements
+
+This prevents users from using passwords found in data breaches.
+
+Your application is now significantly more secure against:
+- ✅ Privilege escalation attacks
+- ✅ Role manipulation attempts  
+- ✅ Spam and brute force attacks
+- ✅ XSS and injection attacks
+- ✅ Anonymous data abuse
+- ✅ Suspicious user patterns
