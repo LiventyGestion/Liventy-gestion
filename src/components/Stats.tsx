@@ -14,11 +14,7 @@ const Stats = () => {
   const revenueCount = 25;
   return <div className="bg-background">
       {/* Main Stats Section */}
-      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom, #0a0a0a, #1a1a1a)' }}>
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <img src={dataAnalytics} alt="" className="w-full h-full object-cover opacity-5" aria-hidden="true" loading="lazy" />
-        </div>
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #0c0c0c 0%, #121212 50%, #1a1a1a 100%)' }}>
         
         <div className="container mx-auto px-4 relative z-10">
           {/* Impact phrase */}
@@ -36,10 +32,10 @@ const Stats = () => {
             </p>
           </div>
 
-          {/* Before After Section - New Design */}
+          {/* Before After Section - Redesigned */}
           <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
             <div className="before-after-container">
-              {/* Bloque "Antes de Liventy" */}
+              {/* Bloque "Antes de Liventy" - IZQUIERDA con mujer preocupada */}
               <article className="before-after-block">
                 <div className="before-after-image-bg">
                   <img 
@@ -79,7 +75,7 @@ const Stats = () => {
                 </div>
               </article>
 
-              {/* Bloque "Con Liventy" */}
+              {/* Bloque "Con Liventy" - DERECHA con hombre relajado */}
               <article className="before-after-block">
                 <div className="before-after-image-bg">
                   <img 
