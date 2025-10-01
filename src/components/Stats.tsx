@@ -14,7 +14,7 @@ const Stats = () => {
   const revenueCount = 25;
   return <div className="bg-background">
       {/* Main Stats Section */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 relative overflow-hidden">
+      <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(to bottom, #0a0a0a, #1a1a1a)' }}>
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img src={dataAnalytics} alt="" className="w-full h-full object-cover opacity-5" aria-hidden="true" loading="lazy" />
@@ -36,81 +36,87 @@ const Stats = () => {
             </p>
           </div>
 
-          {/* Before After Section - 2x2 Grid */}
+          {/* Before After Section - New Design */}
           <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
-            <h3 className="text-3xl font-bold text-center mb-12 text-foreground">
-          </h3>
-            <div className="before-after-grid">
-              {/* Top-left: Con Liventy Image */}
-              <article className="before-after-card image after" aria-hidden="false">
-                <img src={relaxedMan} alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy" loading="lazy" />
-              </article>
-
-              {/* Top-right: Problems Copy */}
-              <article className="before-after-card copy before">
-                <div className="content-wrapper">
-                  <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
-                  <p className="subtitle problems-subtitle">La realidad de gestionar solo</p>
-                  <ul className="bullets modern-bullets">
-                    <li className="bullet-item problem">
-                      <ArrowDown className="bullet-icon problem-icon" strokeWidth={2} aria-label="Bajas ocupaciones" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Bajas ocupaciones</span>
-                        <span className="bullet-detail">Periodos largos vacío</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item problem">
-                      <Euro className="bullet-icon problem-icon" strokeWidth={2} aria-label="Sin ingresos" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Meses sin ingresos</span>
-                        <span className="bullet-detail">Pérdidas económicas</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item problem">
-                      <AlertTriangle className="bullet-icon problem-icon" strokeWidth={2} aria-label="Estrés" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Estrés continuo</span>
-                        <span className="bullet-detail">Preocupación constante</span>
-                      </div>
-                    </li>
-                  </ul>
+            <div className="before-after-container">
+              {/* Bloque "Antes de Liventy" */}
+              <article className="before-after-block">
+                <div className="before-after-image-bg">
+                  <img 
+                    src={worriedWoman} 
+                    alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta" 
+                    loading="lazy" 
+                  />
+                </div>
+                <div className="before-after-card-floating before">
+                  <div className="content-wrapper">
+                    <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
+                    <p className="subtitle problems-subtitle">La realidad de gestionar solo</p>
+                    <ul className="bullets modern-bullets">
+                      <li className="bullet-item problem">
+                        <ArrowDown className="bullet-icon problem-icon" strokeWidth={2} aria-label="Bajas ocupaciones" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Bajas ocupaciones</span>
+                          <span className="bullet-detail">Periodos largos vacío</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item problem">
+                        <Euro className="bullet-icon problem-icon" strokeWidth={2} aria-label="Sin ingresos" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Meses sin ingresos</span>
+                          <span className="bullet-detail">Pérdidas económicas</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item problem">
+                        <AlertTriangle className="bullet-icon problem-icon" strokeWidth={2} aria-label="Estrés" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Estrés continuo</span>
+                          <span className="bullet-detail">Preocupación constante</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </article>
 
-              {/* Bottom-left: Con Liventy Copy */}
-              <article className="before-after-card copy after">
-                <div className="content-wrapper">
-                  <h4 className="modern-title">Con Liventy, tranquilidad total</h4>
-                  <p className="subtitle">Tu inversión en las mejores manos</p>
-                  <ul className="bullets modern-bullets">
-                    <li className="bullet-item success">
-                      <Shield className="bullet-icon accent" strokeWidth={2} aria-label="Ocupación garantizada" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Ocupación garantizada</span>
-                        <span className="bullet-detail">Contratos seguros y estables</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item success">
-                      <TrendingUp className="bullet-icon accent" strokeWidth={2} aria-label="Más rentabilidad" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Más rentabilidad</span>
-                        <span className="bullet-detail">Hasta +15% de ingresos</span>
-                      </div>
-                    </li>
-                    <li className="bullet-item success">
-                      <Zap className="bullet-icon accent" strokeWidth={2} aria-label="Gestión completa" />
-                      <div className="bullet-content">
-                        <span className="bullet-text">Nosotros nos encargamos de todo</span>
-                        <span className="bullet-detail">Gestión 100% profesional</span>
-                      </div>
-                    </li>
-                  </ul>
+              {/* Bloque "Con Liventy" */}
+              <article className="before-after-block">
+                <div className="before-after-image-bg">
+                  <img 
+                    src={relaxedMan} 
+                    alt="Hombre tranquilo y sonriente que representa la tranquilidad con Liventy" 
+                    loading="lazy" 
+                  />
                 </div>
-              </article>
-
-              {/* Bottom-right: Antes Image */}
-              <article className="before-after-card image before" aria-hidden="false">
-                <img src={worriedWoman} alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta" loading="lazy" />
+                <div className="before-after-card-floating after">
+                  <div className="content-wrapper">
+                    <h4 className="modern-title">Con Liventy, tranquilidad total</h4>
+                    <p className="subtitle">Tu inversión en las mejores manos</p>
+                    <ul className="bullets modern-bullets">
+                      <li className="bullet-item success">
+                        <Shield className="bullet-icon accent" strokeWidth={2} aria-label="Ocupación garantizada" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Ocupación garantizada</span>
+                          <span className="bullet-detail">Contratos seguros y estables</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item success">
+                        <TrendingUp className="bullet-icon accent" strokeWidth={2} aria-label="Más rentabilidad" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Más rentabilidad</span>
+                          <span className="bullet-detail">Hasta +15% de ingresos</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item success">
+                        <Zap className="bullet-icon accent" strokeWidth={2} aria-label="Gestión completa" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Nosotros nos encargamos de todo</span>
+                          <span className="bullet-detail">Gestión 100% profesional</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </article>
             </div>
           </section>
