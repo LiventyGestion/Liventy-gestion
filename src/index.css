@@ -241,8 +241,8 @@ All colors MUST be HSL.
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    height: 78%;
+    width: 90%;
+    height: 88%;
     z-index: 1;
     border-radius: 16px;
     overflow: hidden;
