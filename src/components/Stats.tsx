@@ -32,50 +32,9 @@ const Stats = () => {
             </p>
           </div>
 
-          {/* Before After Section - Redesigned */}
           <section id="before-after" className="mb-16" aria-label="Antes de Liventy frente a Con Liventy">
             <div className="before-after-container">
-              {/* Bloque "Antes de Liventy" - IZQUIERDA con mujer preocupada */}
-              <article className="before-after-block">
-                <div className="before-after-image-bg">
-                  <img 
-                    src={worriedWoman} 
-                    alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta" 
-                    loading="lazy" 
-                  />
-                </div>
-                <div className="before-after-card-floating before">
-                  <div className="content-wrapper">
-                    <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
-                    <p className="subtitle problems-subtitle">La realidad de gestionar solo</p>
-                    <ul className="bullets modern-bullets">
-                      <li className="bullet-item problem">
-                        <ArrowDown className="bullet-icon problem-icon" strokeWidth={2} aria-label="Bajas ocupaciones" />
-                        <div className="bullet-content">
-                          <span className="bullet-text">Bajas ocupaciones</span>
-                          <span className="bullet-detail">Periodos largos vacío</span>
-                        </div>
-                      </li>
-                      <li className="bullet-item problem">
-                        <Euro className="bullet-icon problem-icon" strokeWidth={2} aria-label="Sin ingresos" />
-                        <div className="bullet-content">
-                          <span className="bullet-text">Meses sin ingresos</span>
-                          <span className="bullet-detail">Pérdidas económicas</span>
-                        </div>
-                      </li>
-                      <li className="bullet-item problem">
-                        <AlertTriangle className="bullet-icon problem-icon" strokeWidth={2} aria-label="Estrés" />
-                        <div className="bullet-content">
-                          <span className="bullet-text">Estrés continuo</span>
-                          <span className="bullet-detail">Preocupación constante</span>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </article>
-
-              {/* Bloque "Con Liventy" - DERECHA con hombre relajado */}
+              {/* Bloque "Con Liventy" - IZQUIERDA con hombre relajado */}
               <article className="before-after-block">
                 <div className="before-after-image-bg">
                   <img 
@@ -108,6 +67,46 @@ const Stats = () => {
                         <div className="bullet-content">
                           <span className="bullet-text">Nosotros nos encargamos de todo</span>
                           <span className="bullet-detail">Gestión 100% profesional</span>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </article>
+
+              {/* Bloque "Antes de Liventy" - DERECHA con mujer preocupada */}
+              <article className="before-after-block">
+                <div className="before-after-image-bg">
+                  <img 
+                    src={worriedWoman} 
+                    alt="Mujer preocupada con las manos en la cabeza, representa problemas al alquilar por tu cuenta" 
+                    loading="lazy" 
+                  />
+                </div>
+                <div className="before-after-card-floating before">
+                  <div className="content-wrapper">
+                    <h4 className="modern-title problems-title">Problemas al alquilar por tu cuenta</h4>
+                    <p className="subtitle problems-subtitle">La realidad de gestionar solo</p>
+                    <ul className="bullets modern-bullets">
+                      <li className="bullet-item problem">
+                        <ArrowDown className="bullet-icon problem-icon" strokeWidth={2} aria-label="Bajas ocupaciones" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Bajas ocupaciones</span>
+                          <span className="bullet-detail">Periodos largos vacío</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item problem">
+                        <Euro className="bullet-icon problem-icon" strokeWidth={2} aria-label="Sin ingresos" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Meses sin ingresos</span>
+                          <span className="bullet-detail">Pérdidas económicas</span>
+                        </div>
+                      </li>
+                      <li className="bullet-item problem">
+                        <AlertTriangle className="bullet-icon problem-icon" strokeWidth={2} aria-label="Estrés" />
+                        <div className="bullet-content">
+                          <span className="bullet-text">Estrés continuo</span>
+                          <span className="bullet-detail">Preocupación constante</span>
                         </div>
                       </li>
                     </ul>
