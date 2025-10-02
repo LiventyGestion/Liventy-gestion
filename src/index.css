@@ -231,7 +231,7 @@ All colors MUST be HSL.
 
   .before-after-block {
     position: relative;
-    min-height: 580px;
+    min-height: 620px;
     border-radius: 20px;
     overflow: hidden;
   }
@@ -241,8 +241,8 @@ All colors MUST be HSL.
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90%;
-    height: 88%;
+    width: 95%;
+    height: 92%;
     z-index: 1;
     border-radius: 16px;
     overflow: hidden;
@@ -444,8 +444,8 @@ All colors MUST be HSL.
     }
 
     .before-after-image-bg {
-      width: 95%;
-      height: 88%;
+      width: 97%;
+      height: 90%;
     }
     
     .before-after-card-floating {
