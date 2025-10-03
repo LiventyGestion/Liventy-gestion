@@ -221,9 +221,6 @@ All colors MUST be HSL.
   }
 
   .before-after-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 1rem;
@@ -231,20 +228,19 @@ All colors MUST be HSL.
 
   .before-after-block {
     position: relative;
-    min-height: 620px;
+    min-height: 700px;
     border-radius: 20px;
     overflow: hidden;
   }
 
   .before-after-image-bg {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 98%;
-    height: 96%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1;
-    border-radius: 16px;
+    border-radius: 20px;
     overflow: hidden;
   }
 
@@ -282,7 +278,8 @@ All colors MUST be HSL.
   .before-after-card-floating.after {
     background: rgba(32, 32, 32, 0.88);
     backdrop-filter: blur(10px);
-    left: 24px;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
   .before-after-card-floating.before:hover {
@@ -291,6 +288,7 @@ All colors MUST be HSL.
 
   .before-after-card-floating.after:hover {
     background: rgba(32, 32, 32, 0.90);
+    transform: translate(-50%, calc(-50% - 2px));
   }
 
   .before-after-card-floating.after .modern-title,
