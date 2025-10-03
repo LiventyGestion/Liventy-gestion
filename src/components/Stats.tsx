@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import dataAnalytics from "@/assets/data-analytics.jpg";
 import worriedWoman from "@/assets/worried-woman.jpg";
-import relaxedMan from "@/assets/relaxed-man.jpg";
+import relaxedMan from "@/assets/relaxed-man-park.jpg";
 const Stats = () => {
   // Static values without animations
   const occupancyRate = 87;
