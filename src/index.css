@@ -279,7 +279,7 @@ All colors MUST be HSL.
     background: rgba(32, 32, 32, 0.88);
     backdrop-filter: blur(10px);
     left: 40px;
-    top: 120px;
+    top: 180px;
   }
 
   .before-after-card-floating.before:hover {
