@@ -103,14 +103,18 @@ const Testimonials = () => {
           {testimonials.map((testimonial, index) => (
             <div key={index} className="relative">
               <Avatar className="absolute -top-12 left-1/2 -translate-x-1/2 h-24 w-24 ring-4 ring-white">
-                <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                <AvatarImage src={testimonial.image} alt={testimonial.name} className="object-cover object-top" />
                 <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
               </Avatar>
               <Card className="text-center hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 pt-14">
                   <div className="flex justify-center mb-4" role="img" aria-label={`${testimonial.rating} estrellas de 5`}>
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`h-5 w-5 ${i < testimonial.rating ? 'fill-yellow-400 text-yellow-400' : 'fill-gray-300 text-gray-300'}`}
+                        aria-hidden="true" 
+                      />
                     ))}
                   </div>
                   <p className="text-muted-foreground mb-4 text-sm sm:text-base leading-relaxed">"{testimonial.text}"</p>
