@@ -279,8 +279,7 @@ All colors MUST be HSL.
     background: rgba(32, 32, 32, 0.88);
     backdrop-filter: blur(10px);
     left: 40px;
-    top: 60px;
-    transform: translateY(-50%);
+    top: 120px;
   }
 
   .before-after-card-floating.before:hover {
@@ -289,7 +288,7 @@ All colors MUST be HSL.
 
   .before-after-card-floating.after:hover {
     background: rgba(32, 32, 32, 0.90);
-    transform: translateY(calc(-50% - 2px));
+    transform: translateY(-2px);
   }
 
   .before-after-card-floating.after .modern-title,
@@ -413,12 +412,11 @@ All colors MUST be HSL.
       padding: 20px;
       left: 5%;
       right: auto;
-      top: 30px;
-      transform: translateY(-50%);
+      top: 80px;
     }
 
     .before-after-card-floating:hover {
-      transform: translateY(calc(-50% - 2px));
+      transform: translateY(-2px);
     }
 
     .before-after-card-floating.before,
@@ -453,7 +451,7 @@ All colors MUST be HSL.
       padding: 18px;
       max-width: 100%;
       left: 4%;
-      top: 20px;
+      top: 60px;
     }
 
     .before-after-card-floating.before,
