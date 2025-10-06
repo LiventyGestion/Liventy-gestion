@@ -60,9 +60,9 @@ const SellCTA = () => {
             size="lg"
             className="bg-[#E67E0F] hover:bg-[#E67E0F]/90 text-white font-semibold px-8 py-6 text-base sm:text-lg shadow-lg hover:shadow-[0_0_30px_rgba(230,126,15,0.4)] transition-all duration-300 hover:scale-105"
           >
-            <Link to="/contacto#venta">
+            <a href="/venta" target="_blank" rel="noopener noreferrer">
               Quiero información
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

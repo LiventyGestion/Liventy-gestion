@@ -33,7 +33,7 @@ import AlquilerTemporada from "./pages/services/AlquilerTemporada";
 import AlquilerLargaDuracion from "./pages/services/AlquilerLargaDuracion";
 import Mantenimiento from "./pages/services/Mantenimiento";
 import ConsultarMiCaso from "./pages/ConsultarMiCaso";
-
+import Venta from "./pages/Venta";
 
 const queryClient = new QueryClient();
 
@@ -126,7 +126,7 @@ const App = () => (
             <Route path="/servicios/mantenimiento-incidencias" element={<MantenimientoIncidencias />} />
             <Route path="/servicios/mantenimiento" element={<Mantenimiento />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
-            
+            <Route path="/venta" element={<Venta />} />
             
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
