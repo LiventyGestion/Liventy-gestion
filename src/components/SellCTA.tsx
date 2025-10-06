@@ -1,24 +1,66 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { CheckCircle2 } from "lucide-react";
+import sellBgImage from "@/assets/sell-section-bg.jpg";
 
 const SellCTA = () => {
   return (
-    <section className="py-8 bg-muted/30 border-t">
-      <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center">
-          <h2 className="text-lg font-semibold mb-2 text-foreground/80">
-            PENSANDO EN VENDER?
+    <section 
+      id="venta-liventy" 
+      className="relative h-[380px] sm:h-[420px] overflow-hidden animate-fade-in"
+    >
+      {/* Background Image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ 
+          backgroundImage: `url(${sellBgImage})`,
+          filter: 'saturate(0.7)'
+        }}
+        aria-hidden="true"
+      />
+      
+      {/* Overlay Gradient */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%)'
+        }}
+        aria-hidden="true"
+      />
+      
+      {/* Content */}
+      <div className="relative container mx-auto px-4 sm:px-6 h-full flex items-center justify-center">
+        <div className="text-center max-w-3xl">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+            ¿Pensando en vender?
           </h2>
-          <p className="text-muted-foreground mb-4">
-            ¿Pensando en vender? Te asesoramos sin compromiso.
+          <p className="text-lg sm:text-xl text-white/95 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
+            Te acompañamos para que vendas con la misma transparencia, calma y confianza que nos define.
           </p>
+          
+          {/* Benefits List - Hidden on mobile */}
+          <ul className="hidden sm:flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8 text-white">
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
+              <span className="text-sm sm:text-base">Valoración justa y profesional</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
+              <span className="text-sm sm:text-base">Asesoramiento integral hasta la firma</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
+              <span className="text-sm sm:text-base">Sin presión ni exclusividad</span>
+            </li>
+          </ul>
+          
+          {/* CTA Button */}
           <Button 
-            variant="outline" 
-            size="sm" 
             asChild
-            className="hover:bg-primary hover:text-primary-foreground"
+            size="lg"
+            className="bg-[#E67E0F] hover:bg-[#E67E0F]/90 text-white font-semibold px-8 py-6 text-base sm:text-lg shadow-lg hover:shadow-[0_0_30px_rgba(230,126,15,0.4)] transition-all duration-300 hover:scale-105"
           >
-            <Link to="/propietarios#form?origen=venta_home">
+            <Link to="/contacto#venta">
               Quiero información
             </Link>
           </Button>
