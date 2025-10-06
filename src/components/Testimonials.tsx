@@ -1,27 +1,34 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Play, Star } from "lucide-react";
 import clientTestimonial from "@/assets/client-testimonial.jpg";
+import testimonial1 from "@/assets/testimonial-1.jpg";
+import testimonial2 from "@/assets/testimonial-2.jpg";
+import testimonial3 from "@/assets/testimonial-3.jpg";
 
 const Testimonials = () => {
   const testimonials = [
     {
-      name: "María González",
-      role: "Propietaria en Bilbao",
+      name: "Javier Etxebarria",
+      role: "Propietario en Bilbao",
       rating: 5,
+      image: testimonial1,
       text: "Desde que confié mi apartamento a Liventy, no he tenido que preocuparme por nada. La rentabilidad ha aumentado un 20% y el trato es excepcional."
     },
     {
-      name: "Carlos Martín", 
-      role: "Propietario en Madrid",
-      rating: 5,
+      name: "Ainhoa Mendizábal", 
+      role: "Propietaria en Getxo",
+      rating: 4,
+      image: testimonial2,
       text: "Profesionales de verdad. En menos de un mes encontraron inquilinos perfectos y todo el proceso fue transparente y eficiente."
     },
     {
-      name: "Ana Fernández",
-      role: "Propietaria en Barcelona",
+      name: "Laura Urquijo",
+      role: "Inquilina en Barakaldo",
       rating: 5,
-      text: "El mejor servicio de gestión que he probado. Cobro puntualmente todos los meses y ellos se encargan de todo. ¡Recomendable 100%!"
+      image: testimonial3,
+      text: "Como inquilina, el servicio de Liventy es impecable. Cualquier incidencia se resuelve rápido y el trato es muy profesional. Me siento muy bien atendida."
     }
   ];
 
@@ -33,8 +40,8 @@ const Testimonials = () => {
             Lo que dicen nuestros clientes
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Conoce las experiencias reales de propietarios que han transformado 
-            su gestión de alquileres con Liventy.
+            Conoce las experiencias reales de propietarios e inquilinos de Bizkaia que han 
+            transformado su gestión de alquileres con Liventy.
           </p>
         </div>
 
@@ -92,22 +99,28 @@ const Testimonials = () => {
         </div>
 
         {/* Written Testimonials Grid */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto mt-14">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex justify-center mb-4" role="img" aria-label={`${testimonial.rating} estrellas de 5`}>
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-warning text-warning" aria-hidden="true" />
-                  ))}
-                </div>
-                <p className="text-muted-foreground mb-4 text-sm sm:text-base leading-relaxed">"{testimonial.text}"</p>
-                <div>
-                  <div className="font-semibold text-sm sm:text-base">{testimonial.name}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</div>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={index} className="relative">
+              <Avatar className="absolute -top-12 left-1/2 -translate-x-1/2 h-24 w-24 ring-4 ring-white">
+                <AvatarImage src={testimonial.image} alt={testimonial.name} />
+                <AvatarFallback>{testimonial.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              </Avatar>
+              <Card className="text-center hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 pt-14">
+                  <div className="flex justify-center mb-4" role="img" aria-label={`${testimonial.rating} estrellas de 5`}>
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                    ))}
+                  </div>
+                  <p className="text-muted-foreground mb-4 text-sm sm:text-base leading-relaxed">"{testimonial.text}"</p>
+                  <div>
+                    <div className="font-semibold text-sm sm:text-base">{testimonial.name}</div>
+                    <div className="text-xs sm:text-sm text-muted-foreground">{testimonial.role}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           ))}
         </div>
       </div>
