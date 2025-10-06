@@ -17,6 +17,7 @@ import { Calculator, TrendingUp, BarChart3, Home, Euro, CheckCircle2, AlertCircl
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import heroBg from "@/assets/herramientas-hero-bg.jpg";
 
 // Schemas for each calculator
 const precioSchema = z.object({
@@ -276,8 +277,52 @@ const Herramientas = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      <main className="container mx-auto px-4 sm:px-6 py-8">
-        {/* Breadcrumb */}
+      <main>
+        {/* Hero Section with Background Image */}
+        <section className="relative h-[500px] flex items-center justify-center overflow-hidden mb-16">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center"
+            style={{
+              backgroundImage: `url(${heroBg})`,
+              filter: 'brightness(0.5)'
+            }}
+          />
+          
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-white/5" />
+          
+          {/* Content */}
+          <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-white drop-shadow-lg">
+              Herramientas inteligentes para propietarios
+            </h1>
+            <p className="text-xl sm:text-2xl text-white/95 leading-relaxed mb-8 drop-shadow-md">
+              Calcula tu rentabilidad, compara opciones y descubre el potencial de tu vivienda
+            </p>
+            
+            {/* Icon Row */}
+            <div className="flex justify-center gap-8 mt-12">
+              <div className="group cursor-pointer transition-transform hover:scale-110 duration-200">
+                <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+                  <Euro className="h-10 w-10 text-white" />
+                </div>
+              </div>
+              <div className="group cursor-pointer transition-transform hover:scale-110 duration-200">
+                <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+                  <TrendingUp className="h-10 w-10 text-white" />
+                </div>
+              </div>
+              <div className="group cursor-pointer transition-transform hover:scale-110 duration-200">
+                <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl border border-white/30">
+                  <BarChart3 className="h-10 w-10 text-white" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="container mx-auto px-4 sm:px-6">{/* Breadcrumb moved inside container */}
         <nav aria-label="breadcrumb" className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-muted-foreground">
             <li><Link to="/" className="hover:text-foreground">Inicio</Link></li>
@@ -286,77 +331,96 @@ const Herramientas = () => {
           </ol>
         </nav>
 
-        {/* Hero Section */}
-        <section className="text-center mb-16">
-          <div className="max-w-4xl mx-auto">
-            <div className="flex justify-center mb-6">
-              <Calculator className="h-16 w-16 text-primary" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-              Herramientas para propietarios
-            </h1>
-            <p className="text-xl sm:text-2xl text-muted-foreground leading-relaxed">
-              Decide con datos en 2 minutos: precio, rentabilidad y la modalidad que más te conviene.
-            </p>
-          </div>
-        </section>
-
-        {/* Grid de 3 tarjetas */}
+        {/* Grid de 3 tarjetas - Modern Glass Design */}
         <section className="mb-20">
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <Euro className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Precio recomendado</h3>
-                <p className="text-muted-foreground mb-6">
-                  Rango óptimo de publicación
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {/* Precio Card */}
+            <div 
+              className="group relative overflow-hidden rounded-[24px] border border-border bg-gradient-to-br from-white to-neutral-50 hover:shadow-[0_10px_40px_rgba(230,126,15,0.15)] transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              onClick={() => toggleCalculator("precio")}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardContent className="relative p-10 text-center">
+                {/* Animated Icon Container */}
+                <div className="relative mb-6 mx-auto w-20 h-20 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform duration-300" />
+                  <Euro className="relative h-10 w-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-3 text-foreground">Precio recomendado</h3>
+                <p className="text-muted-foreground mb-8 leading-relaxed">
+                  Descubre el rango óptimo para publicar tu propiedad
                 </p>
+                
                 <Button 
-                    onClick={() => toggleCalculator("precio")} 
-                    className="w-full transition-all duration-200"
-                    aria-expanded={openCalc === "precio"}
-                    tabIndex={0}
+                  onClick={(e) => { e.stopPropagation(); toggleCalculator("precio"); }} 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                  aria-expanded={openCalc === "precio"}
+                  size="lg"
                 >
                   Calcular ahora
                 </Button>
               </CardContent>
-            </Card>
+            </div>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <TrendingUp className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Rentabilidad neta</h3>
-                <p className="text-muted-foreground mb-6">
-                  Cashflow y yield anual
+            {/* Rentabilidad Card */}
+            <div 
+              className="group relative overflow-hidden rounded-[24px] border border-border bg-gradient-to-br from-white to-neutral-50 hover:shadow-[0_10px_40px_rgba(230,126,15,0.15)] transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              onClick={() => toggleCalculator("rentabilidad")}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardContent className="relative p-10 text-center">
+                <div className="relative mb-6 mx-auto w-20 h-20 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform duration-300" />
+                  <TrendingUp className="relative h-10 w-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-3 text-foreground">Rentabilidad neta</h3>
+                <p className="text-muted-foreground mb-8 leading-relaxed">
+                  Conoce tu cashflow mensual y ROI anual real
                 </p>
+                
                 <Button 
-                    onClick={() => toggleCalculator("rentabilidad")} 
-                    className="w-full transition-all duration-200"
-                    aria-expanded={openCalc === "rentabilidad"}
-                    tabIndex={0}
+                  onClick={(e) => { e.stopPropagation(); toggleCalculator("rentabilidad"); }} 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                  aria-expanded={openCalc === "rentabilidad"}
+                  size="lg"
                 >
                   Calcular ahora
                 </Button>
               </CardContent>
-            </Card>
+            </div>
 
-            <Card className="text-center hover:shadow-lg transition-shadow">
-              <CardContent className="p-8">
-                <BarChart3 className="h-12 w-12 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold mb-2">Larga vs. Temporal</h3>
-                <p className="text-muted-foreground mb-6">
-                  Qué te conviene más
+            {/* Comparador Card */}
+            <div 
+              className="group relative overflow-hidden rounded-[24px] border border-border bg-gradient-to-br from-white to-neutral-50 hover:shadow-[0_10px_40px_rgba(230,126,15,0.15)] transition-all duration-300 hover:-translate-y-2 cursor-pointer"
+              onClick={() => toggleCalculator("comparador")}
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              
+              <CardContent className="relative p-10 text-center">
+                <div className="relative mb-6 mx-auto w-20 h-20 flex items-center justify-center">
+                  <div className="absolute inset-0 bg-primary/10 rounded-2xl group-hover:scale-110 transition-transform duration-300" />
+                  <BarChart3 className="relative h-10 w-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                
+                <h3 className="text-2xl font-bold mb-3 text-foreground">Larga vs. Temporal</h3>
+                <p className="text-muted-foreground mb-8 leading-relaxed">
+                  Compara y elige la mejor modalidad para ti
                 </p>
+                
                 <Button 
-                    onClick={() => toggleCalculator("comparador")} 
-                    className="w-full transition-all duration-200"
-                    aria-expanded={openCalc === "comparador"}
-                    tabIndex={0}
+                  onClick={(e) => { e.stopPropagation(); toggleCalculator("comparador"); }} 
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-200"
+                  aria-expanded={openCalc === "comparador"}
+                  size="lg"
                 >
                   Comparar ahora
                 </Button>
               </CardContent>
-            </Card>
+            </div>
           </div>
         </section>
 
@@ -810,21 +874,60 @@ const Herramientas = () => {
           </div>
         )}
 
-        {/* Enlaces internos */}
-        <section className="text-center mb-12">
-          <h3 className="text-2xl font-bold mb-6">¿Necesitas más información?</h3>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button variant="outline" asChild>
-              <Link to="/propietarios">Servicios para propietarios</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/faq">Preguntas frecuentes</Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link to="/legal">Información legal</Link>
-            </Button>
+        {/* CTA Final - Redesigned */}
+        <section className="py-16 bg-gradient-to-br from-neutral-50 via-white to-neutral-50 rounded-[32px] mb-12">
+          <div className="max-w-4xl mx-auto text-center px-6">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
+              ¿Necesitas más información?
+            </h2>
+            <p className="text-lg text-muted-foreground mb-10">
+              Descubre todos nuestros servicios y encuentra respuestas a tus preguntas
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {/* Servicios Button */}
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+                className="h-auto py-6 px-6 rounded-[20px] border-2 hover:border-primary hover:bg-primary/5 hover:shadow-lg transition-all duration-200 group"
+              >
+                <Link to="/servicios/gestion-integral" className="flex items-center justify-center gap-3">
+                  <Home className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                  <span className="font-semibold">Servicios para propietarios</span>
+                </Link>
+              </Button>
+
+              {/* FAQ Button */}
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+                className="h-auto py-6 px-6 rounded-[20px] border-2 hover:border-primary hover:bg-primary/5 hover:shadow-lg transition-all duration-200 group"
+              >
+                <Link to="/faq" className="flex items-center justify-center gap-3">
+                  <AlertCircle className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                  <span className="font-semibold">Preguntas frecuentes</span>
+                </Link>
+              </Button>
+
+              {/* Legal Button */}
+              <Button 
+                variant="outline" 
+                size="lg"
+                asChild
+                className="h-auto py-6 px-6 rounded-[20px] border-2 hover:border-primary hover:bg-primary/5 hover:shadow-lg transition-all duration-200 group"
+              >
+                <Link to="/servicios/asesoria-legal" className="flex items-center justify-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
+                  <span className="font-semibold">Información legal</span>
+                </Link>
+              </Button>
+            </div>
           </div>
         </section>
+        
+        </div> {/* Close container */}
       </main>
       
       <Footer />
