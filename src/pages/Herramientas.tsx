@@ -56,6 +56,23 @@ const Herramientas = () => {
   const [searchParams] = useSearchParams();
   const { scrollToCalculator } = useScrollRestoration();
   
+  // SEO Meta tags
+  useEffect(() => {
+    document.title = "Herramientas para propietarios | Calcula tu rentabilidad | Liventy Gestión";
+    const metaDescription = document.querySelector('meta[name="description"]');
+    if (metaDescription) {
+      metaDescription.setAttribute('content', 'Calcula el precio ideal, la rentabilidad de tu vivienda y compara opciones. Herramientas interactivas y visuales de Liventy Gestión.');
+    }
+    
+    // GA4 page view event
+    if (typeof (window as any).gtag !== 'undefined') {
+      (window as any).gtag('event', 'page_view', { 
+        page_title: 'Herramientas',
+        page_path: '/herramientas'
+      });
+    }
+  }, []);
+  
   // Estado único para controlar qué calculadora está abierta
   const [openCalc, setOpenCalc] = useState<"precio" | "rentabilidad" | "comparador" | null>(null);
   
@@ -892,7 +909,7 @@ const Herramientas = () => {
                 asChild
                 className="h-auto py-6 px-6 rounded-[20px] border-2 hover:border-primary hover:bg-primary/5 hover:shadow-lg transition-all duration-200 group"
               >
-                <Link to="/servicios/gestion-integral" className="flex items-center justify-center gap-3">
+                <Link to="/servicios/alquiler-larga-duracion" className="flex items-center justify-center gap-3">
                   <Home className="h-5 w-5 text-primary group-hover:scale-110 transition-transform" />
                   <span className="font-semibold">Servicios para propietarios</span>
                 </Link>
