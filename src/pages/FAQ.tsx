@@ -516,7 +516,7 @@ const FAQ = () => {
                     }
                   }}
                 >
-                  <a href="mailto:info@liventygestion.com">
+                  <a href="mailto:contacto@liventygestion.com">
                     <Mail className="h-4 w-4 mr-2" />
                     Email
                   </a>
