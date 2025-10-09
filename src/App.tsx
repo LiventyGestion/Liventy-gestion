@@ -34,6 +34,7 @@ import AlquilerLargaDuracion from "./pages/services/AlquilerLargaDuracion";
 import Mantenimiento from "./pages/services/Mantenimiento";
 import ConsultarMiCaso from "./pages/ConsultarMiCaso";
 import Venta from "./pages/Venta";
+import FAQ from "./pages/FAQ";
 
 const queryClient = new QueryClient();
 
@@ -127,6 +128,7 @@ const App = () => (
             <Route path="/servicios/mantenimiento" element={<Mantenimiento />} />
             <Route path="/consultar-mi-caso" element={<ConsultarMiCaso />} />
             <Route path="/venta" element={<Venta />} />
+            <Route path="/faq" element={<FAQ />} />
             
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
