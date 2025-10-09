@@ -442,7 +442,7 @@ const FAQ = () => {
                       value={faq.id}
                       className="bg-card rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow duration-200 px-6"
                     >
-                      <AccordionTrigger className="text-left font-semibold hover:no-underline py-6">
+                      <AccordionTrigger className="text-left text-base lg:text-lg font-medium hover:no-underline py-6">
                         <div className="flex items-start gap-4 pr-4">
                           <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mt-0.5">
                             <Icon className="h-5 w-5 text-primary" />
@@ -451,7 +451,7 @@ const FAQ = () => {
                         </div>
                       </AccordionTrigger>
                       <AccordionContent className="pl-14 pr-4 pb-6">
-                        <p className="text-muted-foreground leading-relaxed mb-4">
+                        <p className="text-sm lg:text-base text-muted-foreground leading-relaxed mb-4">
                           {faq.answer}
                         </p>
                         <Button

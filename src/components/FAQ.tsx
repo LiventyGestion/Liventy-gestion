@@ -68,7 +68,7 @@ const FAQ = () => {
           <Accordion type="single" collapsible className="space-y-4">
             {faqs.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`} className="bg-background rounded-lg border px-6">
-                <AccordionTrigger className="text-left font-semibold">
+                <AccordionTrigger className="text-left text-base font-medium">
                   <div className="flex items-center gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
                       <faq.icon className="h-4 w-4 text-primary" aria-hidden="true" />
