@@ -4,7 +4,9 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Shield, Settings, FileText, Home, Euro, HelpCircle } from "lucide-react";
+import { Shield, Settings, FileText, Home, Euro, HelpCircle, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const FAQ = () => {
   const faqs = [
@@ -42,7 +44,21 @@ const FAQ = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
             <HelpCircle className="h-8 w-8 text-primary" aria-hidden="true" />
           </div>
-          <h2 className="text-2xl font-bold mb-4">Resolvemos tus dudas</h2>
+          <Link 
+            to="/faq" 
+            className="inline-block group"
+            onClick={() => {
+              if (typeof window !== 'undefined' && (window as any).gtag) {
+                (window as any).gtag('event', 'faq_preview_to_full_click', {
+                  location: 'title'
+                });
+              }
+            }}
+          >
+            <h2 className="text-2xl font-bold mb-4 hover:text-primary transition-colors">
+              Resolvemos tus dudas
+            </h2>
+          </Link>
           <p className="text-muted-foreground text-base">
             Las preguntas más frecuentes sobre nuestros servicios
           </p>
@@ -66,6 +82,26 @@ const FAQ = () => {
               </AccordionItem>
             ))}
           </Accordion>
+          
+          <div className="text-center mt-8">
+            <Link to="/faq">
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="gap-2"
+                onClick={() => {
+                  if (typeof window !== 'undefined' && (window as any).gtag) {
+                    (window as any).gtag('event', 'faq_preview_to_full_click', {
+                      location: 'cta_bottom'
+                    });
+                  }
+                }}
+              >
+                Ver todas las preguntas frecuentes
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     </section>
