@@ -259,9 +259,17 @@ const AlquilerLargaDuracion = () => {
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                 ¿Y si surge una incidencia? La resolvemos. ¿Una duda legal? La aclaramos.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
+              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
                 Tú solo ves resultados, nosotros lo gestionamos todo.
               </p>
+              <Button 
+                size="lg" 
+                className="group text-lg px-8 py-4"
+                onClick={() => window.location.href = '/contacto?tipo=propietario&origen=alquiler-larga-duracion'}
+              >
+                Empezar ahora
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </div>
             <div className="relative">
               <img
@@ -271,25 +279,6 @@ const AlquilerLargaDuracion = () => {
                 loading="lazy"
               />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-16 lg:py-24 bg-gradient-to-r from-primary/10 to-secondary/10">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              👉 Porque alquilar debe dar tranquilidad, no trabajo.
-            </h2>
-            <Button 
-              size="lg" 
-              className="group text-lg px-8 py-4"
-              onClick={() => window.location.href = '/contacto?tipo=propietario&origen=alquiler-larga-duracion'}
-            >
-              Empezar ahora
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
           </div>
         </div>
       </section>
