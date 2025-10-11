@@ -1,84 +1,104 @@
-import { useState } from "react";
-import { ArrowRight, BarChart3, Camera, CheckCircle, FileText, Calendar, MessageCircle, Monitor, Wrench } from "lucide-react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { ArrowRight, BarChart3, Camera, CheckCircle, FileText, Calendar, MessageCircle, Monitor, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import heroImage from "@/assets/long-term-rental-hero.jpg";
 import interiorDetail from "@/assets/interior-detail.jpg";
-import dataAnalytics from "@/assets/data-analytics.jpg";
-import professionalService from "@/assets/professional-service.jpg";
-import clientTestimonial from "@/assets/client-testimonial.jpg";
-import digitalContract from "@/assets/digital-contract.jpg";
-import digitalManagement from "@/assets/digital-management.jpg";
-import customerSupport from "@/assets/customer-support.jpg";
-import transparentModel from "@/assets/transparent-model.jpg";
 import handymanProfessional from "@/assets/handyman-professional.jpg";
+import cozyHomeImage from "@/assets/cozy-home-detail.jpg";
+import modernLivingroomImage from "@/assets/modern-bright-livingroom.jpg";
+import propertyInspectionImage from "@/assets/property-inspection.jpg";
 
 const AlquilerLargaDuracion = () => {
-  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+  const [nextBtnDisabled, setNextBtnDisabled] = useState(false);
+  
+  const autoplay = useRef(
+    Autoplay({ delay: 4000, stopOnInteraction: false })
+  );
+  
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      loop: true, 
+      align: 'start',
+      slidesToScroll: 1,
+    },
+    [autoplay.current]
+  );
 
-  const toggleItem = (id: string) => {
-    setOpenItems(prev => ({ ...prev, [id]: !prev[id] }));
-  };
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const scrollTo = useCallback((index: number) => {
+    if (emblaApi) emblaApi.scrollTo(index);
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setSelectedIndex(emblaApi.selectedScrollSnap());
+    setPrevBtnDisabled(!emblaApi.canScrollPrev());
+    setNextBtnDisabled(!emblaApi.canScrollNext());
+  }, [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+  }, [emblaApi, onSelect]);
 
   const services = [
     {
       id: "renta-adecuada",
       icon: BarChart3,
       title: "Renta adecuada según mercado",
-      description: "Asesoramiento para fijar la renta adecuada según mercado y perfil del inmueble.",
-      image: dataAnalytics,
-      alt: "Asesoramiento de renta"
+      description: "Asesoramiento para fijar la renta adecuada según mercado y perfil del inmueble."
     },
     {
       id: "publicacion-optimizada",
       icon: Camera,
       title: "Publicación optimizada + foto profesional",
-      description: "Publicación con visibilidad optimizada y fotografía profesional.",
-      image: professionalService,
-      alt: "Fotografía profesional"
+      description: "Publicación con visibilidad optimizada y fotografía profesional."
     },
     {
       id: "seleccion-inquilinos",
       icon: CheckCircle,
       title: "Selección fiable de inquilinos",
-      description: "Selección de inquilinos fiables, con análisis de solvencia y referencias.",
-      image: clientTestimonial,
-      alt: "Análisis de solvencia"
+      description: "Selección de inquilinos fiables, con análisis de solvencia y referencias."
     },
     {
       id: "contrato-legal",
       icon: FileText,
       title: "Contrato conforme a ley",
-      description: "Contrato adaptado a la legislación autonómica y estatal.",
-      image: digitalContract,
-      alt: "Contrato y firma digital"
+      description: "Contrato adaptado a la legislación autonómica y estatal."
     },
     {
       id: "renovaciones",
       icon: Calendar,
       title: "Renovaciones y prórrogas",
-      description: "Gestión de renovaciones, actualizaciones y prórrogas.",
-      image: digitalManagement,
-      alt: "Renovaciones"
+      description: "Gestión de renovaciones, actualizaciones y prórrogas."
     },
     {
       id: "atencion-inquilino",
       icon: MessageCircle,
       title: "Atención al inquilino",
-      description: "Atención al inquilino para que no te llamen a ti.",
-      image: customerSupport,
-      alt: "Atención al inquilino"
+      description: "Atención al inquilino para que no te llamen a ti."
     },
     {
       id: "area-privada",
       icon: Monitor,
       title: "Área privada y seguimiento",
-      description: "Área privada para seguir en tiempo real todo lo que ocurre.",
-      image: transparentModel,
-      alt: "Área privada y seguimiento"
+      description: "Área privada para seguir en tiempo real todo lo que ocurre."
     }
   ];
 
@@ -95,8 +115,8 @@ const AlquilerLargaDuracion = () => {
         />
         <div className="relative z-20 container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-              📅 Alquiler de larga duración
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 text-primary">
+              Alquiler de larga duración
             </h1>
             <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-light">
               Estabilidad con garantías. Y sin esfuerzo.
@@ -129,46 +149,103 @@ const AlquilerLargaDuracion = () => {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="py-16 lg:py-24 bg-secondary/10">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">Con nosotros tendrás:</h2>
+      {/* Services Section - Carousel Style */}
+      <section className="py-16 sm:py-20 relative overflow-hidden">
+        {/* Background image collage */}
+        <div className="absolute inset-0 z-0 grid grid-cols-3 gap-[2px]">
+          <div className="relative w-full h-full bg-white">
+            <img src={cozyHomeImage} alt="" className="w-full h-full object-cover" />
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service) => (
-              <Card key={service.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-card/50 backdrop-blur-sm">
-                <Collapsible 
-                  open={openItems[service.id]} 
-                  onOpenChange={() => toggleItem(service.id)}
-                >
-                  <CollapsibleTrigger asChild>
-                    <CardHeader className="cursor-pointer hover:bg-secondary/20 transition-colors rounded-t-lg">
-                      <div className="flex items-center gap-4 mb-4">
-                        <service.icon className="h-8 w-8 text-primary" aria-hidden="true" />
-                        <img
-                          src={service.image}
-                          alt={service.alt}
-                          className="w-16 h-16 object-cover rounded-lg shadow-sm"
-                          loading="lazy"
-                        />
-                      </div>
-                      <CardTitle className="text-xl font-semibold text-left">
-                        {service.title}
-                      </CardTitle>
-                    </CardHeader>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <CardContent className="pt-0">
-                      <CardDescription className="text-base leading-relaxed">
-                        {service.description}
-                      </CardDescription>
-                    </CardContent>
-                  </CollapsibleContent>
-                </Collapsible>
-              </Card>
-            ))}
+          <div className="relative w-full h-full bg-white">
+            <img src={modernLivingroomImage} alt="" className="w-full h-full object-cover" />
+          </div>
+          <div className="relative w-full h-full bg-white">
+            <img src={propertyInspectionImage} alt="" className="w-full h-full object-cover" />
+          </div>
+        </div>
+        
+        {/* Dark overlay */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 to-black/70"></div>
+        
+        {/* Carousel content */}
+        <div className="container mx-auto px-4 sm:px-6 relative z-20">
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+              Con nosotros tendrás:
+            </h2>
+          </div>
+
+          {/* Carousel with Embla */}
+          <div className="relative max-w-7xl mx-auto">
+            <div className="overflow-hidden px-4" ref={emblaRef}>
+              <div className="flex gap-4 sm:gap-6">
+                {services.map((service) => (
+                  <div 
+                    key={service.id} 
+                    className="flex-none w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)] min-w-0"
+                  >
+                    <Card className="h-full hover:-translate-y-0.5 hover:shadow-xl transition-all duration-200 bg-white border-0 shadow-lg">
+                      <CardContent className="p-6 h-full flex flex-col">
+                        <div className="flex items-start space-x-4 flex-1">
+                          <div className="flex-shrink-0">
+                            <div className="inline-flex items-center justify-center w-14 h-14 bg-primary/10 rounded-2xl">
+                              <service.icon className="h-7 w-7 text-primary" aria-hidden="true" />
+                            </div>
+                          </div>
+                          <div className="min-w-0 flex-1 flex flex-col">
+                            <h3 className="font-semibold text-lg mb-3 leading-tight text-foreground">
+                              {service.title}
+                            </h3>
+                            <p className="text-muted-foreground leading-relaxed flex-1">
+                              {service.description}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation buttons */}
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute -left-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
+              onClick={scrollPrev}
+              disabled={prevBtnDisabled}
+              aria-label="Servicio anterior"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute -right-2 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white border-0 shadow-lg z-10 w-12 h-12 rounded-full"
+              onClick={scrollNext}
+              disabled={nextBtnDisabled}
+              aria-label="Siguiente servicio"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </Button>
+
+            {/* Navigation dots */}
+            <div className="flex justify-center mt-8 gap-2">
+              {services.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-200 ${
+                    index === selectedIndex
+                      ? 'bg-white scale-125'
+                      : 'bg-white/50 hover:bg-white/75'
+                  }`}
+                  onClick={() => scrollTo(index)}
+                  aria-label={`Ir a servicio ${index + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
