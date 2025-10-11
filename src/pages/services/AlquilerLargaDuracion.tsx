@@ -8,7 +8,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import heroImage from "@/assets/long-term-rental-hero.jpg";
 import interiorDetail from "@/assets/interior-detail.jpg";
-import relaxedPropertyOwner from "@/assets/relaxed-property-owner.jpg";
+import peacefulOwnerLifestyle from "@/assets/peaceful-owner-lifestyle.jpg";
 import cozyHomeImage from "@/assets/cozy-home-detail.jpg";
 import modernLivingroomImage from "@/assets/modern-bright-livingroom.jpg";
 import propertyInspectionImage from "@/assets/property-inspection.jpg";
@@ -273,7 +273,7 @@ const AlquilerLargaDuracion = () => {
             </div>
             <div className="relative">
               <img
-                src={relaxedPropertyOwner}
+                src={peacefulOwnerLifestyle}
                 alt="Propietario relajado disfrutando tranquilidad mientras Liventy gestiona su alquiler"
                 className="rounded-lg shadow-lg w-full h-auto"
                 loading="lazy"
