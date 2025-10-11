@@ -155,17 +155,17 @@ const GestionIntegral = () => {
         {/* Servicios - Estilo Carrusel */}
         <section className="py-16 sm:py-20 relative overflow-hidden">
           {/* Collage de imágenes de fondo */}
-          <div className="absolute inset-0 z-0 grid grid-cols-3">
-            <div className="relative w-full h-full">
-              <img src={cozyHomeImage} alt="" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 z-0 grid grid-cols-3 gap-[2px]">
+              <div className="relative w-full h-full bg-white">
+                <img src={cozyHomeImage} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div className="relative w-full h-full bg-white">
+                <img src={interiorDetailImage} alt="" className="w-full h-full object-cover" />
+              </div>
+              <div className="relative w-full h-full bg-white">
+                <img src={modernLivingroomImage} alt="" className="w-full h-full object-cover" />
+              </div>
             </div>
-            <div className="relative w-full h-full">
-              <img src={interiorDetailImage} alt="" className="w-full h-full object-cover" />
-            </div>
-            <div className="relative w-full h-full">
-              <img src={modernLivingroomImage} alt="" className="w-full h-full object-cover" />
-            </div>
-          </div>
           
           {/* Overlay oscuro */}
           <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/60 to-black/70"></div>
