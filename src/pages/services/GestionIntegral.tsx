@@ -16,17 +16,23 @@ import modernLivingroomImage from "@/assets/modern-bright-livingroom.jpg";
 
 const GestionIntegral = () => {
   // Carousel state and configuration
-  const [emblaRef, emblaApi] = useEmblaCarousel(
-    { 
-      loop: true,
-      align: 'start',
-      slidesToScroll: 1
-    },
-    [Autoplay({ delay: 5000, stopOnInteraction: false })]
-  );
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
   const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
+
+  const autoplayRef = useRef(
+    Autoplay({ delay: 5000, stopOnInteraction: false, stopOnMouseEnter: true })
+  );
+
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    { 
+      align: 'start',
+      slidesToScroll: 1,
+      containScroll: 'trimSnaps',
+      dragFree: false
+    },
+    [autoplayRef.current]
+  );
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
