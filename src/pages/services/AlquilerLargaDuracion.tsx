@@ -271,13 +271,27 @@ const AlquilerLargaDuracion = () => {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
-            <div className="relative">
-              <img
-                src={handymanProfessional}
-                alt="Gestión de incidencias"
-                className="rounded-lg shadow-lg w-full h-auto"
-                loading="lazy"
-              />
+            <div className="relative group">
+              {/* Overlay sutil con gradiente animado */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-primary/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-700 z-10"></div>
+              
+              {/* Imagen con animaciones */}
+              <div className="relative overflow-hidden rounded-lg">
+                <img
+                  src={handymanProfessional}
+                  alt="Gestión de incidencias profesional"
+                  className="w-full h-auto rounded-lg shadow-lg transform animate-gentle-float hover:animate-subtle-scale transition-all duration-700"
+                  style={{
+                    animation: 'gentle-float 6s ease-in-out infinite, soft-glow 4s ease-in-out infinite'
+                  }}
+                  loading="lazy"
+                />
+              </div>
+              
+              {/* Badge decorativo animado */}
+              <div className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-6 py-3 rounded-full shadow-xl animate-pulse z-20">
+                <span className="text-sm font-semibold">Gestión 24/7</span>
+              </div>
             </div>
           </div>
         </div>
