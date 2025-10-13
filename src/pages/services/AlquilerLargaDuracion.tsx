@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import heroImage from "@/assets/long-term-rental-hero.jpg";
-import interiorDetail from "@/assets/interior-detail.jpg";
+import modernLivingRoomVertical from "@/assets/modern-living-room-vertical.jpg";
 import peacefulOwnerLifestyle from "@/assets/peaceful-owner-lifestyle.jpg";
 import cozyHomeImage from "@/assets/cozy-home-detail.jpg";
 import modernLivingroomImage from "@/assets/modern-bright-livingroom.jpg";
@@ -125,26 +125,148 @@ const AlquilerLargaDuracion = () => {
         </div>
       </section>
 
-      {/* Intro Section */}
-      <section className="py-16 lg:py-24">
+      {/* Nueva sección de dos columnas con diseño moderno */}
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-[#FAFAFA] to-[#F3F3F3]">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                El alquiler tradicional sigue siendo una de las fórmulas más seguras y estables para obtener rentabilidad a largo plazo. Pero elegir al inquilino equivocado o no estar al día legalmente puede convertir esa estabilidad en una fuente constante de problemas.
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            
+            {/* Columna izquierda - Contenido de texto */}
+            <div className="max-w-[600px] mx-auto lg:mx-0 animate-fade-up">
+              
+              {/* Título principal */}
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary mb-4 font-raleway">
+                Alquiler de larga duración
+              </h2>
+              
+              {/* Subtítulo */}
+              <p className="text-lg md:text-xl text-foreground mb-8 font-raleway font-normal">
+                Estabilidad con garantías. Y sin esfuerzo.
               </p>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                En Liventy Gestión te acompañamos en todo el proceso, desde la publicación hasta el final del contrato, con foco en la protección jurídica, la previsión y la eficiencia.
-              </p>
+              
+              {/* Párrafos principales */}
+              <div className="space-y-6 mb-10">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-justify">
+                  El alquiler tradicional sigue siendo una de las fórmulas más seguras y estables para obtener rentabilidad a largo plazo. Pero elegir al inquilino equivocado o no estar al día legalmente puede convertir esa estabilidad en una fuente constante de problemas.
+                </p>
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed text-justify">
+                  En Liventy Gestión te acompañamos en todo el proceso, desde la publicación hasta el final del contrato, con foco en la protección jurídica, la previsión y la eficiencia.
+                </p>
+              </div>
+              
+              {/* Lista de 3 beneficios clave con iconos */}
+              <div className="space-y-5">
+                {/* Beneficio 1 */}
+                <div className="flex items-start gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-primary/5 hover:translate-x-1">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#FFF3E0] rounded-full flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 font-raleway">
+                      Gestión jurídica completa
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Contratos adaptados, renovaciones y total cumplimiento legal
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Beneficio 2 */}
+                <div className="flex items-start gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-primary/5 hover:translate-x-1">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#FFF3E0] rounded-full flex items-center justify-center">
+                    <CheckCircle className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 font-raleway">
+                      Selección rigurosa de inquilinos
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Análisis de solvencia, referencias y verificación completa
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Beneficio 3 */}
+                <div className="flex items-start gap-4 p-3 rounded-xl transition-all duration-300 hover:bg-primary/5 hover:translate-x-1">
+                  <div className="flex-shrink-0 w-12 h-12 bg-[#FFF3E0] rounded-full flex items-center justify-center">
+                    <BarChart3 className="w-6 h-6 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="text-base md:text-lg font-semibold text-foreground mb-1 font-raleway">
+                      Estabilidad y previsión a largo plazo
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Rentas ajustadas al mercado y gestión profesional continua
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="relative">
-              <img
-                src={interiorDetail}
-                alt="Detalle interior de vivienda moderna"
-                className="rounded-lg shadow-lg w-full h-auto"
-                loading="lazy"
-              />
+            
+            {/* Columna derecha - Imagen vertical */}
+            <div className="relative lg:h-[700px] animate-fade-up" style={{ animationDelay: '0.2s' }}>
+              <div className="relative h-full rounded-2xl overflow-hidden shadow-lg">
+                {/* Overlay degradado suave desde la izquierda */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/20 to-transparent z-10 pointer-events-none"></div>
+                
+                {/* Imagen vertical */}
+                <img
+                  src={modernLivingRoomVertical}
+                  alt="Salón moderno luminoso con luz natural y diseño minimalista"
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
+            
+          </div>
+        </div>
+      </section>
+
+      {/* Bloque de indicadores visuales */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
+            
+            {/* Card 1: Ocupación garantizada */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200 hover:shadow-md transition-all duration-300 animate-fade-up">
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-[#FFF3E0] rounded-full flex items-center justify-center mb-4">
+                  <BarChart3 className="w-8 h-8 text-primary" />
+                </div>
+                <p className="text-4xl md:text-5xl font-bold text-primary mb-2 font-raleway">87%</p>
+                <p className="text-base font-semibold text-foreground mb-1 font-raleway">Ocupación garantizada</p>
+                <p className="text-sm text-muted-foreground">Media anual de nuestros inmuebles</p>
+              </div>
+            </div>
+            
+            {/* Card 2: Rentabilidad media */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200 hover:shadow-md transition-all duration-300 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-[#FFF3E0] rounded-full flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-4xl md:text-5xl font-bold text-primary mb-2 font-raleway">+15%</p>
+                <p className="text-base font-semibold text-foreground mb-1 font-raleway">Rentabilidad media</p>
+                <p className="text-sm text-muted-foreground">Retorno anual optimizado</p>
+              </div>
+            </div>
+            
+            {/* Card 3: Gestión profesional */}
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-neutral-200 hover:shadow-md transition-all duration-300 animate-fade-up" style={{ animationDelay: '0.2s' }}>
+              <div className="flex flex-col items-center text-center">
+                <div className="w-16 h-16 bg-[#FFF3E0] rounded-full flex items-center justify-center mb-4">
+                  <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
+                <p className="text-4xl md:text-5xl font-bold text-primary mb-2 font-raleway">100%</p>
+                <p className="text-base font-semibold text-foreground mb-1 font-raleway">Gestión profesional</p>
+                <p className="text-sm text-muted-foreground">Sin preocupaciones para ti</p>
+              </div>
+            </div>
+            
           </div>
         </div>
       </section>
@@ -250,36 +372,17 @@ const AlquilerLargaDuracion = () => {
         </div>
       </section>
 
-      {/* Incidents Management Section */}
-      <section className="py-16 lg:py-24">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">Si surge algo</h2>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                ¿Y si surge una incidencia? La resolvemos. ¿Una duda legal? La aclaramos.
-              </p>
-              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                Tú solo ves resultados, nosotros lo gestionamos todo.
-              </p>
-              <Button 
-                size="lg" 
-                className="group text-lg px-8 py-4"
-                onClick={() => window.location.href = '/contacto?tipo=propietario&origen=alquiler-larga-duracion'}
-              >
-                Empezar ahora
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-            <div className="relative">
-              <img
-                src={peacefulOwnerLifestyle}
-                alt="Propietario relajado disfrutando tranquilidad mientras Liventy gestiona su alquiler"
-                className="rounded-lg shadow-lg w-full h-auto"
-                loading="lazy"
-              />
-            </div>
-          </div>
+      {/* CTA final */}
+      <section className="py-12 bg-gradient-to-b from-white to-[#FAFAFA]">
+        <div className="container mx-auto px-4 text-center">
+          <Button 
+            size="lg" 
+            className="group text-lg px-10 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
+            onClick={() => window.location.href = '/contacto?tipo=propietario&origen=alquiler-larga-duracion'}
+          >
+            Quiero alquilar sin preocupaciones
+            <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+          </Button>
         </div>
       </section>
 
