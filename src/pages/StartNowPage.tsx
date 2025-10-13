@@ -125,34 +125,49 @@ const StartNowPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Header />
-      <main className="container mx-auto px-4 sm:px-6 py-8">
-        <div className="max-w-4xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <Button
-              variant="ghost"
-              onClick={() => navigate('/')}
-              className="mb-4 text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Volver al inicio
-            </Button>
-            
-            <div className="text-center">
-              <div className="inline-flex items-center justify-center p-3 bg-primary/10 rounded-full mb-4">
-                <Home className="h-8 w-8 text-primary" />
-              </div>
-              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-                Empezar con Liventy Gestión
-              </h1>
-              <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-                Cuéntanos sobre tu propiedad y necesidades para ofrecerte la mejor solución personalizada
-              </p>
-            </div>
+      
+      {/* Hero Section con imagen de fondo */}
+      <section className="relative h-[300px] sm:h-[350px] lg:h-[450px] overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-fixed"
+          style={{ 
+            backgroundImage: 'url(/src/assets/hero-modern-property.jpg)',
+          }}
+        />
+        
+        {/* Overlay degradado */}
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-800/85 via-slate-700/70 to-white" />
+        
+        {/* Contenido del Hero */}
+        <div className="relative container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center items-center text-center pt-[120px] sm:pt-[130px] lg:pt-[140px] pb-[60px] sm:pb-[70px] lg:pb-[80px]">
+          {/* Botón Volver */}
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className="mb-6 text-white hover:text-white hover:bg-white/10 self-start"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Volver al inicio
+          </Button>
+          
+          {/* Icono y títulos */}
+          <div className="inline-flex items-center justify-center p-3 bg-white/20 backdrop-blur-sm border-2 border-white/30 rounded-full mb-6">
+            <Home className="h-8 w-8 text-white" />
           </div>
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 text-white drop-shadow-lg">
+            Empezar con Liventy Gestión
+          </h1>
+          <p className="text-lg sm:text-xl text-white/95 max-w-2xl mx-auto drop-shadow">
+            Cuéntanos sobre tu propiedad y necesidades para ofrecerte la mejor solución personalizada
+          </p>
+        </div>
+      </section>
 
+      <main className="relative container mx-auto px-4 sm:px-6 -mt-12 sm:-mt-16 lg:-mt-20 pb-16 bg-gradient-to-b from-transparent via-background to-background">
+        <div className="max-w-4xl mx-auto">
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl text-center">
