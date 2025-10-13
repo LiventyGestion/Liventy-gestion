@@ -129,7 +129,7 @@ const StartNowPage = () => {
       <Header />
       
       {/* Hero Section con imagen de fondo */}
-      <section className="relative h-[300px] sm:h-[350px] lg:h-[450px] overflow-hidden">
+      <section className="relative h-[350px] sm:h-[400px] lg:h-[500px] overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-fixed"
@@ -142,7 +142,7 @@ const StartNowPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-slate-800/85 via-slate-700/70 to-white" />
         
         {/* Contenido del Hero */}
-        <div className="relative container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center items-center text-center pt-[120px] sm:pt-[130px] lg:pt-[140px] pb-[60px] sm:pb-[70px] lg:pb-[80px]">
+        <div className="relative container mx-auto px-4 sm:px-6 h-full flex flex-col justify-center items-center text-center pt-[110px] sm:pt-[120px] lg:pt-[140px] pb-[50px] sm:pb-[60px] lg:pb-[80px]">
           {/* Botón Volver */}
           <Button
             variant="ghost"
@@ -166,7 +166,7 @@ const StartNowPage = () => {
         </div>
       </section>
 
-      <main className="relative container mx-auto px-4 sm:px-6 -mt-12 sm:-mt-16 lg:-mt-20 pb-16 bg-gradient-to-b from-transparent via-background to-background">
+      <main className="relative container mx-auto px-4 sm:px-6 -mt-16 sm:-mt-20 lg:-mt-24 pb-16 bg-gradient-to-b from-transparent via-background to-background">
         <div className="max-w-4xl mx-auto">
           <Card className="shadow-lg">
             <CardHeader>
