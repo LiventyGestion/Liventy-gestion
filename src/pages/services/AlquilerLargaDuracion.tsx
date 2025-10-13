@@ -378,7 +378,7 @@ const AlquilerLargaDuracion = () => {
           <Button 
             size="lg" 
             className="group text-lg px-10 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl shadow-md hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
-            onClick={() => window.location.href = '/contacto?tipo=propietario&origen=alquiler-larga-duracion'}
+            onClick={() => window.location.href = '/empezar-ahora'}
           >
             Quiero alquilar sin preocupaciones
             <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
