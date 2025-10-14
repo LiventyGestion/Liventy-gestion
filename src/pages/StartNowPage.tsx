@@ -142,7 +142,7 @@ const StartNowPage = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-slate-800/85 via-slate-700/70 to-white" />
         
         {/* Contenido del Hero */}
-        <div className="relative container mx-auto px-4 sm:px-6 h-full flex flex-col justify-start items-center text-center pt-[80px] sm:pt-[90px] lg:pt-[100px] pb-[80px] sm:pb-[90px] lg:pb-[120px]">
+        <div className="relative container mx-auto px-4 sm:px-6 h-full flex flex-col justify-start items-center text-center pt-[60px] sm:pt-[70px] lg:pt-[80px] pb-[80px] sm:pb-[90px] lg:pb-[120px]">
           {/* Botón Volver */}
           <Button
             variant="ghost"
