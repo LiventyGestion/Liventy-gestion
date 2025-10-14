@@ -80,7 +80,7 @@ const PropertySlider = () => {
             <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <FileText className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Contrato digital y transparente</h3>
+            <h3 className="font-semibold mb-2 text-base">Contrato digital y transparente</h3>
             <p className="text-sm text-muted-foreground">Sin letra pequeña ni sorpresas</p>
           </div>
           
@@ -88,7 +88,7 @@ const PropertySlider = () => {
             <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Viviendas revisadas y mantenidas</h3>
+            <h3 className="font-semibold mb-2 text-base">Viviendas revisadas y mantenidas</h3>
             <p className="text-sm text-muted-foreground">Todo listo antes de tu entrada</p>
           </div>
           
@@ -96,7 +96,7 @@ const PropertySlider = () => {
             <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <MessageCircle className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Atención directa durante tu estancia</h3>
+            <h3 className="font-semibold mb-2 text-base">Atención directa durante tu estancia</h3>
             <p className="text-sm text-muted-foreground">Soporte humano cuando lo necesites</p>
           </div>
         </div>
