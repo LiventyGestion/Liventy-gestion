@@ -66,7 +66,7 @@ const PropertySlider = () => {
     <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             Encuentra tu nuevo hogar con Liventy
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -80,14 +80,16 @@ const PropertySlider = () => {
             <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <FileText className="h-6 w-6 text-primary" />
             </div>
-...
+            <h3 className="font-semibold mb-2">Contrato digital y transparente</h3>
+            <p className="text-sm text-muted-foreground">Sin letra pequeña ni sorpresas</p>
           </div>
           
           <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: '0.2s' }}>
             <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
-...
+            <h3 className="font-semibold mb-2">Viviendas revisadas y mantenidas</h3>
+            <p className="text-sm text-muted-foreground">Todo listo antes de tu entrada</p>
           </div>
           
           <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: '0.3s' }}>
