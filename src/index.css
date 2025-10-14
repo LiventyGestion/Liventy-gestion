@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Lato:wght@300;400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,6 +48,7 @@ All colors MUST be HSL.
     
     --primary: var(--brand-orange);
     --primary-foreground: var(--brand-white);
+    --primary-light: 33 100% 96%; /* #FFF3E0 */
     
     --secondary: var(--neutral-50);
     --secondary-foreground: var(--brand-charcoal);
@@ -95,6 +98,7 @@ All colors MUST be HSL.
     
     --primary: var(--brand-orange);
     --primary-foreground: var(--brand-white);
+    --primary-light: 33 100% 96%; /* #FFF3E0 */
     
     --secondary: 0 0% 15%;
     --secondary-foreground: var(--brand-white);
@@ -132,14 +136,14 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground font-raleway;
+    @apply bg-background text-foreground font-lato;
     font-weight: 400;
     line-height: 1.6;
   }
   
-  /* Typography hierarchy with Raleway */
+  /* Typography hierarchy with Montserrat */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-raleway font-bold tracking-heading leading-heading;
+    @apply font-montserrat font-bold tracking-heading leading-heading;
     color: hsl(var(--brand-charcoal));
   }
   
@@ -169,7 +173,7 @@ All colors MUST be HSL.
   
   /* Body text */
   p, span, div, li, a, label, button, input, textarea, select {
-    @apply font-raleway;
+    @apply font-lato;
     color: hsl(var(--brand-charcoal));
   }
   
@@ -195,6 +199,16 @@ All colors MUST be HSL.
   
   .btn-cta:hover {
     transform: translateY(-1px);
+  }
+  
+  /* Button hover lift effect */
+  .btn-hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .btn-hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(230, 126, 15, 0.25);
   }
 }
 

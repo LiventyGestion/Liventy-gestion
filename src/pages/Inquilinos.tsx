@@ -23,12 +23,25 @@ const Inquilinos = () => {
       
       {/* HERO SECTION */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden">
+        {/* Opción 1: Video de fondo (comentado por defecto) */}
+        {/* <video 
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay 
+          loop 
+          muted 
+          playsInline
+        >
+          <source src="/videos/inquilinos-hero.mp4" type="video/mp4" />
+        </video> */}
+        
+        {/* Opción 2: Imagen de fondo (activa por defecto) */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
             backgroundImage: "url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1600&h=900&fit=crop')",
           }}
         />
+        
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40" />
         
         <div className="relative z-10 container mx-auto px-4 text-center text-white">
@@ -45,7 +58,7 @@ const Inquilinos = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white px-8 text-lg"
+              className="bg-primary hover:bg-primary/90 text-white px-8 text-lg btn-hover-lift"
             >
               Ver viviendas disponibles
             </Button>
@@ -64,7 +77,7 @@ const Inquilinos = () => {
       {/* BLOQUE 1 - QUÉ OFRECEMOS */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Qué ofrecemos al inquilino
             </h2>
@@ -74,7 +87,7 @@ const Inquilinos = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg">
+            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg animate-slide-up" style={{ animationDelay: '0.1s' }}>
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mx-auto mb-6">
                   <FileText className="h-8 w-8 text-primary" />
@@ -86,7 +99,7 @@ const Inquilinos = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg">
+            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mx-auto mb-6">
                   <MessageCircle className="h-8 w-8 text-primary" />
@@ -98,7 +111,7 @@ const Inquilinos = () => {
               </CardContent>
             </Card>
 
-            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg">
+            <Card className="border-2 hover:border-primary transition-all hover:shadow-lg animate-slide-up" style={{ animationDelay: '0.3s' }}>
               <CardContent className="p-8 text-center">
                 <div className="w-16 h-16 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mx-auto mb-6">
                   <ShieldCheck className="h-8 w-8 text-primary" />
@@ -117,7 +130,7 @@ const Inquilinos = () => {
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-            <div>
+            <div className="animate-fade-up">
               <Badge className="mb-4 bg-primary text-white">
                 Área de inquilinos
               </Badge>
@@ -156,7 +169,7 @@ const Inquilinos = () => {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="relative animate-scale-in" style={{ animationDelay: '0.2s' }}>
               <div className="bg-gradient-to-br from-primary/10 to-primary/5 rounded-2xl p-8 shadow-xl">
                 <img 
                   src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&h=600&fit=crop" 
@@ -178,7 +191,7 @@ const Inquilinos = () => {
       {/* BLOQUE 3 - TESTIMONIOS */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 animate-fade-up">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
               Lo que dicen nuestros inquilinos
             </h2>
@@ -188,7 +201,7 @@ const Inquilinos = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            <Card className="bg-white">
+            <Card className="bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.1s' }}>
               <CardContent className="p-6">
                 <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -210,7 +223,7 @@ const Inquilinos = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <CardContent className="p-6">
                 <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -232,7 +245,7 @@ const Inquilinos = () => {
               </CardContent>
             </Card>
 
-            <Card className="bg-white">
+            <Card className="bg-white transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: '0.3s' }}>
               <CardContent className="p-6">
                 <div className="flex gap-1 mb-4">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -258,7 +271,7 @@ const Inquilinos = () => {
       </section>
 
       {/* BLOQUE 4 - CTA FINAL */}
-      <section className="py-20 bg-gradient-to-br from-[hsl(var(--primary-light))] to-[hsl(var(--primary-light))]">
+      <section className="py-20 bg-gradient-to-br from-[#FFF3E0] via-[#FFECCC] to-[#FFE0B2]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Encuentra tu próxima vivienda con la tranquilidad de Liventy
@@ -268,7 +281,7 @@ const Inquilinos = () => {
           </p>
           <Button 
             size="lg" 
-            className="bg-primary hover:bg-primary/90 text-white px-10 text-lg"
+            className="bg-primary hover:bg-primary/90 text-white px-10 text-lg btn-hover-lift"
           >
             Ver pisos disponibles
             <ArrowRight className="ml-2 h-5 w-5" />

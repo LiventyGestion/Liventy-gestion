@@ -76,24 +76,22 @@ const PropertySlider = () => {
 
         {/* Bloque de iconos animados */}
         <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in">
-            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <FileText className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Contrato digital y transparente</h3>
-            <p className="text-sm text-muted-foreground">Sin letra pequeña ni sorpresas</p>
+...
           </div>
           
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in" style={{ animationDelay: '0.1s' }}>
-            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <Sparkles className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold mb-2">Viviendas revisadas y mantenidas</h3>
-            <p className="text-sm text-muted-foreground">Todo listo antes de tu entrada</p>
+...
           </div>
           
-          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 animate-slide-up" style={{ animationDelay: '0.3s' }}>
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4 transition-transform duration-300 hover:scale-110">
               <MessageCircle className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold mb-2">Atención directa durante tu estancia</h3>
@@ -179,7 +177,7 @@ const PropertySlider = () => {
         <div className="text-center mt-12">
           <Button 
             size="lg" 
-            className="bg-primary hover:bg-primary/90 text-white px-8"
+            className="bg-primary hover:bg-primary/90 text-white px-8 btn-hover-lift"
             onClick={() => window.location.href = '/inquilinos'}
           >
             Ver todas las viviendas disponibles
