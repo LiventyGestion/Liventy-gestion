@@ -179,9 +179,9 @@ const OwnerBenefits = () => {
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 relative z-20">
         <div className="text-center mb-12 sm:mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
-            ¿Por qué los propietarios nos eligen?
-          </h2>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 text-white" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+              ¿Por qué los propietarios nos eligen?
+            </h2>
           <p className="text-white/90 text-lg sm:text-xl leading-relaxed max-w-3xl mx-auto" style={{ textShadow: '0 1px 2px rgba(0,0,0,0.3)' }}>
             Descubre las ventajas de confiar tu propiedad a Liventy Gestión
           </p>

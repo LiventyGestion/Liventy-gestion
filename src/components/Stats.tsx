@@ -24,7 +24,7 @@ const Stats = () => {
                 ✨ Comprometidos con la rentabilidad y tranquilidad de nuestros clientes
               </p>
             </div>
-            <h2 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
+            <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4 text-white">
               Resultados que Hablan por Sí Solos
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">

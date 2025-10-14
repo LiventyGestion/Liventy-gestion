@@ -33,7 +33,7 @@ const HowItWorks = () => {
     <section className="py-16 bg-gray-50 relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">¿Cómo funciona?</h2>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">¿Cómo funciona?</h2>
           <p className="text-muted-foreground text-lg">
             Tres pasos sencillos para maximizar tu rentabilidad
           </p>

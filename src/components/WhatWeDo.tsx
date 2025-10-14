@@ -37,7 +37,7 @@ const WhatWeDo = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-100/20 to-transparent blur-3xl"></div>
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">¿Qué hacemos en Liventy Gestión?</h2>
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 max-w-6xl mx-auto">

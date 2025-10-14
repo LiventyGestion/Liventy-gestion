@@ -55,9 +55,9 @@ const FAQ = () => {
               }
             }}
           >
-            <h2 className="text-2xl font-bold mb-4 hover:text-primary transition-colors">
-              Resolvemos tus dudas
-            </h2>
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 hover:text-primary transition-colors">
+            Resolvemos tus dudas
+          </h2>
           </Link>
           <p className="text-muted-foreground text-base">
             Las preguntas más frecuentes sobre nuestros servicios

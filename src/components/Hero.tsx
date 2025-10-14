@@ -53,7 +53,7 @@ const Hero = () => {
         
         {/* Title and Subtitle - Above everything */}
         <div className="text-center space-y-6 mb-16 max-w-4xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
             Gestión integral de alquileres en <span className="text-brand-orange">Bizkaia</span>.
           </h1>
           
