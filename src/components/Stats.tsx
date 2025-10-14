@@ -25,7 +25,7 @@ const Stats = () => {
               </p>
             </div>
             <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4 text-white">
-              Resultados que Hablan por Sí Solos
+              Resultados que hablan por si solos
             </h2>
             <p className="text-lg text-gray-300 max-w-2xl mx-auto">
               Nuestros datos y la experiencia de nuestros clientes demuestran el impacto real de trabajar con Liventy
