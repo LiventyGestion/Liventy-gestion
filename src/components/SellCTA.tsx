@@ -42,15 +42,15 @@ const SellCTA = () => {
           <ul className="hidden sm:flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mb-8 text-white">
             <li className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
-              <span className="text-sm sm:text-base">Valoración justa y profesional</span>
+              <span className="text-sm sm:text-base font-semibold" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>Valoración justa y profesional</span>
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
-              <span className="text-sm sm:text-base">Asesoramiento integral hasta la firma</span>
+              <span className="text-sm sm:text-base font-semibold" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>Asesoramiento integral hasta la firma</span>
             </li>
             <li className="flex items-center gap-2">
               <CheckCircle2 className="h-5 w-5 text-[#E67E0F] flex-shrink-0" aria-hidden="true" />
-              <span className="text-sm sm:text-base">Sin presión ni exclusividad</span>
+              <span className="text-sm sm:text-base font-semibold" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8)' }}>Sin presión ni exclusividad</span>
             </li>
           </ul>
           
