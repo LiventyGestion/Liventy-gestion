@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MapPin, Bed, Bath, Square, ChevronLeft, ChevronRight } from "lucide-react";
+import { MapPin, Bed, Bath, Square, ChevronLeft, ChevronRight, FileText, Sparkles, MessageCircle } from "lucide-react";
 import { useState } from "react";
 
 const PropertySlider = () => {
@@ -63,13 +63,42 @@ const PropertySlider = () => {
   };
 
   return (
-    <section className="py-16 bg-muted/30">
+    <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Propiedades Destacadas</h2>
-          <p className="text-muted-foreground text-lg">
-            Descubre propiedades gestionadas por Liventy con total tranquilidad
+          <h2 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-4">
+            Encuentra tu nuevo hogar con Liventy
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            Viviendas cuidadas, inquilinos tranquilos, procesos simples
           </p>
+        </div>
+
+        {/* Bloque de iconos animados */}
+        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in">
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+              <FileText className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="font-semibold mb-2">Contrato digital y transparente</h3>
+            <p className="text-sm text-muted-foreground">Sin letra pequeña ni sorpresas</p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in" style={{ animationDelay: '0.1s' }}>
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="font-semibold mb-2">Viviendas revisadas y mantenidas</h3>
+            <p className="text-sm text-muted-foreground">Todo listo antes de tu entrada</p>
+          </div>
+          
+          <div className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow animate-fade-in" style={{ animationDelay: '0.2s' }}>
+            <div className="w-12 h-12 rounded-full bg-[hsl(var(--primary-light))] flex items-center justify-center mb-4">
+              <MessageCircle className="h-6 w-6 text-primary" />
+            </div>
+            <h3 className="font-semibold mb-2">Atención directa durante tu estancia</h3>
+            <p className="text-sm text-muted-foreground">Soporte humano cuando lo necesites</p>
+          </div>
         </div>
 
         <div className="relative max-w-6xl mx-auto">
@@ -77,19 +106,24 @@ const PropertySlider = () => {
             {properties.slice(currentIndex, currentIndex + 3).concat(
               properties.slice(0, Math.max(0, currentIndex + 3 - properties.length))
             ).map((property) => (
-              <Card key={property.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative">
+              <Card key={property.id} className="overflow-hidden hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+                <div className="relative group">
                   <img 
                     src={property.image} 
                     alt={`${property.title} - Propiedad en ${property.location}`}
                     className="w-full h-48 object-cover"
                     loading="lazy"
                   />
-                  <Badge className="absolute top-4 left-4">
-                    {property.type}
+                  <Badge className="absolute top-4 left-4 bg-primary text-white">
+                    ✓ Vivienda verificada
                   </Badge>
                   <div className="absolute top-4 right-4 bg-background/90 px-3 py-1 rounded-lg">
                     <span className="font-semibold text-primary">{property.price}</span>
+                  </div>
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span className="text-white text-sm font-medium px-4 py-2 bg-primary rounded-lg">
+                      Gestión Liventy — asistencia incluida
+                    </span>
                   </div>
                 </div>
                 <CardContent className="p-6">
@@ -138,6 +172,17 @@ const PropertySlider = () => {
             onClick={nextSlide}
           >
             <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* CTA al final */}
+        <div className="text-center mt-12">
+          <Button 
+            size="lg" 
+            className="bg-primary hover:bg-primary/90 text-white px-8"
+            onClick={() => window.location.href = '/inquilinos'}
+          >
+            Ver todas las viviendas disponibles
           </Button>
         </div>
       </div>
