@@ -170,7 +170,7 @@ const StartNowPage = () => {
         <div className="max-w-4xl mx-auto">
           <Card className="shadow-lg">
             <CardHeader>
-              <CardTitle className="text-xl sm:text-2xl text-center">
+              <CardTitle className="text-2xl sm:text-3xl lg:text-4xl text-center">
                 Formulario detallado de contacto
               </CardTitle>
               <p className="text-center text-muted-foreground">
@@ -206,7 +206,7 @@ const StartNowPage = () => {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                   {/* Información Personal */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-primary border-b pb-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-primary border-b pb-2">
                       1. Información personal
                     </h3>
                     
@@ -298,7 +298,7 @@ const StartNowPage = () => {
 
                   {/* Información de la Propiedad */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-primary border-b pb-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-primary border-b pb-2">
                       2. Información de tu propiedad
                     </h3>
                     
@@ -414,7 +414,7 @@ const StartNowPage = () => {
 
                   {/* Servicios de Interés */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-primary border-b pb-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-primary border-b pb-2">
                       3. Servicios de interés *
                     </h3>
                     
@@ -442,7 +442,7 @@ const StartNowPage = () => {
 
                   {/* Cronología */}
                   <div className="space-y-6">
-                    <h3 className="text-lg font-semibold text-primary border-b pb-2">
+                    <h3 className="text-xl sm:text-2xl font-semibold text-primary border-b pb-2">
                       4. Cronología
                     </h3>
                     
