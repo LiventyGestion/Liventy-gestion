@@ -166,7 +166,7 @@ const StartNowPage = () => {
         </div>
       </section>
 
-      <main className="relative container mx-auto px-4 sm:px-6 -mt-16 sm:-mt-20 lg:-mt-24 pb-16 bg-gradient-to-b from-transparent via-background to-background">
+      <main className="relative container mx-auto px-4 sm:px-6 -mt-8 sm:-mt-12 lg:-mt-16 pb-16 bg-gradient-to-b from-transparent via-background to-background">
         <div className="max-w-4xl mx-auto">
           <Card className="shadow-lg">
             <CardHeader>
