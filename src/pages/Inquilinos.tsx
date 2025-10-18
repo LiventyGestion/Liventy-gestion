@@ -38,7 +38,7 @@ const Inquilinos = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{ 
-            backgroundImage: "url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1600&h=900&fit=crop')",
+            backgroundImage: "url('https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1600&h=900&fit=crop&auto=format&q=80')",
           }}
         />
         
@@ -59,6 +59,7 @@ const Inquilinos = () => {
             <Button 
               size="lg" 
               className="bg-primary hover:bg-primary/90 text-white px-8 text-lg btn-hover-lift"
+              onClick={() => navigate('/contact?type=inquilino')}
             >
               Ver viviendas disponibles
             </Button>
@@ -282,6 +283,7 @@ const Inquilinos = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-white px-10 text-lg btn-hover-lift"
+            onClick={() => navigate('/contact?type=inquilino')}
           >
             Ver pisos disponibles
             <ArrowRight className="ml-2 h-5 w-5" />

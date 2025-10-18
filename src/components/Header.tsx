@@ -33,14 +33,14 @@ const Header = () => {
           <div className="hidden lg:flex items-center justify-center space-x-8">
             <Link 
               to="/" 
-              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-raleway font-semibold text-sm tracking-wide py-2 group"
+              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-lato font-semibold text-sm tracking-wide py-2 group"
             >
               Inicio
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full" style={{ transform: 'translateY(2px)' }}></span>
             </Link>
             <Link 
               to="/herramientas" 
-              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-raleway font-semibold text-sm tracking-wide py-2 group"
+              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-lato font-semibold text-sm tracking-wide py-2 group"
             >
               Herramientas
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full" style={{ transform: 'translateY(2px)' }}></span>
@@ -50,7 +50,7 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 bg-transparent hover:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent font-raleway font-semibold text-sm tracking-wide h-auto p-0 py-2 group">
+                  <NavigationMenuTrigger className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 bg-transparent hover:bg-transparent data-[active]:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent font-lato font-semibold text-sm tracking-wide h-auto p-0 py-2 group">
                     Servicios
                     <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full group-data-[state=open]:w-full" style={{ transform: 'translateY(2px)' }}></span>
                   </NavigationMenuTrigger>
@@ -121,21 +121,21 @@ const Header = () => {
             
             <Link 
               to="/about" 
-              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-raleway font-semibold text-sm tracking-wide py-2 group"
+              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-lato font-semibold text-sm tracking-wide py-2 group"
             >
               Sobre Nosotros
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full" style={{ transform: 'translateY(2px)' }}></span>
             </Link>
             <Link 
               to="/blog" 
-              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-raleway font-semibold text-sm tracking-wide py-2 group"
+              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-lato font-semibold text-sm tracking-wide py-2 group"
             >
               Liventy Insights
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full" style={{ transform: 'translateY(2px)' }}></span>
             </Link>
             <Link 
               to="/contact" 
-              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-raleway font-semibold text-sm tracking-wide py-2 group"
+              className="relative text-brand-charcoal hover:text-brand-orange transition-colors duration-200 font-lato font-semibold text-sm tracking-wide py-2 group"
             >
               Contacto
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-200 group-hover:w-full" style={{ transform: 'translateY(2px)' }}></span>
@@ -145,7 +145,7 @@ const Header = () => {
           {/* CTA Button - Right */}
           <div className="flex items-center justify-end">
             <Link to="/login" className="hidden sm:block">
-              <Button className="bg-brand-orange hover:bg-opacity-90 text-brand-white font-raleway font-semibold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
+              <Button className="bg-brand-orange hover:bg-opacity-90 text-brand-white font-lato font-semibold px-6 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
                 Área de Clientes
               </Button>
             </Link>
@@ -172,14 +172,14 @@ const Header = () => {
             <div className="flex flex-col space-y-4">
               <Link 
                 to="/" 
-                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-raleway font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-lato font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Inicio
               </Link>
               <Link 
                 to="/herramientas" 
-                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-raleway font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-lato font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Herramientas
@@ -187,39 +187,39 @@ const Header = () => {
               
               {/* Services Mobile Menu */}
               <div className="space-y-2">
-                <div className="text-brand-charcoal font-raleway font-bold text-base py-3 px-2">Servicios</div>
+                <div className="text-brand-charcoal font-lato font-bold text-base py-3 px-2">Servicios</div>
                 <div className="pl-4 space-y-2">
                   <Link 
                     to="/servicios/gestion-de-alquileres"
-                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-lato text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Gestión Integral
                   </Link>
                   <Link 
                     to="/servicios/alquiler-larga-duracion"
-                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-lato text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Alquiler Larga Duración
                   </Link>
                   <Link 
                     to="/servicios/alquiler-temporada"
-                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-lato text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Alquiler Temporada
                   </Link>
                   <Link 
                     to="/servicios/mantenimiento"
-                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-lato text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Mantenimiento
                   </Link>
                   <Link 
                     to="/servicios/asesoria-legal"
-                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-raleway text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                    className="block text-neutral-500 hover:text-brand-orange transition-colors duration-200 py-2 px-2 rounded-lg hover:bg-neutral-50 font-lato text-sm focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     Asesoría Legal
@@ -229,21 +229,21 @@ const Header = () => {
               
               <Link 
                 to="/about" 
-                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-raleway font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-lato font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Sobre Nosotros
               </Link>
               <Link 
                 to="/blog" 
-                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-raleway font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-lato font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Liventy Insights
               </Link>
               <Link 
                 to="/contact" 
-                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-raleway font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
+                className="text-brand-charcoal hover:text-brand-orange transition-colors duration-200 py-3 px-2 rounded-xl hover:bg-neutral-50 font-lato font-semibold text-base focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contacto
@@ -252,7 +252,7 @@ const Header = () => {
               {/* Mobile CTA */}
               <div className="pt-4">
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full bg-brand-orange hover:bg-opacity-90 text-brand-white font-raleway font-semibold py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
+                  <Button className="w-full bg-brand-orange hover:bg-opacity-90 text-brand-white font-lato font-semibold py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
                     Área de Clientes
                   </Button>
                 </Link>

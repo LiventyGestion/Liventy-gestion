@@ -53,11 +53,11 @@ const Hero = () => {
         
         {/* Title and Subtitle - Above everything */}
         <div className="text-center space-y-6 mb-16 max-w-4xl mx-auto">
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-raleway font-bold text-brand-charcoal leading-heading tracking-heading">
+          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-montserrat font-bold text-brand-charcoal leading-heading tracking-heading">
             Gestión integral de alquileres en <span className="text-brand-orange">Bizkaia</span>.
           </h1>
           
-          <p className="text-xl sm:text-2xl lg:text-3xl font-raleway font-normal text-neutral-500 leading-relaxed">
+          <p className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal text-neutral-500 leading-relaxed">
             Tu vivienda, más rentable y sin preocupaciones.
           </p>
         </div>
@@ -79,7 +79,7 @@ const Hero = () => {
                   <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-orange/10 rounded-xl mb-4 group-hover:bg-brand-orange/20 transition-all duration-200">
                     <benefit.icon className="h-6 w-6 text-brand-orange group-hover:scale-110 transition-all duration-200" />
                   </div>
-                  <span className="font-raleway text-base font-semibold text-brand-charcoal leading-tight">{benefit.text}</span>
+                  <span className="font-lato text-base font-semibold text-brand-charcoal leading-tight">{benefit.text}</span>
                 </div>
               ))}
             </div>
@@ -88,7 +88,7 @@ const Hero = () => {
             <div className="flex flex-col gap-4 items-stretch max-w-md">
               <Button 
                 size="lg" 
-                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-raleway font-bold px-8 py-4 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 w-full"
+                className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 w-full"
                 onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
                 role="button"
                 aria-label="Empezar ahora – ir al formulario de contacto"
@@ -100,7 +100,7 @@ const Hero = () => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-raleway font-bold px-8 py-4 text-base rounded-xl transition-all duration-200 hover:shadow-lg w-full"
+                className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl transition-all duration-200 hover:shadow-lg w-full"
                 onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
                 aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
                 role="button"
@@ -111,14 +111,14 @@ const Hero = () => {
 
             {/* Badge - Moved below CTAs */}
             <div className="flex justify-start">
-              <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-raleway font-semibold rounded-full">
+              <Badge className="bg-brand-orange/10 text-brand-orange border-brand-orange/20 px-4 py-2 text-sm font-lato font-semibold rounded-full">
                 <MapPin className="w-4 h-4 mr-2" />
                 Empresa local en Bizkaia
               </Badge>
             </div>
 
             {/* Discrete line */}
-            <p className="font-raleway text-sm text-neutral-400 max-w-lg">
+            <p className="font-lato text-sm text-neutral-400 max-w-lg">
               También ofrecemos alquiler por meses y colaboración con empresas, si lo necesitas.
             </p>
           </div>
