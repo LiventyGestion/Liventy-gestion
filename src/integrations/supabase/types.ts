@@ -948,6 +948,10 @@ export type Database = {
         Args: { p_new_role: string; p_user_id: string }
         Returns: boolean
       }
+      anonymize_old_leads: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
       check_anonymous_lead_limits: {
         Args: { p_email: string; p_session_id?: string }
         Returns: boolean
@@ -1106,12 +1110,20 @@ export type Database = {
         Args: { email: string }
         Returns: boolean
       }
+      validate_jsonb_size: {
+        Args: { data: Json; max_size?: number }
+        Returns: boolean
+      }
       validate_lead_access: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
       validate_lead_email: {
         Args: { p_email: string }
+        Returns: boolean
+      }
+      validate_phone_format: {
+        Args: { phone: string }
         Returns: boolean
       }
       validate_session_access: {
