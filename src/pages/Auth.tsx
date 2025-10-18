@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { PasswordStrength } from '@/components/ui/password-strength';
 import { validatePassword, sanitizeInput, sanitizeName, sanitizeEmail, validateEmail, RateLimiter } from '@/utils/security';
@@ -18,7 +17,6 @@ const Auth: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [role, setRole] = useState<'propietario' | 'inquilino'>('inquilino');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('login');
@@ -122,7 +120,9 @@ const Auth: React.FC = () => {
       return;
     }
 
-    const result = await signUp(sanitizedEmail, password, sanitizedName, role);
+    // SECURITY: Role is assigned server-side as 'inquilino' by default
+    // Never send role from client to prevent privilege escalation
+    const result = await signUp(sanitizedEmail, password, sanitizedName);
     
     if (result.success) {
       toast({
@@ -218,18 +218,6 @@ const Auth: React.FC = () => {
                       placeholder="tu@email.com"
                       required
                     />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Tipo de Usuario</Label>
-                    <Select value={role} onValueChange={(value: 'propietario' | 'inquilino') => setRole(value)}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecciona tu rol" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="propietario">Propietario</SelectItem>
-                        <SelectItem value="inquilino">Inquilino</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Contraseña</Label>

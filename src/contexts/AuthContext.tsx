@@ -15,7 +15,7 @@ interface AuthContextType {
   user: User | null;
   session: Session | null;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  signUp: (email: string, password: string, name: string, role: UserRole) => Promise<{ success: boolean; error?: string }>;
+  signUp: (email: string, password: string, name: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   isLoading: boolean;
 }
@@ -69,25 +69,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      // Get profile data
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .maybeSingle();
 
-      if (error) {
-        console.error('Error fetching user profile:', error);
+      if (profileError) {
+        console.error('Error fetching user profile:', profileError);
         setUser(null);
-      } else if (data) {
-        // Get email from session since profiles doesn't store email
-        const email = session?.user?.email || '';
-        setUser({
-          id: data.id,
-          email: email,
-          name: data.full_name || '',
-          role: data.role as UserRole || 'inquilino'
-        });
+        setIsLoading(false);
+        return;
       }
+
+      if (!profileData) {
+        setUser(null);
+        setIsLoading(false);
+        return;
+      }
+
+      // Get user role from user_roles table using SECURITY DEFINER function
+      const { data: roleData, error: roleError } = await supabase
+        .rpc('get_user_role', { _user_id: userId });
+
+      if (roleError) {
+        console.error('Error fetching user role:', roleError);
+      }
+
+      const email = session?.user?.email || '';
+      setUser({
+        id: profileData.id,
+        email: email,
+        name: profileData.full_name || '',
+        role: (roleData as UserRole) || 'inquilino'
+      });
     } catch (error) {
       console.error('Error fetching user profile:', error);
       setUser(null);
@@ -117,20 +133,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const signUp = async (email: string, password: string, name: string, role: UserRole): Promise<{ success: boolean; error?: string }> => {
+  const signUp = async (email: string, password: string, name: string): Promise<{ success: boolean; error?: string }> => {
     setIsLoading(true);
     
     try {
       const redirectUrl = `${window.location.origin}/`;
       
+      // SECURITY: Never send role from client - server hardcodes 'inquilino' by default
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: redirectUrl,
           data: {
-            name,
-            role
+            name
+            // Role is NEVER sent from client to prevent privilege escalation
           }
         }
       });
