@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import maintenanceHero from "@/assets/maintenance-hero.jpg";
 import repairTools from "@/assets/repair-tools.jpg";
 import mobileNotification from "@/assets/mobile-notification.jpg";
@@ -67,6 +68,12 @@ const Mantenimiento = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Servicios", href: "/" },
+          { label: "Mantenimiento e Incidencias" }
+        ]} 
+      />
       
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">

@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +21,11 @@ const Inquilinos = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Para Inquilinos" }
+        ]} 
+      />
       
       {/* HERO SECTION */}
       <section className="relative h-[600px] flex items-center justify-center overflow-hidden">

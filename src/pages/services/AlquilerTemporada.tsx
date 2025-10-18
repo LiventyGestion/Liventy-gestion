@@ -5,6 +5,7 @@ import { ChevronRight, FileText, Key, Eye, MessageCircle, BarChart3 } from "luci
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import seasonalHeroImage from "@/assets/seasonal-rental-hero.jpg";
 import interiorDetailImage from "@/assets/interior-detail.jpg";
 import bizkaiaUrbanImage from "@/assets/bizkaia-urban.jpg";
@@ -62,6 +63,12 @@ const AlquilerTemporada = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Servicios", href: "/" },
+          { label: "Alquiler de Temporada" }
+        ]} 
+      />
       
       <main>
         {/* Hero Section */}

@@ -22,9 +22,12 @@ const Header = () => {
           <div className="flex items-center">
             <Link to="/" className="flex items-center">
               <img 
-                src="/icons/logo-source.svg" 
+                src="/lovable-uploads/5b1ed236-dc4e-465f-a21e-7c3186a1ba0d.png" 
                 alt="Liventy Gestión - Volver al inicio" 
                 className="h-12 sm:h-14 w-auto"
+                onError={(e) => {
+                  e.currentTarget.src = "/icons/logo-source.svg";
+                }}
               />
             </Link>
           </div>

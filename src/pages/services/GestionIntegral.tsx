@@ -5,6 +5,7 @@ import { ChevronRight, ChevronLeft, Camera, Users, FileText, Wrench, Monitor, Ma
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import rentalHeroImage from "@/assets/rental-management-hero.jpg";
@@ -102,6 +103,12 @@ const GestionIntegral = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Servicios", href: "/" },
+          { label: "Gestión de Alquileres" }
+        ]} 
+      />
       
       <main>
         {/* Hero Section */}

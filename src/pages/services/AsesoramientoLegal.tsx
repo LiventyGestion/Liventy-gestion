@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import heroImage from "@/assets/property-consultation.jpg";
 import sideImage from "@/assets/property-guide.jpg";
 import contractImage from "@/assets/legal-contract-review.jpg";
@@ -73,6 +74,12 @@ const AsesoramientoLegal = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Servicios", href: "/" },
+          { label: "Asesoramiento Legal" }
+        ]} 
+      />
       
       <main>
         {/* Hero Section */}

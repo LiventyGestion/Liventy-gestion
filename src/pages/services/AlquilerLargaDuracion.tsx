@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 import heroImage from "@/assets/long-term-rental-hero.jpg";
@@ -105,6 +106,12 @@ const AlquilerLargaDuracion = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/5">
       <Header />
+      <Breadcrumbs 
+        items={[
+          { label: "Servicios", href: "/" },
+          { label: "Alquiler de Larga Duración" }
+        ]} 
+      />
       
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">

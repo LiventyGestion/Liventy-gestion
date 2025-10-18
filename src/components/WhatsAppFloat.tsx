@@ -13,7 +13,7 @@ const WhatsAppFloat = () => {
   return (
     <Button
       onClick={handleWhatsAppClick}
-      className="fixed bottom-6 right-24 rounded-full w-14 h-14 sm:w-12 sm:h-12 sm:right-20 shadow-lg z-50 bg-white hover:bg-gray-50 border-2 border-gray-100 p-0 overflow-hidden group transition-all duration-300 hover:scale-105"
+      className="fixed bottom-6 left-6 rounded-full w-14 h-14 sm:w-12 sm:h-12 shadow-lg z-40 bg-white hover:bg-gray-50 border-2 border-gray-100 p-0 overflow-hidden group transition-all duration-300 hover:scale-105"
       size="icon"
       aria-label="Abrir chat de WhatsApp con Liventy Gestión"
     >
