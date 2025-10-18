@@ -16,45 +16,57 @@ import SellCTA from "@/components/SellCTA";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <Hero />
-      <WhatWeDo />
-      <HowItWorks />
-      <SecondaryCTAs />
-      <OwnerBenefits />
-      <PropertySlider />
-      <Stats />
+      <div className="animate-fade-up" style={{ animationDelay: '0ms' }}>
+        <WhatWeDo />
+      </div>
+      <div className="animate-fade-up" style={{ animationDelay: '100ms' }}>
+        <HowItWorks />
+      </div>
+      <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
+        <SecondaryCTAs />
+      </div>
+      <div className="animate-fade-up" style={{ animationDelay: '250ms' }}>
+        <OwnerBenefits />
+      </div>
+      <div className="animate-fade-up" style={{ animationDelay: '300ms' }}>
+        <PropertySlider />
+      </div>
+      <div className="animate-fade-up" style={{ animationDelay: '350ms' }}>
+        <Stats />
+      </div>
       
-      {/* Sección Para Inquilinos */}
-      <section className="py-20 bg-gradient-to-br from-[#FFF3E0] via-[#FFECCC] to-[#FFE0B2]">
-        <div className="container mx-auto px-4 text-center">
-          <div className="max-w-3xl mx-auto">
-            <Badge className="mb-6 bg-primary text-white px-4 py-2">
+      <section className="py-16 bg-gradient-to-br from-background to-muted/20 animate-fade-up" style={{ animationDelay: '400ms' }}>
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center space-y-6">
+            <Badge variant="outline" className="mb-4">
               Para inquilinos
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              ¿Buscas un alquiler sin complicaciones?
+            <h2 className="text-3xl md:text-4xl font-bold font-montserrat">
+              ¿Buscas tu próximo hogar?
             </h2>
-            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-              Descubre cómo Liventy hace que alquilar sea transparente, fácil y con atención personalizada. Viviendas verificadas, contratos claros y soporte continuo.
+            <p className="text-lg text-muted-foreground font-lato">
+              Descubre nuestras propiedades disponibles y encuentra el lugar perfecto para ti. 
+              Con Liventy, alquilar es sencillo, transparente y sin complicaciones.
             </p>
-            <Button 
-              size="lg" 
-              className="bg-primary hover:bg-primary/90 text-white px-10 text-lg btn-hover-lift"
-              onClick={() => window.location.href = '/inquilinos'}
-            >
-              Ver más información
-              <ArrowRight className="ml-2 h-5 w-5" />
+            <Button size="lg" asChild className="mt-6">
+              <Link to="/inquilinos">
+                Explorar propiedades <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
           </div>
         </div>
       </section>
       
-      <Testimonials />
+      <div className="animate-fade-up" style={{ animationDelay: '450ms' }}>
+        <Testimonials />
+      </div>
       <FAQ />
       <ContactFormSection />
       <SellCTA />

@@ -116,22 +116,30 @@ const Footer = () => {
                   Sobre Nosotros
                 </Link>
               </li>
-              <li>
-                <Link 
-                  to="/blog" 
-                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                >
-                  Liventy Insights
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/contact" 
-                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                >
-                  Contacto
-                </Link>
-              </li>
+                <li>
+                  <Link 
+                    to="/blog" 
+                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                  >
+                    Liventy Insights
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/inquilinos" 
+                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                  >
+                    Para Inquilinos
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/contact" 
+                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                  >
+                    Contacto
+                  </Link>
+                </li>
               <li>
                 <Link 
                   to="/login" 
@@ -163,8 +171,22 @@ const Footer = () => {
                   Cookies
                 </Link>
               </li>
-              <li className="text-muted-foreground">Términos y Condiciones</li>
-              <li className="text-muted-foreground">Aviso Legal</li>
+              <li>
+                <Link 
+                  to="/terms-conditions" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Términos y Condiciones
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/legal-notice" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Aviso Legal
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

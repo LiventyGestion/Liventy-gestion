@@ -3,9 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Bed, Bath, Square, ChevronLeft, ChevronRight, FileText, Sparkles, MessageCircle } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PropertySlider = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const navigate = useNavigate();
   
   const properties = [
     {
@@ -17,7 +19,7 @@ const PropertySlider = () => {
       beds: 2,
       baths: 1,
       area: 85,
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop&auto=format&q=80"
     },
     {
       id: 2,
@@ -28,7 +30,7 @@ const PropertySlider = () => {
       beds: 1,
       baths: 1,
       area: 65,
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=300&fit=crop&auto=format&q=80"
     },
     {
       id: 3,
@@ -39,7 +41,7 @@ const PropertySlider = () => {
       beds: 3,
       baths: 2,
       area: 120,
-      image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=400&h=300&fit=crop&auto=format&q=80"
     },
     {
       id: 4,
@@ -50,7 +52,7 @@ const PropertySlider = () => {
       beds: 1,
       baths: 1,
       area: 40,
-      image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&h=300&fit=crop"
+      image: "https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&h=300&fit=crop&auto=format&q=80"
     }
   ];
 
@@ -148,9 +150,13 @@ const PropertySlider = () => {
                     </div>
                   </div>
                   
-                  <Button variant="outline" className="w-full">
-                    Ver Detalles
-                  </Button>
+                            <Button 
+                              variant="outline" 
+                              className="w-full"
+                              onClick={() => navigate('/inquilinos')}
+                            >
+                              Ver Detalles
+                            </Button>
                 </CardContent>
               </Card>
             ))}

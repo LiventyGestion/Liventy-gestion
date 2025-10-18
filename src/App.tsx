@@ -25,6 +25,8 @@ import Herramientas from "./pages/Herramientas";
 import StartNowPage from "./pages/StartNowPage";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiePolicy from "./pages/CookiePolicy";
+import TermsConditions from "./pages/TermsConditions";
+import LegalNotice from "./pages/LegalNotice";
 import NotFound from "./pages/NotFound";
 import GestionIntegral from "./pages/services/GestionIntegral";
 import AsesoramientoLegal from "./pages/services/AsesoramientoLegal";
@@ -134,6 +136,8 @@ const App = () => (
             
             <Route path="/politica-privacidad" element={<PrivacyPolicy />} />
             <Route path="/politica-cookies" element={<CookiePolicy />} />
+            <Route path="/terms-conditions" element={<TermsConditions />} />
+            <Route path="/legal-notice" element={<LegalNotice />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
