@@ -26,12 +26,67 @@ serve(async (req) => {
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY');
 
-    if (!supabaseUrl || !supabaseServiceKey) {
+    if (!supabaseUrl || !supabaseServiceKey || !supabaseAnonKey) {
       throw new Error('Missing Supabase configuration');
     }
 
+    // ==================== ADMIN AUTHENTICATION ====================
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      console.log('❌ No authorization header provided');
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: 'Unauthorized: No authorization header provided' 
+      }), {
+        status: 401,
+        headers: { ...enhancedCorsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Create a client with the user's auth token to verify identity
+    const supabaseAuth = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } }
+    });
+
+    const { data: { user }, error: authError } = await supabaseAuth.auth.getUser();
+    
+    if (authError || !user) {
+      console.log('❌ Invalid or expired token');
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: 'Unauthorized: Invalid or expired token' 
+      }), {
+        status: 401,
+        headers: { ...enhancedCorsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Use service role client for admin check
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Check if user has admin role
+    const { data: roleData, error: roleError } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (roleError || !roleData) {
+      console.log('❌ User is not an admin:', user.id);
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: 'Forbidden: Admin access required' 
+      }), {
+        status: 403,
+        headers: { ...enhancedCorsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    console.log('✅ Admin authenticated:', user.id);
+    // ==================== END AUTHENTICATION ====================
 
     // Get request details for IP tracking
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
@@ -57,7 +112,11 @@ serve(async (req) => {
           p_event_type: 'security_scan_performed',
           p_ip_address: clientIP,
           p_user_agent: userAgent,
-          p_details: { window_minutes: params.window_minutes || 60, results_count: suspiciousData?.length || 0 },
+          p_details: { 
+            window_minutes: params.window_minutes || 60, 
+            results_count: suspiciousData?.length || 0,
+            performed_by: user.id 
+          },
           p_severity: 'low'
         });
 
@@ -90,7 +149,7 @@ serve(async (req) => {
           p_event_type: 'manual_security_cleanup',
           p_ip_address: clientIP,
           p_user_agent: userAgent,
-          p_details: { triggered_by: 'manual_request' },
+          p_details: { triggered_by: user.id },
           p_severity: 'low'
         });
 
@@ -145,7 +204,7 @@ serve(async (req) => {
       p_event_type: `security_monitor_${action}`,
       p_ip_address: clientIP,
       p_user_agent: userAgent,
-      p_details: { action, success: true },
+      p_details: { action, success: true, performed_by: user.id },
       p_severity: 'low'
     });
 
