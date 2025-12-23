@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ExportLeadsButton } from "@/components/admin/ExportLeadsButton";
+import { LeadsExportView } from "@/components/admin/LeadsExportView";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Users, 
   Search, 
@@ -24,7 +26,9 @@ import {
   Phone,
   MapPin,
   Calendar,
-  TrendingUp
+  TrendingUp,
+  FileSpreadsheet,
+  List
 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -104,6 +108,9 @@ const AdminLeads = () => {
   
   // Selected lead for detail view
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  
+  // Active tab
+  const [activeTab, setActiveTab] = useState<string>("list");
 
   // Stats
   const [stats, setStats] = useState({
@@ -310,8 +317,26 @@ const AdminLeads = () => {
           </Card>
         </div>
 
-        {/* Filters */}
-        <Card className="mb-6">
+        {/* Tabs for List vs Export View */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="list" className="gap-2">
+              <List className="h-4 w-4" />
+              Lista de Leads
+            </TabsTrigger>
+            <TabsTrigger value="export" className="gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Exportar (Excel)
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="export" className="mt-0">
+            <LeadsExportView />
+          </TabsContent>
+
+          <TabsContent value="list" className="mt-0">
+            {/* Filters */}
+            <Card className="mb-6">
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
@@ -522,6 +547,8 @@ const AdminLeads = () => {
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Lead Detail Modal */}
         {selectedLead && (
