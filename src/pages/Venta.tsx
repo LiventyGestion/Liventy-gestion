@@ -7,9 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 import { CheckCircle2, TrendingUp, FileText, Clock, Shield, Users, Home } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useUnifiedLeads, validateSpanishPhone, validateEmail } from "@/hooks/useUnifiedLeads";
 import sellHeroImage from "@/assets/sell-section-bg.jpg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -17,18 +18,22 @@ import Footer from "@/components/Footer";
 const formSchema = z.object({
   nombre: z.string().trim().min(2, "El nombre debe tener al menos 2 caracteres").max(100),
   email: z.string().trim().email("Email inválido").max(255),
-  telefono: z.string().trim().min(9, "Teléfono inválido").max(20),
-  direccion: z.string().trim().min(5, "Dirección inválida").max(200),
-  superficie: z.string().trim().optional(),
+  telefono: z.string().trim().min(9, "Teléfono inválido").max(20).refine(
+    (val) => validateSpanishPhone(val),
+    "El teléfono debe ser un número español válido de 9 dígitos"
+  ),
+  municipio: z.string().trim().min(2, "Introduce el municipio").max(100),
+  barrio: z.string().trim().max(100).optional(),
+  m2: z.string().trim().optional(),
   habitaciones: z.string().trim().optional(),
   comentarios: z.string().trim().max(1000).optional(),
+  consent: z.boolean().refine(val => val === true, "Debes aceptar la política de privacidad")
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 const Venta = () => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { submitLead, isSubmitting } = useUnifiedLeads();
   const [isSuccess, setIsSuccess] = useState(false);
 
   const form = useForm<FormData>({
@@ -37,10 +42,12 @@ const Venta = () => {
       nombre: "",
       email: "",
       telefono: "",
-      direccion: "",
-      superficie: "",
+      municipio: "",
+      barrio: "",
+      m2: "",
       habitaciones: "",
       comentarios: "",
+      consent: false
     },
   });
 
@@ -53,66 +60,30 @@ const Venta = () => {
   }, []);
 
   const onSubmit = async (data: FormData) => {
-    setIsSubmitting(true);
+    await submitLead({
+      source: 'owners_form',
+      page: '/venta',
+      persona_tipo: 'propietario',
+      nombre: data.nombre,
+      email: data.email,
+      telefono: data.telefono,
+      municipio: data.municipio,
+      barrio: data.barrio || undefined,
+      m2: data.m2 ? parseFloat(data.m2) : undefined,
+      habitaciones: data.habitaciones ? parseInt(data.habitaciones) : undefined,
+      comentarios: data.comentarios ? `Interés en venta. ${data.comentarios}` : 'Interés en servicio de venta',
+      consent: data.consent
+    });
     
-    try {
-      // Guardar en tabla de solicitudes
-      const { error: dbError } = await supabase.from("solicitudes").insert({
-        tipo_servicio: "venta",
-        nombre: data.nombre,
-        email: data.email,
-        telefono: data.telefono,
-        direccion: data.direccion,
-        detalles: {
-          superficie: data.superficie,
-          habitaciones: data.habitaciones,
-          comentarios: data.comentarios,
-        },
+    setIsSuccess(true);
+    form.reset();
+    
+    // Analytics event
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'submit_venta_form', {
+        event_category: 'venta',
+        event_label: 'Formulario valoración venta',
       });
-
-      if (dbError) throw dbError;
-
-      // Enviar email
-      await supabase.functions.invoke("send-form-email", {
-        body: {
-          type: "venta",
-          data: {
-            nombre: data.nombre,
-            email: data.email,
-            telefono: data.telefono,
-            direccion: data.direccion,
-            superficie: data.superficie,
-            habitaciones: data.habitaciones,
-            comentarios: data.comentarios,
-          },
-        },
-      });
-
-      setIsSuccess(true);
-      form.reset();
-      
-      // Analytics event
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'submit_venta_form', {
-          event_category: 'venta',
-          event_label: 'Formulario valoración venta',
-        });
-      }
-
-      toast({
-        title: "¡Solicitud enviada!",
-        description: "Te contactamos en menos de 24 horas.",
-      });
-
-    } catch (error) {
-      console.error("Error al enviar formulario:", error);
-      toast({
-        title: "Error",
-        description: "No se pudo enviar el formulario. Inténtalo de nuevo.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -394,24 +365,40 @@ const Venta = () => {
                     )}
                   />
 
-                  <FormField
-                    control={form.control}
-                    name="direccion"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Dirección de la vivienda *</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Calle, número, ciudad" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="grid sm:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="municipio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Municipio *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Bilbao, Getxo..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="barrio"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Barrio</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Deusto, Algorta..." {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <div className="grid sm:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
-                      name="superficie"
+                      name="m2"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Superficie (m²)</FormLabel>
@@ -456,13 +443,30 @@ const Venta = () => {
                     )}
                   />
 
-                  <p className="text-xs text-muted-foreground">
-                    Al enviar este formulario, aceptas nuestra{" "}
-                    <a href="/politica-privacidad" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
-                      política de privacidad
-                    </a>
-                    . Tus datos serán tratados conforme al RGPD.
-                  </p>
+                  <FormField
+                    control={form.control}
+                    name="consent"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-sm font-normal">
+                            Acepto la{" "}
+                            <a href="/politica-privacidad" target="_blank" rel="noopener noreferrer" className="underline hover:text-foreground">
+                              política de privacidad
+                            </a>
+                            {" "}y el tratamiento de mis datos conforme al RGPD. *
+                          </FormLabel>
+                          <FormMessage />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
 
                   <Button 
                     type="submit" 
