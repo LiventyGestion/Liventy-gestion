@@ -125,16 +125,16 @@ const Contact = () => {
       <Header />
       <main className="container mx-auto px-6 sm:px-8 py-16">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h1 className="text-3xl sm:text-4xl font-bold mb-4">
-              {isPropertyOwner ? 'Contacta con Nosotros - Propietarios' : 'Contacta con Nosotros'}
-            </h1>
-            <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto">
-              {isPropertyOwner ? 
-                'Cuéntanos más sobre tu propiedad y cómo podemos ayudarte' :
-                'Estamos aquí para ayudarte en todo lo que necesites'
-              }
-            </p>
+          {/* Sección Empezar */}
+          <div id="empezar" className="scroll-mt-24 mb-8">
+            <div className="text-center mb-12">
+              <h1 className="text-3xl sm:text-4xl font-bold mb-4">
+                Estamos a un clic
+              </h1>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                944 397 330 · contacto@liventygestion.com
+              </p>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
@@ -147,9 +147,9 @@ const Contact = () => {
                   {isSubmitted ? (
                     <div className="text-center py-8">
                       <CheckCircle2 className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                      <h3 className="text-xl font-semibold mb-2">¡Mensaje enviado!</h3>
+                      <h3 className="text-xl font-semibold mb-2">¡Gracias!</h3>
                       <p className="text-muted-foreground">
-                        Gracias por contactarnos. Te responderemos en menos de 24 h.
+                        En menos de 2 horas laborables te contactamos.
                       </p>
                       <Button 
                         onClick={() => setIsSubmitted(false)}

@@ -40,6 +40,7 @@ import FAQ from "./pages/FAQ";
 import Inquilinos from "./pages/Inquilinos";
 import Propietarios from "./pages/Propietarios";
 import Precios from "./pages/Precios";
+import Recursos from "./pages/Recursos";
 
 const queryClient = new QueryClient();
 
@@ -63,7 +64,7 @@ const App = () => (
             <Route path="/precios" element={<Precios />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/recursos" element={<Recursos />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth" element={<Auth />} />
             
