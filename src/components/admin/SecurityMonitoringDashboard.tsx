@@ -19,12 +19,9 @@ interface SecurityEvent {
 
 interface SecurityThreat {
   threat_type: string;
-  threat_level: string;
-  identifier: string;
-  event_count: number;
-  first_occurrence: string;
-  last_occurrence: string;
-  recommendation: string;
+  severity: string;
+  created_at: string;
+  details: any;
 }
 
 interface SecurityStats {
@@ -72,12 +69,12 @@ const SecurityMonitoringDashboard: React.FC = () => {
       if (eventsError) throw eventsError;
       setRecentEvents(eventsData || []);
 
-      // Fetch security threats using RPC
+      // Fetch security threats using RPC (no parameters)
       const { data: threatsData, error: threatsError } = await supabase
-        .rpc('detect_advanced_security_threats', { check_window_minutes: 1440 });
+        .rpc('detect_advanced_security_threats');
 
       if (threatsError) throw threatsError;
-      setThreats(threatsData || []);
+      setThreats((threatsData as SecurityThreat[]) || []);
 
       // Calculate stats
       const last24h = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -246,33 +243,34 @@ const SecurityMonitoringDashboard: React.FC = () => {
                 <div className="space-y-4">
                   {threats.map((threat, index) => (
                     <Card key={index} className="border-l-4" style={{
-                      borderLeftColor: threat.threat_level === 'critical' ? 'hsl(var(--destructive))' : 
-                                      threat.threat_level === 'high' ? '#f97316' : '#eab308'
+                      borderLeftColor: threat.severity === 'critical' ? 'hsl(var(--destructive))' : 
+                                      threat.severity === 'high' ? '#f97316' : '#eab308'
                     }}>
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <CardTitle className="text-base">
                             {threat.threat_type.replace(/_/g, ' ').toUpperCase()}
                           </CardTitle>
-                          <Badge className={getThreatLevelColor(threat.threat_level)}>
-                            {threat.threat_level}
+                          <Badge className={getThreatLevelColor(threat.severity)}>
+                            {threat.severity}
                           </Badge>
                         </div>
                       </CardHeader>
                       <CardContent className="text-sm space-y-2">
-                        <div className="grid grid-cols-2 gap-2">
-                          <div>
-                            <span className="font-medium">Identificador:</span>{' '}
-                            <code className="text-xs">{threat.identifier}</code>
-                          </div>
-                          <div>
-                            <span className="font-medium">Eventos:</span> {threat.event_count}
-                          </div>
-                        </div>
                         <div>
-                          <span className="font-medium">Recomendación:</span>{' '}
-                          <p className="text-muted-foreground mt-1">{threat.recommendation}</p>
+                          <span className="font-medium">Fecha:</span>{' '}
+                          {new Date(threat.created_at).toLocaleString('es-ES')}
                         </div>
+                        {threat.details && Object.keys(threat.details).length > 0 && (
+                          <details className="text-xs">
+                            <summary className="cursor-pointer text-muted-foreground hover:text-foreground">
+                              Detalles
+                            </summary>
+                            <pre className="mt-2 p-2 bg-muted rounded text-xs overflow-auto">
+                              {JSON.stringify(threat.details, null, 2)}
+                            </pre>
+                          </details>
+                        )}
                       </CardContent>
                     </Card>
                   ))}
