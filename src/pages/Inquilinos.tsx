@@ -26,6 +26,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const alertSchema = z.object({
   email: z.string().email("Email inválido"),
@@ -37,6 +38,7 @@ type AlertForm = z.infer<typeof alertSchema>;
 const Inquilinos = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { trackQuieroInscribirme } = useGA4Tracking();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
@@ -119,7 +121,7 @@ const Inquilinos = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-white px-8 text-lg"
-            onClick={() => navigate('/auth')}
+            onClick={() => { trackQuieroInscribirme('inquilinos_hero', '/auth'); navigate('/auth'); }}
           >
             Quiero inscribirme
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -252,7 +254,7 @@ const Inquilinos = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
-            onClick={() => navigate('/auth')}
+            onClick={() => { trackQuieroInscribirme('inquilinos_cta_final', '/auth'); navigate('/auth'); }}
           >
             Quiero inscribirme
             <ArrowRight className="ml-2 h-5 w-5" />

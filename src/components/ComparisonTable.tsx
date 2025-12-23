@@ -1,9 +1,16 @@
 import { Check, X, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const ComparisonTable = () => {
   const navigate = useNavigate();
+  const { trackValoraTuPiso } = useGA4Tracking();
+
+  const handleValoraCTA = () => {
+    trackValoraTuPiso('comparison_table', '/recursos#calculadora-precio');
+    navigate('/recursos#calculadora-precio');
+  };
 
   const rows = [
     { feature: "Difusión", solo: "Limitada", liventy: "Multicanal" },
@@ -73,7 +80,7 @@ const ComparisonTable = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
-            onClick={() => navigate('/herramientas#calculadora-precio')}
+            onClick={handleValoraCTA}
           >
             Valora tu piso gratis
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -86,7 +93,7 @@ const ComparisonTable = () => {
         <Button 
           size="lg" 
           className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl shadow-lg"
-          onClick={() => navigate('/herramientas#calculadora-precio')}
+          onClick={handleValoraCTA}
         >
           Valora tu piso gratis
           <ArrowRight className="ml-2 h-5 w-5" />

@@ -5,9 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Euro, TrendingUp, FileText, Shield, ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const Herramientas = () => {
   const navigate = useNavigate();
+  const { trackAgendaLlamada } = useGA4Tracking();
 
   const recursos = [
     {
@@ -117,7 +119,7 @@ const Herramientas = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
-            onClick={() => navigate('/contact')}
+            onClick={() => { trackAgendaLlamada('recursos_cta', '/contact'); navigate('/contact'); }}
           >
             Agenda una llamada de 15'
             <ArrowRight className="ml-2 h-5 w-5" />

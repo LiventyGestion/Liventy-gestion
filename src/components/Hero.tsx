@@ -2,30 +2,19 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Shield, FileText, Wrench, BarChart3, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import bilbaoImage from "@/assets/bilbao-guggenheim-hero.jpg";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const Hero = () => {
-  const handleCTAClick = (location: string, label: string, dest: string) => {
-    // GA4 tracking
-    if (typeof (window as any).gtag !== 'undefined') {
-      (window as any).gtag('event', 'cta_click', {
-        location,
-        label,
-        dest
-      });
-    }
-    
-    // Handle navigation
-    if (dest.startsWith('#')) {
-      const element = document.querySelector(dest);
-      if (element) {
-        element.scrollIntoView({ 
-          behavior: 'smooth',
-          block: 'start'
-        });
-      }
-    } else {
-      window.location.href = dest;
-    }
+  const { trackEmpiezaAhora, trackValoraTuPiso } = useGA4Tracking();
+
+  const handleEmpezar = () => {
+    trackEmpiezaAhora('home_hero', '/contact#empezar');
+    window.location.href = '/contact#empezar';
+  };
+
+  const handleValora = () => {
+    trackValoraTuPiso('home_hero', '/recursos#calculadora-precio');
+    window.location.href = '/recursos#calculadora-precio';
   };
 
   const benefits = [
@@ -89,11 +78,11 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 w-full"
-                onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/contact#empezar')}
+                onClick={handleEmpezar}
                 role="button"
                 aria-label="Empezar con Liventy Gestión – ir al formulario de contacto"
               >
-                Empezar ahora
+                Empieza ahora
                 <ArrowRight className="ml-3 h-5 w-5" aria-hidden="true" />
               </Button>
               
@@ -101,11 +90,11 @@ const Hero = () => {
                 variant="outline" 
                 size="lg"
                 className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl transition-all duration-200 hover:shadow-lg w-full"
-                onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas#calculadora-precio')}
+                onClick={handleValora}
                 aria-label="Valora Gratis mi piso – calculadora de precio recomendado"
                 role="button"
               >
-                Valora Gratis mi piso
+                Valora tu piso gratis
               </Button>
             </div>
 

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const navItems = [
   { label: "Propietarios", href: "/propietarios" },
@@ -15,8 +16,13 @@ const navItems = [
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const { trackValoraTuPiso } = useGA4Tracking();
 
   const isActive = (href: string) => location.pathname === href;
+
+  const handleValoraCTA = () => {
+    trackValoraTuPiso('header', '/recursos#calculadora-precio');
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white border-b border-neutral-200 shadow-sm">
@@ -60,7 +66,7 @@ const Header = () => {
           {/* CTA Buttons - Right */}
           <div className="flex items-center gap-3">
             {/* Primary CTA - Valora tu piso gratis */}
-            <Link to="/recursos#calculadora-precio" className="hidden sm:block">
+            <Link to="/recursos#calculadora-precio" className="hidden sm:block" onClick={handleValoraCTA}>
               <Button className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
                 Valora tu piso gratis
               </Button>
@@ -108,7 +114,7 @@ const Header = () => {
               
               {/* Mobile CTAs */}
               <div className="pt-4 space-y-3">
-                <Link to="/recursos#calculadora-precio" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/recursos#calculadora-precio" onClick={() => { setIsMenuOpen(false); handleValoraCTA(); }}>
                   <Button className="w-full bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-semibold py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
                     Valora tu piso gratis
                   </Button>

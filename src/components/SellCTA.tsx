@@ -2,8 +2,10 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import sellBgImage from "@/assets/sell-section-bg.jpg";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const SellCTA = () => {
+  const { trackEmpiezaAhora } = useGA4Tracking();
   return (
     <section 
       id="venta-liventy" 
@@ -59,6 +61,7 @@ const SellCTA = () => {
             asChild
             size="lg"
             className="bg-[#E67E0F] hover:bg-[#E67E0F]/90 text-white font-semibold px-8 py-6 text-base sm:text-lg shadow-lg hover:shadow-[0_0_30px_rgba(230,126,15,0.4)] transition-all duration-300 hover:scale-105"
+            onClick={() => trackEmpiezaAhora('sell_cta', '/contact#empezar')}
           >
             <Link to="/contact#empezar">
               Empieza ahora
