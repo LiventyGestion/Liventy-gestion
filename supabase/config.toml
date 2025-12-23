@@ -17,3 +17,6 @@ verify_jwt = true
 
 [functions.create-test-users]
 verify_jwt = false
+
+[functions.export-leads-csv]
+verify_jwt = false
