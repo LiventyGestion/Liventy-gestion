@@ -1,1 +1,19 @@
 project_id = "oascetkhonnldurnujmh"
+
+[functions.send-form-email]
+verify_jwt = false
+
+[functions.chatbot-ai]
+verify_jwt = false
+
+[functions.security-monitor]
+verify_jwt = true
+
+[functions.security-cron-job]
+verify_jwt = false
+
+[functions.automated-security-cleanup]
+verify_jwt = true
+
+[functions.create-test-users]
+verify_jwt = false
