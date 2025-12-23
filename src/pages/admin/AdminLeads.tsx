@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ExportLeadsButton } from "@/components/admin/ExportLeadsButton";
+import { ExportLeadsXLSXButton } from "@/components/admin/ExportLeadsXLSXButton";
 import { LeadsExportView } from "@/components/admin/LeadsExportView";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -264,6 +265,7 @@ const AdminLeads = () => {
             </p>
           </div>
           <div className="flex gap-2">
+            <ExportLeadsXLSXButton />
             <Button 
               variant="outline" 
               size="sm"
