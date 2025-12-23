@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.56.0";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -40,12 +41,14 @@ serve(async (req) => {
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
     const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
 
     console.log('🔑 API Keys check:', {
       openai: !!openAIApiKey,
       supabase: !!supabaseUrl,
       service: !!supabaseServiceKey,
+      resend: !!resendApiKey,
       n8n: !!n8nWebhookUrl
     });
 
@@ -197,12 +200,17 @@ serve(async (req) => {
           .update({ context: updatedContext })
           .eq('id', conversation.id);
 
-        // Create lead and send to webhook if qualified and has consent
-        if (leadInfo.isQualified && userContext?.consent) {
+        // Create lead and send email if qualified AND has consent
+        if (leadInfo.isQualified && userContext?.consent === true) {
           const leadData = buildLeadData(conversation, leadInfo, userContext);
           
-          // Save to Supabase leads
-          await createLead(supabase, leadData);
+          // Save to unified Leads table
+          const leadId = await createLead(supabase, leadData);
+          
+          // Send notification email
+          if (resendApiKey && leadId) {
+            await sendLeadNotificationEmail(resendApiKey, leadData, leadId);
+          }
           
           // Send to n8n webhook if configured
           if (n8nWebhookUrl) {
@@ -439,10 +447,37 @@ COBERTURA: ${BRAND.coverage.join(', ')}. Disponibilidad presencial en Bizkaia.
 ${contextInfo}
 ${outsideHoursNote}
 
-FLUJOS:
-A) PROPIETARIO (prioridad): Pregunta municipio, m², habitaciones, estado, fecha. Explica proceso. Ofrece valoración gratis y llamada 15'.
-B) INQUILINO: Requisitos solvencia + documentación. Ofrece alertas (nombre, email, teléfono, zonas, rango precio).
-C) EMPRESA: Fechas, nº personas, ubicación, presupuesto.
+FLUJOS DE CAPTURA DE DATOS:
+
+A) PROPIETARIO (prioridad alta):
+   Datos a capturar en orden:
+   1. municipio (dónde está la vivienda)
+   2. m2 (superficie en metros cuadrados)
+   3. habitaciones (número)
+   4. estado_vivienda (Reformado / Buen estado / A actualizar / Obra nueva)
+   5. fecha_disponible (cuándo estará disponible)
+   6. nombre, telefono, email (datos de contacto)
+   7. consent (confirmar aceptación de política de privacidad)
+   
+   Explica proceso y ofrece valoración gratuita.
+
+B) INQUILINO:
+   Datos a capturar en orden:
+   1. municipio (zona donde busca)
+   2. barrio (opcional, más específico)
+   3. habitaciones (número que necesita)
+   4. presupuesto_renta (rango de precio mensual)
+   5. nombre, telefono, email (datos de contacto)
+   6. consent (confirmar aceptación de política de privacidad)
+   
+   Explica requisitos de solvencia y ofrece alertas de viviendas.
+
+C) EMPRESA:
+   Datos: municipio, fechas, nº personas, presupuesto, nombre, telefono, email, consent.
+
+IMPORTANTE SOBRE CONSENTIMIENTO:
+- Antes de guardar datos, SIEMPRE pregunta si acepta la política de privacidad
+- Sin consentimiento explícito ("sí acepto", "de acuerdo", "acepto"), NO se guardan datos
 
 ESCALADO (si no resuelves o lo piden):
 - Solicita: nombre, teléfono (ES 9 dígitos), email, municipio, franja horaria, canal preferido
@@ -459,42 +494,90 @@ IMPORTANTE:
 
 function extractLeadInfo(userMessage: string, botMessage: string, conversation: any, userContext: any): any {
   const m = userMessage.toLowerCase();
-  const leadInfo: any = { ...userContext };
+  const leadInfo: any = { ...conversation?.context, ...userContext };
   
   // Extract email
   const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
   const emailMatch = userMessage.match(emailRegex);
-  if (emailMatch) leadInfo.email = emailMatch[0];
+  if (emailMatch) leadInfo.email = emailMatch[0].toLowerCase();
   
-  // Extract phone
+  // Extract phone (Spanish format)
   const phoneRegex = /(?:\+34|0034|34)?[\s\-]?[6-9][\d\s\-]{7,11}/g;
   const phoneMatch = userMessage.match(phoneRegex);
-  if (phoneMatch) leadInfo.telefono = phoneMatch[0].replace(/[\s\-]/g, '');
+  if (phoneMatch) {
+    leadInfo.telefono = phoneMatch[0].replace(/[\s\-\+]/g, '').replace(/^(34|0034)/, '');
+  }
   
-  // Extract name (simple heuristic)
-  const nameMatch = userMessage.match(/me llamo\s+(\w+)/i) || userMessage.match(/soy\s+(\w+)/i);
+  // Extract name
+  const nameMatch = userMessage.match(/me llamo\s+(\w+)/i) || 
+                    userMessage.match(/soy\s+(\w+)/i) ||
+                    userMessage.match(/mi nombre es\s+(\w+)/i);
   if (nameMatch) leadInfo.nombre = nameMatch[1];
   
-  // User type
-  if (m.includes('propietario') || m.includes('tengo un piso') || m.includes('mi propiedad')) {
+  // User type detection
+  if (m.includes('propietario') || m.includes('tengo un piso') || m.includes('mi propiedad') || m.includes('tengo una casa') || m.includes('mi vivienda')) {
     leadInfo.persona_tipo = 'propietario';
     leadInfo.isQualified = true;
-  } else if (m.includes('inquilino') || m.includes('busco piso')) {
+  } else if (m.includes('inquilino') || m.includes('busco piso') || m.includes('busco casa') || m.includes('alquilar un')) {
     leadInfo.persona_tipo = 'inquilino';
-  } else if (m.includes('empresa') || m.includes('corporativo')) {
+  } else if (m.includes('empresa') || m.includes('corporativo') || m.includes('trabajadores')) {
     leadInfo.persona_tipo = 'empresa';
     leadInfo.isQualified = true;
   }
   
-  // Location - Bizkaia
+  // Location - Bizkaia municipalities
   const bizkaiaLocations = ['bilbao', 'getxo', 'las arenas', 'algorta', 'sopela', 'berango', 
-    'barakaldo', 'santurtzi', 'portugalete', 'erandio', 'leioa', 'basauri', 'durango'];
+    'barakaldo', 'santurtzi', 'portugalete', 'erandio', 'leioa', 'basauri', 'durango',
+    'galdakao', 'amorebieta', 'gernika', 'bermeo', 'mungia', 'derio', 'loiu', 'sondika'];
   for (const loc of bizkaiaLocations) {
     if (m.includes(loc)) {
       leadInfo.municipio = loc.charAt(0).toUpperCase() + loc.slice(1);
       leadInfo.inBizkaia = true;
       break;
     }
+  }
+  
+  // Extract barrio
+  const barrioMatch = m.match(/barrio\s+(?:de\s+)?(\w+)/i) || m.match(/en\s+(deusto|san ignacio|indautxu|abando|santutxu|rekalde|basurto|zorroza|otxarkoaga|txurdinaga)/i);
+  if (barrioMatch) leadInfo.barrio = barrioMatch[1].charAt(0).toUpperCase() + barrioMatch[1].slice(1);
+  
+  // Extract m2
+  const m2Match = userMessage.match(/(\d+)\s*(?:m2|m²|metros)/i);
+  if (m2Match) leadInfo.m2 = parseInt(m2Match[1]);
+  
+  // Extract habitaciones
+  const habMatch = userMessage.match(/(\d+)\s*(?:habitacion|dormitorio|cuarto)/i);
+  if (habMatch) leadInfo.habitaciones = parseInt(habMatch[1]);
+  
+  // Extract presupuesto_renta
+  const rentaMatch = userMessage.match(/(\d+)\s*(?:€|euros?|eur)/i) || 
+                     userMessage.match(/presupuesto\s*(?:de\s*)?(\d+)/i) ||
+                     userMessage.match(/hasta\s*(\d+)/i);
+  if (rentaMatch) leadInfo.presupuesto_renta = parseInt(rentaMatch[1]);
+  
+  // Extract estado_vivienda
+  if (m.includes('reformad')) leadInfo.estado_vivienda = 'Reformado';
+  else if (m.includes('buen estado')) leadInfo.estado_vivienda = 'Buen estado';
+  else if (m.includes('actualizar') || m.includes('reformar')) leadInfo.estado_vivienda = 'A actualizar';
+  else if (m.includes('obra nueva') || m.includes('nuevo')) leadInfo.estado_vivienda = 'Obra nueva';
+  
+  // Extract fecha_disponible
+  const fechaMatch = userMessage.match(/disponible\s+(?:desde\s+|a partir de\s+)?(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/i) ||
+                     userMessage.match(/(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})/);
+  if (fechaMatch) {
+    // Convert to YYYY-MM-DD format
+    const parts = fechaMatch[1].split(/[\/\-]/);
+    if (parts.length === 3) {
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2].length === 2 ? '20' + parts[2] : parts[2];
+      leadInfo.fecha_disponible = `${year}-${month}-${day}`;
+    }
+  }
+  
+  // Check for consent
+  if (m.includes('acepto') || m.includes('de acuerdo') || m.includes('sí, acepto') || m.includes('conforme')) {
+    leadInfo.consentGiven = true;
   }
   
   // Service interest
@@ -513,6 +596,13 @@ function extractLeadInfo(userMessage: string, botMessage: string, conversation: 
   } else if (m.includes('próximo mes') || m.includes('en breve')) {
     leadInfo.timing = 'corto_plazo';
     leadInfo.availableWithin30Days = true;
+  }
+  
+  // Check if we have enough data to qualify as lead
+  const hasContact = leadInfo.email || leadInfo.telefono;
+  const hasLocation = leadInfo.municipio;
+  if (hasContact && hasLocation && leadInfo.persona_tipo) {
+    leadInfo.isQualified = true;
   }
   
   return leadInfo;
@@ -538,6 +628,10 @@ function calculateLeadScore(conversation: any, message: string, leadInfo: any): 
   if (leadInfo.email || leadInfo.telefono) score += 1;
   if (leadInfo.email && leadInfo.telefono) score += 1;
   
+  // Property details
+  if (leadInfo.m2) score += 1;
+  if (leadInfo.habitaciones) score += 1;
+  
   // Engagement
   const messageCount = conversation?.context?.messageCount || 0;
   if (messageCount > 3) score += 1;
@@ -558,44 +652,167 @@ function buildLeadData(conversation: any, leadInfo: any, userContext: any): any 
   else if (leadInfo.canal_preferido === 'whatsapp') canalPreferido = 'whatsapp';
   else if (leadInfo.canal_preferido === 'email') canalPreferido = 'email';
   
+  // Map estado_vivienda to valid enum value
+  let estadoVivienda: 'Reformado' | 'Buen estado' | 'A actualizar' | 'Obra nueva' | null = null;
+  if (leadInfo.estado_vivienda === 'Reformado') estadoVivienda = 'Reformado';
+  else if (leadInfo.estado_vivienda === 'Buen estado') estadoVivienda = 'Buen estado';
+  else if (leadInfo.estado_vivienda === 'A actualizar') estadoVivienda = 'A actualizar';
+  else if (leadInfo.estado_vivienda === 'Obra nueva') estadoVivienda = 'Obra nueva';
+  
+  // Build lead data in EXACT order matching schema
   return {
+    // 1. source (required)
     source: 'chatbot' as const,
+    
+    // 2. page (current page)
     page: userContext?.page || '/',
+    
+    // 3. persona_tipo (based on flow)
     persona_tipo: personaTipo,
-    nombre: leadInfo.nombre || conversation?.context?.userName || null,
-    telefono: leadInfo.telefono || null,
-    email: leadInfo.email || null,
-    municipio: leadInfo.municipio || null,
-    barrio: leadInfo.barrio || null,
+    
+    // 4. Contact info
+    nombre: leadInfo.nombre?.trim() || null,
+    telefono: leadInfo.telefono?.replace(/[\s\-\+\(\)]/g, '').replace(/^(34|0034)/, '') || null,
+    email: leadInfo.email?.trim().toLowerCase() || null,
+    
+    // 5. Location
+    municipio: leadInfo.municipio?.trim() || null,
+    barrio: leadInfo.barrio?.trim() || null,
+    
+    // 6. Property data
     m2: leadInfo.m2 ? Number(leadInfo.m2) : null,
     habitaciones: leadInfo.habitaciones ? Number(leadInfo.habitaciones) : null,
-    estado_vivienda: null, // Not typically captured in chat
+    estado_vivienda: estadoVivienda,
     fecha_disponible: leadInfo.fecha_disponible || null,
     presupuesto_renta: leadInfo.presupuesto_renta ? Number(leadInfo.presupuesto_renta) : null,
+    
+    // 7. Contact preferences
     canal_preferido: canalPreferido,
     franja_horaria: leadInfo.franja_horaria || null,
-    comentarios: `Conversación chatbot ID: ${conversation?.id}. Interés: ${leadInfo.service_interest || 'consulta general'}. Score: ${leadInfo.leadScore || 0}`,
+    
+    // 8. Comments
+    comentarios: `Chatbot conversation ID: ${conversation?.id}. Score: ${leadInfo.leadScore || 0}. Interés: ${leadInfo.service_interest || 'consulta general'}`,
+    
+    // 9. UTM tracking
     utm_source: userContext?.utm_source || 'chatbot',
     utm_medium: userContext?.utm_medium || 'chat',
     utm_campaign: userContext?.utm_campaign || 'ai_assistant',
-    consent: userContext?.consent === true
-    // status defaults to 'new' in database
+    
+    // 10. Consent (REQUIRED - only save if true)
+    consent: true,
+    
+    // 11. Status (defaults to 'new')
+    status: 'new'
   };
 }
 
-async function createLead(supabase: any, leadData: any) {
+async function createLead(supabase: any, leadData: any): Promise<string | null> {
   try {
+    // CRITICAL: Only save if consent is true
+    if (leadData.consent !== true) {
+      console.log('⚠️ Lead not saved: consent not given');
+      return null;
+    }
+    
     const { data, error } = await supabase
       .from('Leads')
-      .insert(leadData);
+      .insert(leadData)
+      .select('id')
+      .single();
       
     if (error) {
-      console.error('Error creating lead:', error);
-    } else {
-      console.log('✅ Lead created successfully in unified Leads table');
+      console.error('❌ Error creating lead:', error);
+      return null;
     }
+    
+    console.log('✅ Lead created successfully in unified Leads table:', data?.id);
+    return data?.id || null;
   } catch (error) {
     console.error('Error in createLead function:', error);
+    return null;
+  }
+}
+
+async function sendLeadNotificationEmail(resendApiKey: string, leadData: any, leadId: string): Promise<void> {
+  try {
+    const resend = new Resend(resendApiKey);
+    
+    // Build subject: [Chatbot] {persona_tipo} — {municipio} — {nombre}
+    const personaTipoLabel = leadData.persona_tipo 
+      ? leadData.persona_tipo.charAt(0).toUpperCase() + leadData.persona_tipo.slice(1)
+      : 'Contacto';
+    const municipio = leadData.municipio || 'Sin ubicación';
+    const nombre = leadData.nombre || 'Sin nombre';
+    
+    const subject = `[Chatbot] ${personaTipoLabel} — ${municipio} — ${nombre}`;
+    
+    const adminLink = `https://liventygestion.com/admin/leads`;
+    
+    const currentTime = new Date().toLocaleString('es-ES', {
+      timeZone: 'Europe/Madrid',
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const htmlBody = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="background: linear-gradient(135deg, #7C3AED 0%, #A855F7 100%); color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+          <h1 style="margin: 0; font-size: 24px;">🤖 Nuevo Lead desde Chatbot</h1>
+          <p style="margin: 10px 0 0 0; opacity: 0.9; font-size: 18px;">${personaTipoLabel}</p>
+        </div>
+        
+        <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 0 0 8px 8px;">
+          
+          <h2 style="color: #7C3AED; margin-top: 0; border-bottom: 2px solid #7C3AED; padding-bottom: 8px;">📞 Datos de contacto</h2>
+          <table style="width: 100%; margin-bottom: 20px;">
+            <tr><td style="padding: 8px 0; font-weight: bold; width: 140px;">Nombre:</td><td style="padding: 8px 0;">${leadData.nombre || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Teléfono:</td><td style="padding: 8px 0;">${leadData.telefono ? `<a href="tel:${leadData.telefono}" style="color: #7C3AED;">${leadData.telefono}</a>` : '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Email:</td><td style="padding: 8px 0;">${leadData.email ? `<a href="mailto:${leadData.email}" style="color: #7C3AED;">${leadData.email}</a>` : '-'}</td></tr>
+          </table>
+
+          <h2 style="color: #7C3AED; border-bottom: 2px solid #7C3AED; padding-bottom: 8px;">🏠 Datos del inmueble</h2>
+          <table style="width: 100%; margin-bottom: 20px;">
+            <tr><td style="padding: 8px 0; font-weight: bold; width: 140px;">Municipio:</td><td style="padding: 8px 0;">${leadData.municipio || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Barrio:</td><td style="padding: 8px 0;">${leadData.barrio || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Superficie:</td><td style="padding: 8px 0;">${leadData.m2 ? `${leadData.m2} m²` : '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Habitaciones:</td><td style="padding: 8px 0;">${leadData.habitaciones || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Estado:</td><td style="padding: 8px 0;">${leadData.estado_vivienda || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Disponible:</td><td style="padding: 8px 0;">${leadData.fecha_disponible || '-'}</td></tr>
+            <tr><td style="padding: 8px 0; font-weight: bold;">Presupuesto:</td><td style="padding: 8px 0;">${leadData.presupuesto_renta ? `${leadData.presupuesto_renta} €/mes` : '-'}</td></tr>
+          </table>
+
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${adminLink}" style="display: inline-block; background: #7C3AED; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 16px;">
+              📋 Ver ficha del lead
+            </a>
+          </div>
+
+          <div style="background: #f1f5f9; padding: 15px; border-radius: 6px; font-size: 12px; color: #64748b;">
+            <p style="margin: 4px 0;"><strong>Fecha:</strong> ${currentTime}</p>
+            <p style="margin: 4px 0;"><strong>Página origen:</strong> ${leadData.page}</p>
+            <p style="margin: 4px 0;"><strong>Lead ID:</strong> ${leadId}</p>
+          </div>
+        </div>
+      </div>
+    `;
+
+    console.log('📤 Sending chatbot lead notification email');
+    
+    await resend.emails.send({
+      from: "Liventy Gestión <contacto@liventygestion.com>",
+      to: ["contacto@liventygestion.com"],
+      replyTo: leadData.email || undefined,
+      subject: subject,
+      html: htmlBody
+    });
+
+    console.log("✅ Chatbot lead notification email sent");
+  } catch (error) {
+    console.error('❌ Error sending lead notification email:', error);
   }
 }
 
@@ -613,12 +830,10 @@ async function sendToWebhook(webhookUrl: string, leadData: any) {
     
     if (!response.ok) {
       console.error('❌ Webhook error:', response.status);
-      // Fallback: Could send email notification here
     } else {
       console.log('✅ Webhook sent successfully');
     }
   } catch (error) {
     console.error('Error sending to webhook:', error);
-    // Fallback: Could send email notification here
   }
 }
