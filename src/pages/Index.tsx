@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import WhatWeDo from "@/components/WhatWeDo";
 import OwnerBenefits from "@/components/OwnerBenefits";
 import HowItWorks from "@/components/HowItWorks";
+import ComparisonTable from "@/components/ComparisonTable";
 import PropertySlider from "@/components/PropertySlider";
 import Stats from "@/components/Stats";
 import Testimonials from "@/components/Testimonials";
@@ -11,7 +12,6 @@ import FAQ from "@/components/FAQ";
 import ContactFormSection from "@/components/ContactForm";
 import Chatbot from "@/components/Chatbot";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
-import SecondaryCTAs from "@/components/SecondaryCTAs";
 import SellCTA from "@/components/SellCTA";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,20 +29,20 @@ const Index = () => {
       <div className="animate-fade-up" style={{ animationDelay: '100ms' }}>
         <HowItWorks />
       </div>
-      <div className="animate-slide-up" style={{ animationDelay: '200ms' }}>
-        <SecondaryCTAs />
+      <div className="animate-fade-up" style={{ animationDelay: '150ms' }}>
+        <ComparisonTable />
       </div>
-      <div className="animate-fade-up" style={{ animationDelay: '250ms' }}>
+      <div className="animate-fade-up" style={{ animationDelay: '200ms' }}>
         <OwnerBenefits />
       </div>
-      <div className="animate-fade-up" style={{ animationDelay: '300ms' }}>
+      <div className="animate-fade-up" style={{ animationDelay: '250ms' }}>
         <PropertySlider />
       </div>
-      <div className="animate-fade-up" style={{ animationDelay: '350ms' }}>
+      <div className="animate-fade-up" style={{ animationDelay: '300ms' }}>
         <Stats />
       </div>
       
-      <section className="py-16 bg-gradient-to-br from-background to-muted/20 animate-fade-up" style={{ animationDelay: '400ms' }}>
+      <section className="py-16 bg-gradient-to-br from-background to-muted/20 animate-fade-up" style={{ animationDelay: '350ms' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <Badge variant="outline" className="mb-4">
@@ -57,14 +57,14 @@ const Index = () => {
             </p>
             <Button size="lg" asChild className="mt-6">
               <Link to="/inquilinos">
-                Explorar propiedades <ArrowRight className="ml-2 h-4 w-4" />
+                Quiero inscribirme <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
         </div>
       </section>
       
-      <div className="animate-fade-up" style={{ animationDelay: '450ms' }}>
+      <div className="animate-fade-up" style={{ animationDelay: '400ms' }}>
         <Testimonials />
       </div>
       <FAQ />

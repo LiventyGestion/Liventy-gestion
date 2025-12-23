@@ -38,6 +38,8 @@ import ConsultarMiCaso from "./pages/ConsultarMiCaso";
 import Venta from "./pages/Venta";
 import FAQ from "./pages/FAQ";
 import Inquilinos from "./pages/Inquilinos";
+import Propietarios from "./pages/Propietarios";
+import Precios from "./pages/Precios";
 
 const queryClient = new QueryClient();
 
@@ -57,7 +59,10 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
+            <Route path="/propietarios" element={<Propietarios />} />
+            <Route path="/precios" element={<Precios />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/contact" element={<Contact />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/auth" element={<Auth />} />
