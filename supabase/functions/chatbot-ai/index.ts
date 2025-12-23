@@ -2,33 +2,36 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.56.0";
 
-// Enhanced security headers with CSP and additional protections
-const enhancedCorsHeaders = {
+const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
   'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-  'X-Content-Type-Options': 'nosniff',
-  'X-Frame-Options': 'DENY',
-  'X-XSS-Protection': '1; mode=block',
-  'Referrer-Policy': 'strict-origin-when-cross-origin',
-  'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-  'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; connect-src 'self' https:",
-  'Permissions-Policy': 'camera=(), microphone=(), geolocation=()'
 };
+
+// Brand configuration
+const BRAND = {
+  name: "Liventy Gestión",
+  phone: "944 397 330",
+  email: "contacto@liventygestion.com",
+  coverage: ["Bizkaia", "Álava", "Gipuzkoa", "Cantabria", "Norte de Burgos"],
+  coverageMain: "Bizkaia"
+};
+
+// Intent classification
+type ChatIntent = "OWNER_PROSPECT" | "TENANT_PROSPECT" | "COMPANY" | "PRICING" | "PROCESS" | "LEGAL_FAQ" | "COVERAGE" | "SUPPORT" | "GREETING" | "OTHER";
 
 serve(async (req) => {
   console.log('🤖 Chatbot AI function called');
   
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: enhancedCorsHeaders });
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const requestBody = await req.json();
     console.log('📩 Request body:', requestBody);
     
-    const { message, sessionId, conversationId, userContext } = requestBody;
+    const { message, sessionId, conversationId, intent: providedIntent, userContext } = requestBody;
 
     if (!message) {
       throw new Error('No message provided');
@@ -37,39 +40,39 @@ serve(async (req) => {
     const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     const supabaseUrl = Deno.env.get('SUPABASE_URL');
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+    const n8nWebhookUrl = Deno.env.get('N8N_WEBHOOK_URL');
 
     console.log('🔑 API Keys check:', {
       openai: !!openAIApiKey,
       supabase: !!supabaseUrl,
-      service: !!supabaseServiceKey
+      service: !!supabaseServiceKey,
+      n8n: !!n8nWebhookUrl
     });
 
     if (!openAIApiKey) {
       console.error('❌ Missing OpenAI API Key');
-      // Return a basic response without AI
       return new Response(JSON.stringify({
         message: getBasicResponse(message),
         conversationId: null,
         intent: 'basic_fallback'
       }), {
-        headers: { ...enhancedCorsHeaders, 'Content-Type': 'application/json' },
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    // Try OpenAI call
-    console.log('🧠 Calling OpenAI...');
-    
+    // Detect intent
+    const detectedIntent = providedIntent || detectIntent(message);
+    console.log('🎯 Detected intent:', detectedIntent);
+
     // Get conversation history if available
-    let conversationHistory = [];
-    let conversation = null;
+    let conversationHistory: any[] = [];
+    let conversation: any = null;
     
     if (supabaseUrl && supabaseServiceKey) {
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      
       try {
-        const supabase = createClient(supabaseUrl, supabaseServiceKey);
-        
-        // Get or create conversation
         if (conversationId) {
-          // For existing conversations, validate session access for anonymous users
           const { data } = await supabase
             .from('chatbot_conversations')
             .select('*')
@@ -77,25 +80,21 @@ serve(async (req) => {
           
           if (data && data.length > 0) {
             const conv = data[0];
-            // Validate that anonymous users can only access their own session conversations
             if (conv.user_id === null && conv.session_id !== sessionId) {
-              console.error('🚨 Security: Anonymous user tried to access different session conversation');
+              console.error('🚨 Security: Unauthorized conversation access');
               throw new Error('Unauthorized access to conversation');
             }
             conversation = conv;
-          } else {
-            console.warn('⚠️ Conversation not found:', conversationId);
           }
         } else {
           const { data, error } = await supabase
             .from('chatbot_conversations')
             .insert({
               session_id: sessionId || `session_${Date.now()}`,
-              user_type: userContext?.userType || 'general',
-              user_name: userContext?.name,
-              user_phone: userContext?.phone,
-              user_email: userContext?.email,
-              context: userContext || {}
+              context: {
+                userType: userContext?.userType || 'general',
+                ...userContext
+              }
             })
             .select()
             .single();
@@ -103,19 +102,18 @@ serve(async (req) => {
           if (!error) conversation = data;
         }
 
-        // Get conversation history
         if (conversation) {
           const { data: messageHistory } = await supabase
             .from('chatbot_messages')
             .select('*')
             .eq('conversation_id', conversation.id)
             .order('created_at', { ascending: true })
-            .limit(10); // Last 10 messages
+            .limit(10);
 
           if (messageHistory && messageHistory.length > 0) {
             conversationHistory = messageHistory.map(msg => ({
-              role: msg.is_bot ? 'assistant' : 'user',
-              content: msg.message
+              role: msg.role === 'user' ? 'user' : 'assistant',
+              content: msg.content
             }));
           }
         }
@@ -126,7 +124,7 @@ serve(async (req) => {
 
     console.log('💭 Conversation history length:', conversationHistory.length);
     
-    const systemPrompt = buildSystemPrompt(conversation, userContext);
+    const systemPrompt = buildSystemPrompt(conversation, userContext, detectedIntent);
     
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -138,10 +136,10 @@ serve(async (req) => {
         model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: systemPrompt },
-          ...conversationHistory, // Include conversation history
+          ...conversationHistory,
           { role: 'user', content: message }
         ],
-        max_tokens: 800,
+        max_tokens: 500,
         temperature: 0.7,
       }),
     });
@@ -159,55 +157,57 @@ serve(async (req) => {
     
     const botMessage = aiResponse.choices[0].message.content;
 
-    // Save to database and update conversation
+    // Extract lead info from conversation
+    const leadInfo = extractLeadInfo(message, botMessage, conversation, userContext);
+    const leadScore = calculateLeadScore(conversation, message, leadInfo);
+    
+    // Save to database
     if (conversation && supabaseUrl && supabaseServiceKey) {
+      const supabase = createClient(supabaseUrl, supabaseServiceKey);
+      
       try {
-        const supabase = createClient(supabaseUrl, supabaseServiceKey);
-        
-        // Extract lead information from message
-        const leadInfo = extractLeadInfo(message, botMessage, conversation);
-        
         // Save messages
         await supabase.from('chatbot_messages').insert([
           {
             conversation_id: conversation.id,
-            message,
-            is_bot: false,
-            intent: detectIntent(message),
-            metadata: { leadInfo }
+            content: message,
+            role: 'user',
+            metadata: { intent: detectedIntent, leadInfo }
           },
           {
             conversation_id: conversation.id,
-            message: botMessage,
-            is_bot: true,
-            intent: 'ai_response'
+            content: botMessage,
+            role: 'assistant',
+            metadata: { intent: 'ai_response' }
           }
         ]);
 
-        // Update conversation context with new information
+        // Update conversation context
         const updatedContext = {
           ...conversation.context,
           lastMessage: message,
-          lastIntent: detectIntent(message),
+          lastIntent: detectedIntent,
           messageCount: (conversation.context?.messageCount || 0) + 1,
-          leadScore: calculateLeadScore(conversation, message),
+          leadScore,
           ...leadInfo
         };
 
         await supabase
           .from('chatbot_conversations')
-          .update({ 
-            context: updatedContext,
-            user_type: leadInfo.userType || conversation.user_type,
-            user_name: leadInfo.name || conversation.user_name,
-            user_phone: leadInfo.phone || conversation.user_phone,
-            user_email: leadInfo.email || conversation.user_email
-          })
+          .update({ context: updatedContext })
           .eq('id', conversation.id);
 
-        // Create lead if qualified
-        if (leadInfo.isQualified) {
-          await createLead(supabase, conversation, leadInfo);
+        // Create lead and send to webhook if qualified and has consent
+        if (leadInfo.isQualified && userContext?.consent) {
+          const leadData = buildLeadData(conversation, leadInfo, userContext);
+          
+          // Save to Supabase leads
+          await createLead(supabase, leadData);
+          
+          // Send to n8n webhook if configured
+          if (n8nWebhookUrl) {
+            await sendToWebhook(n8nWebhookUrl, leadData);
+          }
         }
 
       } catch (dbError) {
@@ -216,13 +216,21 @@ serve(async (req) => {
     }
 
     // Detect redirection
-    const redirectionInfo = detectRedirection(message);
+    const redirectionInfo = detectRedirection(message, detectedIntent);
+    
+    // Determine if we need consent or should show CTAs
+    const requiresConsent = leadInfo.isQualified && !userContext?.consent;
+    const showCTAs = ['OWNER_PROSPECT', 'COMPANY'].includes(detectedIntent) || leadScore >= 4;
 
     return new Response(JSON.stringify({
       message: botMessage,
       conversationId: conversation?.id || conversationId || null,
       redirection: redirectionInfo,
-      intent: detectIntent(message)
+      intent: detectedIntent,
+      leadInfo,
+      leadScore,
+      requiresConsent,
+      showCTAs
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -230,9 +238,15 @@ serve(async (req) => {
   } catch (error) {
     console.error('💥 Function error:', error);
     
-    // Always return a helpful response
+    let fallbackMessage = "Entiendo tu consulta. Para asistencia inmediata, puedes llamarnos al 944 397 330 o escribirnos por WhatsApp.";
+    
+    try {
+      const body = await req.clone().json();
+      fallbackMessage = getBasicResponse(body.message || '');
+    } catch {}
+    
     return new Response(JSON.stringify({ 
-      message: getBasicResponse(await req.json().then(body => body.message).catch(() => 'hola')),
+      message: fallbackMessage,
       fallback: true,
       intent: 'error_recovery'
     }), {
@@ -242,66 +256,128 @@ serve(async (req) => {
   }
 });
 
+function detectIntent(message: string): ChatIntent {
+  const m = message.toLowerCase();
+  
+  // Owner prospect (priority)
+  if (m.includes('propietario') || m.includes('tengo un piso') || m.includes('tengo una casa') || 
+      m.includes('mi propiedad') || m.includes('alquilar mi') || m.includes('tengo un local')) {
+    return 'OWNER_PROSPECT';
+  }
+  
+  // Tenant prospect
+  if (m.includes('inquilino') || m.includes('busco piso') || m.includes('busco casa') || 
+      m.includes('alquilar un') || m.includes('necesito piso')) {
+    return 'TENANT_PROSPECT';
+  }
+  
+  // Company/Corporate
+  if (m.includes('empresa') || m.includes('corporativo') || m.includes('temporal') || 
+      m.includes('trabajadores') || m.includes('empleados')) {
+    return 'COMPANY';
+  }
+  
+  // Pricing
+  if (m.includes('precio') || m.includes('tarifa') || m.includes('coste') || 
+      m.includes('cuánto') || m.includes('cuanto cuesta')) {
+    return 'PRICING';
+  }
+  
+  // Process
+  if (m.includes('cómo') || m.includes('proceso') || m.includes('funciona') || 
+      m.includes('trabajáis') || m.includes('pasos')) {
+    return 'PROCESS';
+  }
+  
+  // Legal FAQ
+  if (m.includes('contrato') || m.includes('legal') || m.includes('ley') || 
+      m.includes('derecho') || m.includes('fianza')) {
+    return 'LEGAL_FAQ';
+  }
+  
+  // Coverage
+  if (m.includes('zona') || m.includes('cobertura') || m.includes('dónde') || 
+      m.includes('municipio') || m.includes('bizkaia') || m.includes('bilbao')) {
+    return 'COVERAGE';
+  }
+  
+  // Support
+  if (m.includes('problema') || m.includes('incidencia') || m.includes('ayuda') || 
+      m.includes('urgente') || m.includes('contacto')) {
+    return 'SUPPORT';
+  }
+  
+  // Greeting
+  if (m.includes('hola') || m.includes('buenos') || m.includes('buenas') || 
+      m.includes('hello') || m.includes('hi') || m === '') {
+    return 'GREETING';
+  }
+  
+  return 'OTHER';
+}
+
 function getBasicResponse(message: string): string {
-  const messageLower = message.toLowerCase();
+  const intent = detectIntent(message);
   
-  if (messageLower.includes('hola') || messageLower.includes('hello') || messageLower === '') {
-    return "Soy Ana de Liventy Gestión. Me alegra saludarte. Nos especializamos en gestión integral de alquileres en Bilbao y alrededores. ¿En qué puedo ayudarte hoy?";
+  switch (intent) {
+    case 'GREETING':
+      return `¡Hola! Soy Ana de ${BRAND.name}. Gestiono alquileres en ${BRAND.coverageMain} y provincias limítrofes. ¿En qué puedo ayudarte?`;
+    
+    case 'OWNER_PROSPECT':
+      return "Perfecto, eres propietario. Nuestro proceso:\n• Valoración en 48h\n• Difusión multicanal\n• Firma digital\n• Gestión mensual\n\n¿Te gustaría una valoración gratuita o agendar una llamada?";
+    
+    case 'TENANT_PROSPECT':
+      return "¡Hola! Para alquilar necesitas:\n• Solvencia demostrable\n• DNI/NIE\n• Contrato o justificante de ingresos\n• Últimas nóminas\n\n¿Quieres que te avisemos cuando haya pisos en tu zona?";
+    
+    case 'PRICING':
+      return "Nuestras tarifas:\n• Start: 1 mensualidad + IVA\n• Full: 8% mensual + IVA (mín. 80€)\n• Corporate: 10% mensual\n• Home (larga): 500€ + IVA\n\nNota: seguimiento del cobro ≠ garantía de pago; garantías mediante pólizas externas.";
+    
+    case 'COVERAGE':
+      return `Cubrimos ${BRAND.coverage.join(', ')}. Disponibilidad presencial cuando sea necesario en Bizkaia.`;
+    
+    case 'PROCESS':
+      return "Nuestro proceso:\n1. Valoración inicial (48h)\n2. Preparación y fotos profesionales\n3. Difusión multicanal\n4. Selección rigurosa de inquilinos\n5. Firma digital del contrato\n6. Gestión mensual completa\n\n¿Quieres saber más sobre algún paso?";
+    
+    default:
+      return `Entiendo tu consulta. Para darte la mejor respuesta, ¿podrías contarme más? También puedes llamarnos al ${BRAND.phone}.`;
   }
-  
-  if (messageLower.includes('propietario') || messageLower.includes('tengo un piso') || messageLower.includes('alquilar mi')) {
-    return "Perfecto, eres propietario. En Liventy Gestión nos encargamos de todo: desde encontrar inquilinos de calidad hasta gestionar cobros y mantenimiento. ¿Te gustaría saber más sobre nuestros servicios?";
-  }
-  
-  if (messageLower.includes('precio') || messageLower.includes('valorar') || messageLower.includes('cuánto vale')) {
-    return "Te ayudo con la valoración. Tenemos herramientas para calcular el valor de tu propiedad en el mercado actual de Bilbao. ¿Te gustaría hacer una valoración inicial?";
-  }
-  
-  if (messageLower.includes('contacto') || messageLower.includes('teléfono') || messageLower.includes('email')) {
-    return "Te ayudo con el contacto. Puedes llamarnos, escribirnos por WhatsApp o rellenar nuestro formulario web. ¿Qué prefieres?";
-  }
-  
-  return "Entiendo tu consulta. En Liventy Gestión somos especialistas en gestión de alquileres en Bizkaia. Para darte la mejor respuesta, ¿podrías contarme un poco más sobre lo que necesitas?";
 }
 
-function detectIntent(message: string): string {
-  const messageLower = message.toLowerCase();
+function detectRedirection(message: string, intent: ChatIntent): any {
+  const m = message.toLowerCase();
   
-  if (messageLower.includes('valorar') || messageLower.includes('precio')) return 'property_valuation';
-  if (messageLower.includes('propietario')) return 'owner_inquiry';
-  if (messageLower.includes('inquilino')) return 'tenant_inquiry';
-  if (messageLower.includes('contacto')) return 'contact_request';
-  if (messageLower.includes('hola') || messageLower.includes('hello')) return 'greeting';
-  
-  return 'general';
-}
-
-function detectRedirection(message: string): any {
-  const messageLower = message.toLowerCase();
-  
-  if (messageLower.includes('valorar') || messageLower.includes('precio')) {
+  if (m.includes('valorar') || m.includes('tasación') || m.includes('precio de mi')) {
     return {
       intent: 'property_valuation',
       url: '/herramientas?calc=precio',
-      explanation: '💡 Puedes usar nuestra herramienta de valoración automática',
+      explanation: 'Calcula el valor de tu propiedad',
       action: 'redirect'
     };
   }
   
-  if (messageLower.includes('simulador')) {
+  if (m.includes('simulador') || m.includes('rentabilidad')) {
     return {
       intent: 'rental_simulator', 
       url: '/herramientas?calc=rental',
-      explanation: '📊 Usa nuestro simulador de rentabilidad',
+      explanation: 'Simula tu rentabilidad',
       action: 'redirect'
     };
   }
   
-  if (messageLower.includes('contacto')) {
+  if (intent === 'OWNER_PROSPECT' && (m.includes('más info') || m.includes('servicios'))) {
     return {
-      intent: 'contact',
-      url: '/contacto?tipo=propietario',
-      explanation: '📞 Formulario de contacto',
+      intent: 'owner_services',
+      url: '/propietarios',
+      explanation: 'Ver servicios para propietarios',
+      action: 'redirect'
+    };
+  }
+  
+  if (intent === 'TENANT_PROSPECT') {
+    return {
+      intent: 'tenant_services',
+      url: '/inquilinos',
+      explanation: 'Ver información para inquilinos',
       action: 'redirect'
     };
   }
@@ -309,168 +385,200 @@ function detectRedirection(message: string): any {
   return null;
 }
 
-function buildSystemPrompt(conversation: any, userContext: any): string {
-  const userName = conversation?.user_name || userContext?.name || 'usuario';
-  const userType = conversation?.user_type || userContext?.userType || 'general';
+function buildSystemPrompt(conversation: any, userContext: any, intent: ChatIntent): string {
+  const userName = userContext?.name || 'usuario';
+  const userType = userContext?.userType || 'general';
   const messageCount = conversation?.context?.messageCount || 0;
-  const leadScore = conversation?.context?.leadScore || 0;
-  const lastIntent = conversation?.context?.lastIntent || 'unknown';
+  const isOutsideHours = userContext?.isOutsideHours || false;
   
   let contextInfo = '';
   if (messageCount > 0) {
     contextInfo = `
-CONTEXTO DE LA CONVERSACIÓN:
+CONTEXTO CONVERSACIÓN:
 - Usuario: ${userName}
-- Tipo: ${userType} 
-- Mensajes intercambiados: ${messageCount}
-- Intención anterior: ${lastIntent}
-- Puntuación de lead: ${leadScore}/10
-- Información capturada: ${JSON.stringify(conversation?.context || {})}`;
+- Tipo: ${userType}
+- Mensajes: ${messageCount}
+- Intención actual: ${intent}
+- Info capturada: ${JSON.stringify(conversation?.context || {})}`;
   }
 
-  return `Eres Ana, la asistente virtual de Liventy Gestión en Bizkaia. Eres amigable, profesional y experta en gestión de alquileres.
+  const outsideHoursNote = isOutsideHours ? `
+NOTA: Estamos fuera de horario laboral. Recoge los datos del usuario y confirma que le contactaremos en <2 horas laborables>.` : '';
 
-EMPRESA: Liventy Gestión - Gestión integral de alquileres en Bilbao y alrededores.
+  return `Eres Ana, asistente virtual de ${BRAND.name} en ${BRAND.coverageMain}. 
+Misión: resolver dudas, reducir fricción y convertir visitas en leads cualificados.
+Si no resuelves o el usuario lo pide, agenda una llamada.
+
+ESTILO:
+- Claro, cercano y profesional
+- Respuestas cortas (máx 3 frases + bullets)
+- No prometas rentas ni plazos garantizados; usa estimaciones
+- Si escriben en euskera/inglés, responde en ese idioma
+
+CONTACTO:
+- Teléfono: ${BRAND.phone}
+- Email: ${BRAND.email}
 
 SERVICIOS:
-- Gestión completa de alquileres residenciales
-- Selección rigurosa de inquilinos 
+- Gestión integral de alquileres residenciales
+- Alquiler de larga duración
+- Alquiler de temporada (empresas)
+- Selección rigurosa de inquilinos
 - Mantenimiento y reparaciones
 - Gestión legal y contratos
-- Gestión de cobros y administración
+
+TARIFAS:
+- Start: 1 mensualidad + IVA
+- Full: 8% mensual + IVA (mín. 80€)
+- Corporate: 10% mensual o por proyecto
+- Home (larga): 500€ + IVA
+Nota: seguimiento del cobro ≠ garantía de pago; garantías mediante pólizas externas.
+
+COBERTURA: ${BRAND.coverage.join(', ')}. Disponibilidad presencial en Bizkaia.
 
 ${contextInfo}
+${outsideHoursNote}
 
-INSTRUCCIONES DE MEMORIA Y CONTINUIDAD:
-- RECUERDA toda la información anterior de la conversación
-- Haz referencia a lo que ya has hablado con el usuario
-- Continúa el hilo de la conversación de forma natural
-- Si el usuario te ha dado información personal, úsala apropiadamente
-- Construye sobre las respuestas anteriores
+FLUJOS:
+A) PROPIETARIO (prioridad): Pregunta municipio, m², habitaciones, estado, fecha. Explica proceso. Ofrece valoración gratis y llamada 15'.
+B) INQUILINO: Requisitos solvencia + documentación. Ofrece alertas (nombre, email, teléfono, zonas, rango precio).
+C) EMPRESA: Fechas, nº personas, ubicación, presupuesto.
 
-CAPTURA DE INFORMACIÓN PARA LEADS:
-- Identifica si es propietario, inquilino o empresa
-- Obtén nombre, teléfono, email cuando sea natural
-- Detecta ubicación de la propiedad (barrio, municipio)
-- Identifica el tipo de servicio que necesita
-- Evalúa nivel de interés e intención de compra
+ESCALADO (si no resuelves o lo piden):
+- Solicita: nombre, teléfono (ES 9 dígitos), email, municipio, franja horaria, canal preferido
+- Slots: hoy 17-19h / mañana 10-12h
+- Confirma: "Te contactaremos en <2 horas laborables"
 
-INSTRUCCIONES GENERALES:
-- NO repitas saludos si ya estás en una conversación
-- Responde de forma directa y conversacional
-- Haz referencias a Bilbao, Getxo, Las Arenas cuando sea apropiado
-- Si no sabes algo específico, di que te conectarás con un especialista
-- NUNCA menciones alquileres turísticos
-- Mantén un tono conversacional y profesional
+DIFERENCIAL: "Selección rigurosa, contratos claros, incidencias trazadas y reporting mensual."
 
-Responde siempre en español manteniendo la continuidad de la conversación.`;
+IMPORTANTE:
+- NUNCA menciones alquileres turísticos (no los gestionamos)
+- Si falta dato clave, propón opciones cerradas
+- Mantén continuidad de la conversación`;
 }
 
-function extractLeadInfo(userMessage: string, botMessage: string, conversation: any): any {
-  const messageLower = userMessage.toLowerCase();
-  const leadInfo: any = {};
+function extractLeadInfo(userMessage: string, botMessage: string, conversation: any, userContext: any): any {
+  const m = userMessage.toLowerCase();
+  const leadInfo: any = { ...userContext };
   
-  // Extract contact information
-  const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
-  const phoneRegex = /(\+34|0034|34)?[\s\-]?[6789]\d{8}/g;
-  
+  // Extract email
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
   const emailMatch = userMessage.match(emailRegex);
-  const phoneMatch = userMessage.match(phoneRegex);
-  
   if (emailMatch) leadInfo.email = emailMatch[0];
-  if (phoneMatch) leadInfo.phone = phoneMatch[0];
   
-  // Extract user type
-  if (messageLower.includes('propietario') || messageLower.includes('tengo un piso') || messageLower.includes('mi propiedad')) {
-    leadInfo.userType = 'propietario';
+  // Extract phone
+  const phoneRegex = /(?:\+34|0034|34)?[\s\-]?[6-9][\d\s\-]{7,11}/g;
+  const phoneMatch = userMessage.match(phoneRegex);
+  if (phoneMatch) leadInfo.telefono = phoneMatch[0].replace(/[\s\-]/g, '');
+  
+  // Extract name (simple heuristic)
+  const nameMatch = userMessage.match(/me llamo\s+(\w+)/i) || userMessage.match(/soy\s+(\w+)/i);
+  if (nameMatch) leadInfo.nombre = nameMatch[1];
+  
+  // User type
+  if (m.includes('propietario') || m.includes('tengo un piso') || m.includes('mi propiedad')) {
+    leadInfo.persona_tipo = 'propietario';
     leadInfo.isQualified = true;
-  } else if (messageLower.includes('inquilino') || messageLower.includes('busco piso')) {
-    leadInfo.userType = 'inquilino';
-  } else if (messageLower.includes('empresa') || messageLower.includes('corporativo')) {
-    leadInfo.userType = 'empresa';
+  } else if (m.includes('inquilino') || m.includes('busco piso')) {
+    leadInfo.persona_tipo = 'inquilino';
+  } else if (m.includes('empresa') || m.includes('corporativo')) {
+    leadInfo.persona_tipo = 'empresa';
     leadInfo.isQualified = true;
   }
   
-  // Extract location information
-  const locations = ['bilbao', 'getxo', 'las arenas', 'algorta', 'sopela', 'berango', 'urduliz', 'mungia', 'barakaldo', 'santurtzi'];
-  for (const location of locations) {
-    if (messageLower.includes(location)) {
-      leadInfo.location = location;
+  // Location - Bizkaia
+  const bizkaiaLocations = ['bilbao', 'getxo', 'las arenas', 'algorta', 'sopela', 'berango', 
+    'barakaldo', 'santurtzi', 'portugalete', 'erandio', 'leioa', 'basauri', 'durango'];
+  for (const loc of bizkaiaLocations) {
+    if (m.includes(loc)) {
+      leadInfo.municipio = loc.charAt(0).toUpperCase() + loc.slice(1);
+      leadInfo.inBizkaia = true;
       break;
     }
   }
   
-  // Extract service interest
-  if (messageLower.includes('valorar') || messageLower.includes('tasación')) {
-    leadInfo.serviceInterest = 'valoración';
+  // Service interest
+  if (m.includes('valorar') || m.includes('tasación')) {
+    leadInfo.service_interest = 'valoración';
     leadInfo.isQualified = true;
-  } else if (messageLower.includes('gestión') || messageLower.includes('alquilar')) {
-    leadInfo.serviceInterest = 'gestión_integral';
+  } else if (m.includes('gestión') || m.includes('alquilar')) {
+    leadInfo.service_interest = 'gestión_integral';
     leadInfo.isQualified = true;
-  } else if (messageLower.includes('mantenimiento') || messageLower.includes('reparaciones')) {
-    leadInfo.serviceInterest = 'mantenimiento';
   }
   
-  // Extract timing
-  if (messageLower.includes('urgente') || messageLower.includes('pronto') || messageLower.includes('ya')) {
+  // Timing
+  if (m.includes('urgente') || m.includes('ya') || m.includes('pronto') || m.includes('esta semana')) {
     leadInfo.timing = 'inmediato';
-    leadInfo.isQualified = true;
-  } else if (messageLower.includes('próximo mes') || messageLower.includes('en breve')) {
+    leadInfo.availableWithin30Days = true;
+  } else if (m.includes('próximo mes') || m.includes('en breve')) {
     leadInfo.timing = 'corto_plazo';
+    leadInfo.availableWithin30Days = true;
   }
   
   return leadInfo;
 }
 
-function calculateLeadScore(conversation: any, message: string): number {
+function calculateLeadScore(conversation: any, message: string, leadInfo: any): number {
   let score = 0;
-  const messageLower = message.toLowerCase();
-  const context = conversation?.context || {};
   
-  // User type scoring
-  if (context.userType === 'propietario') score += 3;
-  if (context.userType === 'empresa') score += 2;
+  // Owner scoring (priority)
+  if (leadInfo.persona_tipo === 'propietario') score += 3;
+  if (leadInfo.persona_tipo === 'empresa') score += 2;
   
-  // Contact info provided
-  if (context.email || context.phone) score += 2;
-  if (context.email && context.phone) score += 1;
+  // Bizkaia location +2
+  if (leadInfo.inBizkaia) score += 2;
   
-  // Service interest
-  if (context.serviceInterest === 'gestión_integral') score += 3;
-  if (context.serviceInterest === 'valoración') score += 2;
+  // Available within 30 days +2
+  if (leadInfo.availableWithin30Days) score += 2;
   
-  // Engagement level
-  const messageCount = context.messageCount || 0;
+  // Full management interest +2
+  if (leadInfo.service_interest === 'gestión_integral') score += 2;
+  
+  // Contact info
+  if (leadInfo.email || leadInfo.telefono) score += 1;
+  if (leadInfo.email && leadInfo.telefono) score += 1;
+  
+  // Engagement
+  const messageCount = conversation?.context?.messageCount || 0;
   if (messageCount > 3) score += 1;
-  if (messageCount > 5) score += 1;
   
-  // Urgency indicators
-  if (messageLower.includes('urgente') || messageLower.includes('pronto')) score += 1;
-  if (context.timing === 'inmediato') score += 2;
-  
-  // Location in service area
-  if (context.location) score += 1;
-  
-  return Math.min(score, 10); // Cap at 10
+  return Math.min(score, 10);
 }
 
-async function createLead(supabase: any, conversation: any, leadInfo: any) {
+function buildLeadData(conversation: any, leadInfo: any, userContext: any): any {
+  return {
+    nombre: leadInfo.nombre || conversation?.context?.userName || 'Usuario chatbot',
+    email: leadInfo.email || '',
+    telefono: leadInfo.telefono || '',
+    persona_tipo: leadInfo.persona_tipo || 'general',
+    municipio: leadInfo.municipio || '',
+    service_interest: leadInfo.service_interest || 'consulta_general',
+    comentarios: `Conversación chatbot ID: ${conversation?.id}`,
+    utm_source: userContext?.utm_source || 'chatbot',
+    utm_medium: userContext?.utm_medium || 'chat',
+    utm_campaign: userContext?.utm_campaign || 'ai_assistant',
+    page: userContext?.page || '/',
+    consent: userContext?.consent || false,
+    score: leadInfo.leadScore || 0,
+    source_tag: 'chatbot_ai'
+  };
+}
+
+async function createLead(supabase: any, leadData: any) {
   try {
-    const leadData = {
-      name: conversation.user_name || leadInfo.name || 'Usuario desde chatbot',
-      email: conversation.user_email || leadInfo.email || '',
-      phone: conversation.user_phone || leadInfo.phone || '',
-      service_interest: leadInfo.serviceInterest || 'consulta_general',
-      source_tag: 'chatbot_ai',
-      utm_source: 'chatbot',
-      utm_medium: 'chat',
-      utm_campaign: 'ai_assistant',
-      utm_content: conversation.user_type || 'general'
-    };
-    
     const { data, error } = await supabase
       .from('leads')
-      .insert(leadData);
+      .insert({
+        nombre: leadData.nombre,
+        email: leadData.email,
+        telefono: leadData.telefono,
+        service_interest: leadData.service_interest,
+        source_tag: leadData.source_tag,
+        utm_source: leadData.utm_source,
+        utm_medium: leadData.utm_medium,
+        utm_campaign: leadData.utm_campaign,
+        mensaje: leadData.comentarios
+      });
       
     if (error) {
       console.error('Error creating lead:', error);
@@ -479,5 +587,29 @@ async function createLead(supabase: any, conversation: any, leadInfo: any) {
     }
   } catch (error) {
     console.error('Error in createLead function:', error);
+  }
+}
+
+async function sendToWebhook(webhookUrl: string, leadData: any) {
+  try {
+    console.log('📤 Sending to n8n webhook:', webhookUrl);
+    
+    const response = await fetch(webhookUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(leadData),
+    });
+    
+    if (!response.ok) {
+      console.error('❌ Webhook error:', response.status);
+      // Fallback: Could send email notification here
+    } else {
+      console.log('✅ Webhook sent successfully');
+    }
+  } catch (error) {
+    console.error('Error sending to webhook:', error);
+    // Fallback: Could send email notification here
   }
 }
