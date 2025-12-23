@@ -24,22 +24,20 @@ import {
   Home
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useUnifiedLeads } from "@/hooks/useUnifiedLeads";
 import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const alertSchema = z.object({
   email: z.string().email("Email inválido"),
-  consent: z.boolean().refine(val => val === true, "Debes aceptar recibir comunicaciones")
+  consent: z.boolean().refine(val => val === true, "Debes aceptar para continuar")
 });
 
 type AlertForm = z.infer<typeof alertSchema>;
 
 const Inquilinos = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const { trackQuieroInscribirme } = useGA4Tracking();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { submitLead, isSubmitting } = useUnifiedLeads();
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<AlertForm>({
@@ -50,28 +48,15 @@ const Inquilinos = () => {
   const consentValue = watch("consent");
 
   const onSubmitAlert = async (data: AlertForm) => {
-    setIsSubmitting(true);
-    try {
-      await supabase.from('leads' as any).insert({
-        email: data.email,
-        origen: 'alerta_viviendas',
-        source_tag: 'inquilino_alertas'
-      });
-      
-      setIsSubscribed(true);
-      toast({
-        title: "¡Suscrito!",
-        description: "Te avisaremos cuando haya nuevas viviendas disponibles."
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo completar la suscripción.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    await submitLead({
+      source: 'tenants_form',
+      page: '/inquilinos',
+      persona_tipo: 'inquilino',
+      email: data.email,
+      comentarios: 'Suscripción a alertas de viviendas disponibles',
+      consent: data.consent
+    });
+    setIsSubscribed(true);
   };
 
   const criterios = [
@@ -222,7 +207,11 @@ const Inquilinos = () => {
                     onCheckedChange={(checked) => setValue("consent", checked as boolean)}
                   />
                   <Label htmlFor="consent" className="text-xs text-muted-foreground text-left">
-                    Acepto recibir comunicaciones sobre viviendas disponibles
+                    Acepto la{" "}
+                    <a href="/politica-privacidad" target="_blank" className="underline hover:text-foreground">
+                      política de privacidad
+                    </a>{" "}
+                    y recibir comunicaciones sobre viviendas disponibles
                   </Label>
                 </div>
                 {errors.consent && (

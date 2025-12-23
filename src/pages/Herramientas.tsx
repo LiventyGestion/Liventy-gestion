@@ -130,7 +130,7 @@ const Herramientas = () => {
   // Función para guardar en base de datos
   const saveCalculatorResult = async (toolType: string, inputs: any, outputs: any, email?: string) => {
     try {
-      // Guardar resultado usando el client genérico
+      // Guardar resultado en calculadora_resultados
       const { error: calcError } = await supabase
         .from('calculadora_resultados' as any)
         .insert({
@@ -138,30 +138,31 @@ const Herramientas = () => {
           inputs,
           outputs,
           email: email || null,
-          user_id: null // Anonymous for now
+          user_id: null
         });
 
       if (calcError) {
         console.error('Error saving calculator result:', calcError);
       }
 
-      // Si hay email, crear/actualizar lead
+      // Si hay email, crear lead en tabla unificada Leads
       if (email) {
         const urlParams = new URLSearchParams(window.location.search);
-        const sourceTag = urlParams.get('origen') || `herramientas_${toolType}`;
         
         const { error: leadError } = await supabase
-          .from('leads' as any)
-          .upsert({
-            email,
-            service_interest: toolType,
-            source_tag: sourceTag,
-            utm_source: urlParams.get('utm_source'),
-            utm_medium: urlParams.get('utm_medium'),
-            utm_campaign: urlParams.get('utm_campaign'),
-            utm_term: urlParams.get('utm_term'),
-            utm_content: urlParams.get('utm_content')
-          }, { onConflict: 'email' });
+          .from('Leads' as any)
+          .insert({
+            source: 'contact_form',
+            page: '/herramientas',
+            persona_tipo: 'propietario',
+            email: email.trim().toLowerCase(),
+            comentarios: `Uso de herramienta: ${toolType}. Resultado: ${JSON.stringify(outputs)}`,
+            utm_source: urlParams.get('utm_source') || null,
+            utm_medium: urlParams.get('utm_medium') || null,
+            utm_campaign: urlParams.get('utm_campaign') || null,
+            consent: true, // User provided email voluntarily
+            status: 'new'
+          });
 
         if (leadError) {
           console.error('Error saving lead:', leadError);
