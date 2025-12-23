@@ -29,9 +29,10 @@ import {
   Calendar,
   TrendingUp,
   FileSpreadsheet,
-  List
+  List,
+  X
 } from "lucide-react";
-import { format } from "date-fns";
+import { format, startOfDay, startOfWeek, isAfter } from "date-fns";
 import { es } from "date-fns/locale";
 
 // Lead type matching the database schema
@@ -106,6 +107,8 @@ const AdminLeads = () => {
   const [sourceFilter, setSourceFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [personaFilter, setPersonaFilter] = useState<string>("all");
+  const [dateFilter, setDateFilter] = useState<string>("all");
+  const [activeQuickFilter, setActiveQuickFilter] = useState<string | null>(null);
   
   // Selected lead for detail view
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
@@ -151,6 +154,15 @@ const AdminLeads = () => {
       }
       if (searchTerm) {
         query = query.or(`nombre.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%,telefono.ilike.%${searchTerm}%,municipio.ilike.%${searchTerm}%`);
+      }
+      
+      // Date filter
+      if (dateFilter === 'today') {
+        const todayStart = startOfDay(new Date()).toISOString();
+        query = query.gte('created_at', todayStart);
+      } else if (dateFilter === 'week') {
+        const weekStart = startOfWeek(new Date(), { weekStartsOn: 1 }).toISOString();
+        query = query.gte('created_at', weekStart);
       }
 
       // Pagination
@@ -199,7 +211,7 @@ const AdminLeads = () => {
       fetchLeads();
       fetchStats();
     }
-  }, [user, currentPage, sourceFilter, statusFilter, personaFilter]);
+  }, [user, currentPage, sourceFilter, statusFilter, personaFilter, dateFilter]);
 
   // Debounced search
   useEffect(() => {
@@ -232,6 +244,57 @@ const AdminLeads = () => {
     } catch (error) {
       console.error('Error updating lead status:', error);
     }
+  };
+
+  // Quick filter presets
+  const applyQuickFilter = (filterId: string) => {
+    // Reset all filters first
+    setSearchTerm("");
+    setSourceFilter("all");
+    setStatusFilter("all");
+    setPersonaFilter("all");
+    setDateFilter("all");
+    setCurrentPage(1);
+
+    // Apply specific filter
+    switch (filterId) {
+      case 'today':
+        setDateFilter('today');
+        break;
+      case 'week':
+        setDateFilter('week');
+        break;
+      case 'propietarios':
+        setPersonaFilter('propietario');
+        break;
+      case 'inquilinos':
+        setPersonaFilter('inquilino');
+        break;
+      case 'chatbot':
+        setSourceFilter('chatbot');
+        break;
+      case 'contacted':
+        setStatusFilter('contacted');
+        break;
+      case 'scheduled':
+        setStatusFilter('scheduled');
+        break;
+      case 'all':
+        // Already reset above
+        break;
+    }
+    
+    setActiveQuickFilter(filterId === 'all' ? null : filterId);
+  };
+
+  const clearAllFilters = () => {
+    setSearchTerm("");
+    setSourceFilter("all");
+    setStatusFilter("all");
+    setPersonaFilter("all");
+    setDateFilter("all");
+    setActiveQuickFilter(null);
+    setCurrentPage(1);
   };
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
@@ -337,6 +400,83 @@ const AdminLeads = () => {
           </TabsContent>
 
           <TabsContent value="list" className="mt-0">
+            {/* Quick Filters */}
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button
+                variant={activeQuickFilter === null ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('all')}
+              >
+                Todos
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'today' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('today')}
+              >
+                <Calendar className="h-4 w-4 mr-1" />
+                Hoy
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'week' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('week')}
+              >
+                <Calendar className="h-4 w-4 mr-1" />
+                Esta semana
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'propietarios' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('propietarios')}
+                className="bg-emerald-100 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-900 dark:text-emerald-300 dark:hover:bg-emerald-800 border-emerald-300"
+              >
+                Propietarios
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'inquilinos' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('inquilinos')}
+                className="bg-sky-100 text-sky-800 hover:bg-sky-200 dark:bg-sky-900 dark:text-sky-300 dark:hover:bg-sky-800 border-sky-300"
+              >
+                Inquilinos
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'chatbot' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('chatbot')}
+              >
+                Chatbot
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'contacted' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('contacted')}
+                className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-300 dark:hover:bg-yellow-800 border-yellow-300"
+              >
+                Contactados
+              </Button>
+              <Button
+                variant={activeQuickFilter === 'scheduled' ? "default" : "outline"}
+                size="sm"
+                onClick={() => applyQuickFilter('scheduled')}
+                className="bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 border-green-300"
+              >
+                Agendados
+              </Button>
+              {(activeQuickFilter || searchTerm || sourceFilter !== 'all' || statusFilter !== 'all' || personaFilter !== 'all') && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearAllFilters}
+                  className="text-muted-foreground"
+                >
+                  <X className="h-4 w-4 mr-1" />
+                  Limpiar filtros
+                </Button>
+              )}
+            </div>
+
             {/* Filters */}
             <Card className="mb-6">
           <CardContent className="p-4">
