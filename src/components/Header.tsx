@@ -59,10 +59,10 @@ const Header = () => {
 
           {/* CTA Buttons - Right */}
           <div className="flex items-center gap-3">
-            {/* Primary CTA - Valora tu piso */}
-            <Link to="/consultar-mi-caso" className="hidden sm:block">
+            {/* Primary CTA - Valora tu piso gratis */}
+            <Link to="/recursos#calculadora-precio" className="hidden sm:block">
               <Button className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-semibold px-5 py-2.5 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
-                Valora tu piso
+                Valora tu piso gratis
               </Button>
             </Link>
             
@@ -108,9 +108,9 @@ const Header = () => {
               
               {/* Mobile CTAs */}
               <div className="pt-4 space-y-3">
-                <Link to="/consultar-mi-caso" onClick={() => setIsMenuOpen(false)}>
+                <Link to="/recursos#calculadora-precio" onClick={() => setIsMenuOpen(false)}>
                   <Button className="w-full bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-semibold py-3 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-orange focus:ring-offset-2">
-                    Valora tu piso
+                    Valora tu piso gratis
                   </Button>
                 </Link>
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
