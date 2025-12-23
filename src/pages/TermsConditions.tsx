@@ -94,8 +94,8 @@ const TermsConditions = () => {
                   Para cualquier pregunta sobre estos términos y condiciones, puede contactarnos en:
                 </p>
                 <ul className="list-none space-y-2 text-muted-foreground font-lato mt-4">
-                  <li><strong>Email:</strong> info@liventygestion.com</li>
-                  <li><strong>Teléfono:</strong> +34 944 123 456</li>
+                  <li><strong>Email:</strong> contacto@liventygestion.com</li>
+                  <li><strong>Teléfono:</strong> 944 397 330</li>
                   <li><strong>Dirección:</strong> Calle Gran Vía, 1, 48001 Bilbao, Vizcaya</li>
                 </ul>
               </section>
