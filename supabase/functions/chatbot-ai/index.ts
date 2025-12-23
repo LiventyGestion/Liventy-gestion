@@ -546,44 +546,53 @@ function calculateLeadScore(conversation: any, message: string, leadInfo: any): 
 }
 
 function buildLeadData(conversation: any, leadInfo: any, userContext: any): any {
+  // Map persona_tipo to valid enum value
+  let personaTipo: 'propietario' | 'inquilino' | 'empresa' | null = null;
+  if (leadInfo.persona_tipo === 'propietario') personaTipo = 'propietario';
+  else if (leadInfo.persona_tipo === 'inquilino') personaTipo = 'inquilino';
+  else if (leadInfo.persona_tipo === 'empresa') personaTipo = 'empresa';
+  
+  // Map canal_preferido to valid enum value
+  let canalPreferido: 'llamada' | 'whatsapp' | 'email' | null = null;
+  if (leadInfo.canal_preferido === 'llamada') canalPreferido = 'llamada';
+  else if (leadInfo.canal_preferido === 'whatsapp') canalPreferido = 'whatsapp';
+  else if (leadInfo.canal_preferido === 'email') canalPreferido = 'email';
+  
   return {
-    nombre: leadInfo.nombre || conversation?.context?.userName || 'Usuario chatbot',
-    email: leadInfo.email || '',
-    telefono: leadInfo.telefono || '',
-    persona_tipo: leadInfo.persona_tipo || 'general',
-    municipio: leadInfo.municipio || '',
-    service_interest: leadInfo.service_interest || 'consulta_general',
-    comentarios: `Conversación chatbot ID: ${conversation?.id}`,
+    source: 'chatbot' as const,
+    page: userContext?.page || '/',
+    persona_tipo: personaTipo,
+    nombre: leadInfo.nombre || conversation?.context?.userName || null,
+    telefono: leadInfo.telefono || null,
+    email: leadInfo.email || null,
+    municipio: leadInfo.municipio || null,
+    barrio: leadInfo.barrio || null,
+    m2: leadInfo.m2 ? Number(leadInfo.m2) : null,
+    habitaciones: leadInfo.habitaciones ? Number(leadInfo.habitaciones) : null,
+    estado_vivienda: null, // Not typically captured in chat
+    fecha_disponible: leadInfo.fecha_disponible || null,
+    presupuesto_renta: leadInfo.presupuesto_renta ? Number(leadInfo.presupuesto_renta) : null,
+    canal_preferido: canalPreferido,
+    franja_horaria: leadInfo.franja_horaria || null,
+    comentarios: `Conversación chatbot ID: ${conversation?.id}. Interés: ${leadInfo.service_interest || 'consulta general'}. Score: ${leadInfo.leadScore || 0}`,
     utm_source: userContext?.utm_source || 'chatbot',
     utm_medium: userContext?.utm_medium || 'chat',
     utm_campaign: userContext?.utm_campaign || 'ai_assistant',
-    page: userContext?.page || '/',
-    consent: userContext?.consent || false,
-    score: leadInfo.leadScore || 0,
-    source_tag: 'chatbot_ai'
+    consent: userContext?.consent === true
+    // status defaults to 'new' in database
   };
 }
 
 async function createLead(supabase: any, leadData: any) {
   try {
     const { data, error } = await supabase
-      .from('leads')
-      .insert({
-        nombre: leadData.nombre,
-        email: leadData.email,
-        telefono: leadData.telefono,
-        service_interest: leadData.service_interest,
-        source_tag: leadData.source_tag,
-        utm_source: leadData.utm_source,
-        utm_medium: leadData.utm_medium,
-        utm_campaign: leadData.utm_campaign,
-        mensaje: leadData.comentarios
-      });
+      .from('Leads')
+      .insert(leadData);
       
     if (error) {
       console.error('Error creating lead:', error);
     } else {
-      console.log('✅ Lead created successfully');
+      console.log('✅ Lead created successfully in unified Leads table');
     }
   } catch (error) {
     console.error('Error in createLead function:', error);

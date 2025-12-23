@@ -75,25 +75,17 @@ export function MaintenanceForm({ selectedDate, onComplete, onBack }: Maintenanc
     }
     
     await submitLead({
-      origen: 'servicio_mantenimiento',
+      source: 'contact_form',
+      page: '/servicios/mantenimiento',
+      persona_tipo: 'inquilino',
       nombre: 'Solicitud de Mantenimiento',
-      email: 'admin@liventygestion.com',
-      mensaje: `Solicitud de mantenimiento para ${format(selectedDate, 'dd/MM/yyyy')}:
-Horas disponibles: ${availableHours}
+      franja_horaria: availableHours,
+      comentarios: `Solicitud de mantenimiento para ${format(selectedDate, 'dd/MM/yyyy')}:
 Categoría: ${categories.find(cat => cat.value === category)?.label || category}
 Prioridad: ${priorities.find(prio => prio.value === priority)?.label || priority}
 Descripción: ${sanitizedDescription}
 Fotos adjuntas: ${photos.length}`,
-      info_adicional: `Servicio: Mantenimiento - ${category}, Prioridad: ${priority}, Fotos: ${photos.length}`,
-      acepta_comercial: true, // Service request implies consent
-      payload: {
-        selectedDate: format(selectedDate, 'yyyy-MM-dd'),
-        availableHours,
-        category,
-        priority,
-        description: sanitizedDescription,
-        photosCount: photos.length
-      }
+      consent: true
     });
   };
 

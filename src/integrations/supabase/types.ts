@@ -263,94 +263,87 @@ export type Database = {
       }
       Leads: {
         Row: {
-          acepta_comercial: boolean | null
-          acepta_cookies: boolean | null
-          acepta_politica: boolean | null
-          alquiler_deseado: number | null
-          apellidos: string | null
+          barrio: string | null
+          canal_preferido: Database["public"]["Enums"]["canal_preferido"] | null
+          comentarios: string | null
+          consent: boolean | null
           created_at: string
           email: string | null
-          fecha_disponibilidad: string | null
+          estado_vivienda: Database["public"]["Enums"]["estado_vivienda"] | null
+          fecha_disponible: string | null
+          franja_horaria: string | null
           habitaciones: number | null
           id: string
-          info_adicional: string | null
-          ip: string | null
           m2: number | null
-          mensaje: string | null
+          municipio: string | null
           nombre: string | null
-          origen: string
-          page_url: string | null
-          payload: Json | null
-          referrer: string | null
+          page: string | null
+          persona_tipo: Database["public"]["Enums"]["persona_tipo"] | null
+          presupuesto_renta: number | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status: Database["public"]["Enums"]["lead_status"]
           telefono: string | null
-          tipo_propiedad: string | null
-          ubicacion: string | null
-          user_agent: string | null
           utm_campaign: string | null
-          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
-          utm_term: string | null
         }
         Insert: {
-          acepta_comercial?: boolean | null
-          acepta_cookies?: boolean | null
-          acepta_politica?: boolean | null
-          alquiler_deseado?: number | null
-          apellidos?: string | null
+          barrio?: string | null
+          canal_preferido?:
+            | Database["public"]["Enums"]["canal_preferido"]
+            | null
+          comentarios?: string | null
+          consent?: boolean | null
           created_at?: string
           email?: string | null
-          fecha_disponibilidad?: string | null
+          estado_vivienda?:
+            | Database["public"]["Enums"]["estado_vivienda"]
+            | null
+          fecha_disponible?: string | null
+          franja_horaria?: string | null
           habitaciones?: number | null
           id?: string
-          info_adicional?: string | null
-          ip?: string | null
           m2?: number | null
-          mensaje?: string | null
+          municipio?: string | null
           nombre?: string | null
-          origen: string
-          page_url?: string | null
-          payload?: Json | null
-          referrer?: string | null
+          page?: string | null
+          persona_tipo?: Database["public"]["Enums"]["persona_tipo"] | null
+          presupuesto_renta?: number | null
+          source: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
           telefono?: string | null
-          tipo_propiedad?: string | null
-          ubicacion?: string | null
-          user_agent?: string | null
           utm_campaign?: string | null
-          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
-          utm_term?: string | null
         }
         Update: {
-          acepta_comercial?: boolean | null
-          acepta_cookies?: boolean | null
-          acepta_politica?: boolean | null
-          alquiler_deseado?: number | null
-          apellidos?: string | null
+          barrio?: string | null
+          canal_preferido?:
+            | Database["public"]["Enums"]["canal_preferido"]
+            | null
+          comentarios?: string | null
+          consent?: boolean | null
           created_at?: string
           email?: string | null
-          fecha_disponibilidad?: string | null
+          estado_vivienda?:
+            | Database["public"]["Enums"]["estado_vivienda"]
+            | null
+          fecha_disponible?: string | null
+          franja_horaria?: string | null
           habitaciones?: number | null
           id?: string
-          info_adicional?: string | null
-          ip?: string | null
           m2?: number | null
-          mensaje?: string | null
+          municipio?: string | null
           nombre?: string | null
-          origen?: string
-          page_url?: string | null
-          payload?: Json | null
-          referrer?: string | null
+          page?: string | null
+          persona_tipo?: Database["public"]["Enums"]["persona_tipo"] | null
+          presupuesto_renta?: number | null
+          source?: Database["public"]["Enums"]["lead_source"]
+          status?: Database["public"]["Enums"]["lead_status"]
           telefono?: string | null
-          tipo_propiedad?: string | null
-          ubicacion?: string | null
-          user_agent?: string | null
           utm_campaign?: string | null
-          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
-          utm_term?: string | null
         }
         Relationships: []
       }
@@ -578,6 +571,15 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "propietario" | "inquilino"
+      canal_preferido: "llamada" | "whatsapp" | "email"
+      estado_vivienda:
+        | "Reformado"
+        | "Buen estado"
+        | "A actualizar"
+        | "Obra nueva"
+      lead_source: "contact_form" | "owners_form" | "tenants_form" | "chatbot"
+      lead_status: "new" | "qualified" | "contacted" | "scheduled" | "closed"
+      persona_tipo: "propietario" | "inquilino" | "empresa"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -706,6 +708,16 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "propietario", "inquilino"],
+      canal_preferido: ["llamada", "whatsapp", "email"],
+      estado_vivienda: [
+        "Reformado",
+        "Buen estado",
+        "A actualizar",
+        "Obra nueva",
+      ],
+      lead_source: ["contact_form", "owners_form", "tenants_form", "chatbot"],
+      lead_status: ["new", "qualified", "contacted", "scheduled", "closed"],
+      persona_tipo: ["propietario", "inquilino", "empresa"],
     },
   },
 } as const
