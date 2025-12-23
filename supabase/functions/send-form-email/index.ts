@@ -177,7 +177,7 @@ INFORMACIÓN TÉCNICA:
             <hr style="border: none; height: 1px; background: #e2e8f0; margin: 20px 0;">
             <p style="font-size: 12px; color: #64748b;">
               Liventy Gestión - Gestión integral de alquileres<br>
-              contacto@liventygestion.com | +34 944 123 456
+              contacto@liventygestion.com | 944 397 330
             </p>
           </div>
         </div>
@@ -189,7 +189,7 @@ INFORMACIÓN TÉCNICA:
         replyTo: "contacto@liventygestion.com",
         subject: "Hemos recibido tu solicitud — Liventy Gestión",
         html: confirmationHtml,
-        text: `Hola ${displayName},\n\nGracias por contactar con nosotros. Hemos recibido tu solicitud correctamente y te responderemos en un máximo de 24 horas.\n\nUn saludo,\nEl equipo de Liventy Gestión\n\ncontacto@liventygestion.com | +34 944 123 456`
+        text: `Hola ${displayName},\n\nGracias por contactar con nosotros. Hemos recibido tu solicitud correctamente y te responderemos en un máximo de 24 horas.\n\nUn saludo,\nEl equipo de Liventy Gestión\n\ncontacto@liventygestion.com | 944 397 330`
       });
     }
 
