@@ -54,11 +54,11 @@ const Hero = () => {
         {/* Title and Subtitle - Above everything */}
         <div className="text-center space-y-6 mb-16 max-w-4xl mx-auto">
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-montserrat font-bold text-brand-charcoal leading-heading tracking-heading">
-            Gestión integral de alquileres en <span className="text-brand-orange">Bizkaia</span>.
+            Gestión integral de alquileres en <span className="text-brand-orange">Bizkaia</span>
           </h1>
           
           <p className="text-xl sm:text-2xl lg:text-3xl font-lato font-normal text-neutral-500 leading-relaxed">
-            Tu vivienda, más rentable y sin preocupaciones.
+            Inquilinos fiables, contratos claros y mantenimiento resuelto.
           </p>
         </div>
 
@@ -89,9 +89,9 @@ const Hero = () => {
               <Button 
                 size="lg" 
                 className="bg-brand-orange hover:bg-brand-orange/90 text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 hover:-translate-y-0.5 w-full"
-                onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/empezar-ahora')}
+                onClick={() => handleCTAClick('home_hero', 'empezar_ahora', '/contact#empezar')}
                 role="button"
-                aria-label="Empezar ahora – ir al formulario de contacto"
+                aria-label="Empezar con Liventy Gestión – ir al formulario de contacto"
               >
                 Empezar ahora
                 <ArrowRight className="ml-3 h-5 w-5" aria-hidden="true" />
@@ -101,11 +101,11 @@ const Hero = () => {
                 variant="outline" 
                 size="lg"
                 className="border-2 border-brand-orange text-brand-orange hover:bg-brand-orange hover:text-brand-white font-lato font-bold px-8 py-4 text-base rounded-xl transition-all duration-200 hover:shadow-lg w-full"
-                onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas?calc=precio')}
-                aria-label="Valorar gratis mi piso – calculadora de precio recomendado"
+                onClick={() => handleCTAClick('home_hero', 'valora_gratis', '/herramientas#calculadora-precio')}
+                aria-label="Valora Gratis mi piso – calculadora de precio recomendado"
                 role="button"
               >
-                Valora gratis mi piso
+                Valora Gratis mi piso
               </Button>
             </div>
 
