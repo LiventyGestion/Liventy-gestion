@@ -28,6 +28,7 @@ import Inquilinos from "./pages/Inquilinos";
 import Propietarios from "./pages/Propietarios";
 import Precios from "./pages/Precios";
 import Recursos from "./pages/Recursos";
+import AdminLeads from "./pages/admin/AdminLeads";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,16 @@ const App = () => (
             {/* Auth */}
             <Route path="/login" element={<Login />} />
             <Route path="/auth" element={<Auth />} />
+            
+            {/* Admin */}
+            <Route 
+              path="/admin/leads" 
+              element={
+                <ProtectedRoute allowedRoles={['admin']}>
+                  <AdminLeads />
+                </ProtectedRoute>
+              } 
+            />
             
             {/* Client Area */}
             <Route 
