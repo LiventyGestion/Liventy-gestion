@@ -13,9 +13,16 @@ import {
   ArrowRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const Propietarios = () => {
   const navigate = useNavigate();
+  const { trackEmpiezaAhora } = useGA4Tracking();
+
+  const handleEmpiezaAhora = (location: string, destination: string) => {
+    trackEmpiezaAhora(location, destination);
+    navigate(destination);
+  };
 
   const valuePoints = [
     { icon: Shield, text: "Selección rigurosa" },
@@ -142,7 +149,7 @@ const Propietarios = () => {
                 </ul>
                 <Button 
                   className="w-full bg-primary hover:bg-primary/90"
-                  onClick={() => navigate('/contact?tipo=propietario&plan=full')}
+                  onClick={() => handleEmpiezaAhora('propietarios_plan_full', '/contact?tipo=propietario&plan=full')}
                 >
                   Empieza ahora
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -170,7 +177,7 @@ const Propietarios = () => {
           <Button 
             size="lg" 
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8"
-            onClick={() => navigate('/contact#empezar')}
+            onClick={() => handleEmpiezaAhora('propietarios_cta_final', '/contact#empezar')}
           >
             Empieza ahora
             <ArrowRight className="ml-2 h-5 w-5" />

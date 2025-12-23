@@ -17,8 +17,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useGA4Tracking } from "@/hooks/useGA4Tracking";
 
 const Index = () => {
+  const { trackQuieroInscribirme } = useGA4Tracking();
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -55,7 +58,12 @@ const Index = () => {
               Descubre nuestras propiedades disponibles y encuentra el lugar perfecto para ti. 
               Con Liventy, alquilar es sencillo, transparente y sin complicaciones.
             </p>
-            <Button size="lg" asChild className="mt-6">
+            <Button 
+              size="lg" 
+              asChild 
+              className="mt-6"
+              onClick={() => trackQuieroInscribirme('home_inquilinos_section', '/inquilinos')}
+            >
               <Link to="/inquilinos">
                 Quiero inscribirme <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
