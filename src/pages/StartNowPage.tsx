@@ -73,19 +73,17 @@ const StartNowPage = () => {
       const apellidos = nameParts.slice(1).join(' ') || '';
 
       await submitLead({
-        origen: 'solicitud_empresas',
-        nombre,
-        apellidos,
+        source: 'owners_form',
+        page: '/empezar',
+        persona_tipo: 'propietario',
+        nombre: `${nombre} ${apellidos}`.trim(),
         email: data.email,
         telefono: data.phone,
-        tipo_propiedad: data.propertyType,
-        ubicacion: data.propertyLocation,
+        municipio: data.propertyLocation,
         m2: data.propertySize ? parseFloat(data.propertySize.replace(/\D/g, '')) : undefined,
-        alquiler_deseado: data.monthlyRent ? parseFloat(data.monthlyRent.replace(/\D/g, '')) : undefined,
-        info_adicional: `Situación: ${data.currentSituation}. Servicios: ${data.serviceInterest.join(', ')}. Timeline: ${data.timeline}. ${data.additionalInfo || ''}`,
-        acepta_politica: data.hasAgreedToTerms,
-        acepta_comercial: true, // Implied by form submission
-        payload: data
+        presupuesto_renta: data.monthlyRent ? parseFloat(data.monthlyRent.replace(/\D/g, '')) : undefined,
+        comentarios: `Tipo: ${data.propertyType}. Situación: ${data.currentSituation}. Servicios: ${data.serviceInterest.join(', ')}. Timeline: ${data.timeline}. ${data.additionalInfo || ''}`,
+        consent: data.hasAgreedToTerms
       });
       
       setIsSubmitted(true);

@@ -2,44 +2,50 @@ import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
-interface UnifiedLeadData {
+// Unified Lead data interface matching the new Leads table schema
+export interface UnifiedLeadData {
   // Required
-  origen: string;
+  source: 'contact_form' | 'owners_form' | 'tenants_form' | 'chatbot';
   
-  // Personal info
+  // Page info
+  page?: string;
+  
+  // User type
+  persona_tipo?: 'propietario' | 'inquilino' | 'empresa';
+  
+  // Contact info
   nombre?: string;
-  apellidos?: string;
-  email?: string;
   telefono?: string;
-  mensaje?: string;
-  info_adicional?: string;
+  email?: string;
+  
+  // Location
+  municipio?: string;
+  barrio?: string;
   
   // Property data
-  ubicacion?: string;
-  tipo_propiedad?: string;
   m2?: number;
   habitaciones?: number;
-  alquiler_deseado?: number;
-  fecha_disponibilidad?: string; // YYYY-MM-DD format
+  estado_vivienda?: 'Reformado' | 'Buen estado' | 'A actualizar' | 'Obra nueva';
+  fecha_disponible?: string; // YYYY-MM-DD format
+  presupuesto_renta?: number;
   
-  // Consent checkboxes (boolean values)
-  acepta_politica?: boolean;
-  acepta_comercial?: boolean;
-  acepta_cookies?: boolean;
+  // Contact preferences
+  canal_preferido?: 'llamada' | 'whatsapp' | 'email';
+  franja_horaria?: string;
+  
+  // Comments
+  comentarios?: string;
   
   // Marketing/tracking fields
   utm_source?: string;
   utm_medium?: string;
   utm_campaign?: string;
-  utm_term?: string;
-  utm_content?: string;
-  page_url?: string;
-  referrer?: string;
-  ip?: string;
-  user_agent?: string;
   
-  // Raw form payload for backup
-  payload?: any;
+  // Consent
+  consent?: boolean;
+  
+  // Status (defaults to 'new' in database)
+  status?: 'new' | 'qualified' | 'contacted' | 'scheduled' | 'closed';
 }
 
 interface UseUnifiedLeadsOptions {
@@ -48,7 +54,7 @@ interface UseUnifiedLeadsOptions {
 }
 
 // Helper function to get UTM parameters from URL
-function getUTMParameters(): Partial<UnifiedLeadData> {
+function getUTMParameters(): Pick<UnifiedLeadData, 'utm_source' | 'utm_medium' | 'utm_campaign' | 'page'> {
   if (typeof window === 'undefined') return {};
   
   const urlParams = new URLSearchParams(window.location.search);
@@ -57,12 +63,14 @@ function getUTMParameters(): Partial<UnifiedLeadData> {
     utm_source: urlParams.get('utm_source') || undefined,
     utm_medium: urlParams.get('utm_medium') || undefined,
     utm_campaign: urlParams.get('utm_campaign') || undefined,
-    utm_term: urlParams.get('utm_term') || undefined,
-    utm_content: urlParams.get('utm_content') || undefined,
-    page_url: window.location.href,
-    referrer: document.referrer || undefined,
-    user_agent: navigator.userAgent || undefined
+    page: window.location.pathname
   };
+}
+
+// Validate Spanish phone (9 digits)
+function validateSpanishPhone(phone: string): boolean {
+  const cleaned = phone.replace(/[\s\-\+]/g, '').replace(/^(34|0034)/, '');
+  return /^[6-9]\d{8}$/.test(cleaned);
 }
 
 export function useUnifiedLeads(options: UseUnifiedLeadsOptions = {}) {
@@ -75,27 +83,47 @@ export function useUnifiedLeads(options: UseUnifiedLeadsOptions = {}) {
       // Add tracking information
       const trackingData = getUTMParameters();
       
-      // Prepare the complete lead data
-      const leadData = {
-        ...data,
-        ...trackingData,
-        // Ensure booleans are properly set
-        acepta_politica: data.acepta_politica === true,
-        acepta_comercial: data.acepta_comercial === true,
-        acepta_cookies: data.acepta_cookies === true,
-        // Convert numeric values properly
+      // Validate phone if provided
+      if (data.telefono && !validateSpanishPhone(data.telefono)) {
+        throw new Error('El teléfono debe ser un número español válido de 9 dígitos');
+      }
+      
+      // Clean phone number
+      const cleanedPhone = data.telefono 
+        ? data.telefono.replace(/[\s\-\+]/g, '').replace(/^(34|0034)/, '')
+        : undefined;
+      
+      // Prepare the complete lead data matching the new schema
+      const leadData: Record<string, any> = {
+        source: data.source,
+        page: data.page || trackingData.page,
+        persona_tipo: data.persona_tipo || null,
+        nombre: data.nombre || null,
+        telefono: cleanedPhone || null,
+        email: data.email || null,
+        municipio: data.municipio || null,
+        barrio: data.barrio || null,
         m2: data.m2 ? Number(data.m2) : null,
         habitaciones: data.habitaciones ? Number(data.habitaciones) : null,
-        alquiler_deseado: data.alquiler_deseado ? Number(data.alquiler_deseado) : null,
-        // Store raw payload for debugging/backup  
-        payload: JSON.parse(JSON.stringify(data.payload || data))
+        estado_vivienda: data.estado_vivienda || null,
+        fecha_disponible: data.fecha_disponible || null,
+        presupuesto_renta: data.presupuesto_renta ? Number(data.presupuesto_renta) : null,
+        canal_preferido: data.canal_preferido || null,
+        franja_horaria: data.franja_horaria || null,
+        comentarios: data.comentarios || null,
+        utm_source: data.utm_source || trackingData.utm_source || null,
+        utm_medium: data.utm_medium || trackingData.utm_medium || null,
+        utm_campaign: data.utm_campaign || trackingData.utm_campaign || null,
+        consent: data.consent === true,
+        // status defaults to 'new' in database
       };
 
-      console.log('Submitting lead data:', leadData); // For debugging
+      console.log('Submitting unified lead data:', leadData);
 
+      // Use type assertion to bypass strict typing since the types file hasn't been regenerated yet
       const { error } = await supabase
         .from('Leads')
-        .insert([leadData]);
+        .insert([leadData] as any);
 
       if (error) {
         console.error('Supabase error:', error);
@@ -106,22 +134,17 @@ export function useUnifiedLeads(options: UseUnifiedLeadsOptions = {}) {
       try {
         await supabase.functions.invoke('send-form-email', {
           body: { 
-            formType: data.origen || 'contacto',
+            formType: data.source,
             nombre: data.nombre || '',
-            apellidos: data.apellidos || '',
-            fullName: `${data.nombre || ''} ${data.apellidos || ''}`.trim(),
             email: data.email || '',
-            phone: data.telefono || '',
-            message: data.mensaje || '',
-            info_adicional: data.info_adicional || '',
-            ubicacion: data.ubicacion || '',
-            tipo_propiedad: data.tipo_propiedad || '',
+            phone: cleanedPhone || '',
+            message: data.comentarios || '',
+            municipio: data.municipio || '',
+            persona_tipo: data.persona_tipo || '',
             m2: data.m2 || '',
             habitaciones: data.habitaciones || '',
-            alquiler_deseado: data.alquiler_deseado || '',
-            acepta_politica: data.acepta_politica || false,
-            acepta_comercial: data.acepta_comercial || false,
-            source_tag: data.utm_source || 'direct'
+            presupuesto_renta: data.presupuesto_renta || '',
+            consent: data.consent || false
           }
         });
       } catch (emailError) {
@@ -139,7 +162,7 @@ export function useUnifiedLeads(options: UseUnifiedLeadsOptions = {}) {
       console.error('Error submitting lead:', error);
       toast({
         title: "Error al enviar",
-        description: "Hubo un problema al enviar el formulario. Inténtalo de nuevo.",
+        description: error instanceof Error ? error.message : "Hubo un problema al enviar el formulario. Inténtalo de nuevo.",
         variant: "destructive",
       });
       options.onError?.(error as Error);

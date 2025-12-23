@@ -55,21 +55,16 @@ export function CleaningForm({ selectedDate, onComplete, onBack }: CleaningFormP
     }
     
     await submitLead({
-      origen: 'servicio_limpieza',
+      source: 'contact_form',
+      page: '/servicios/limpieza',
+      persona_tipo: 'inquilino',
       nombre: 'Solicitud de Limpieza',
-      email: 'admin@liventygestion.com',
-      mensaje: `Solicitud de limpieza para ${format(selectedDate, 'dd/MM/yyyy')}:
+      comentarios: `Solicitud de limpieza para ${format(selectedDate, 'dd/MM/yyyy')}:
 Horas: ${selectedHourOption?.label}
 Franja horaria: ${timeSlotLabel}
 Precio estimado: ${selectedHourOption?.price}€`,
-      info_adicional: `Servicio: Limpieza - ${selectedHourOption?.label}, Horario: ${timeSlotLabel}, Precio: €${selectedHourOption?.price}`,
-      acepta_comercial: true, // Service request implies consent
-      payload: {
-        selectedDate: format(selectedDate, 'yyyy-MM-dd'),
-        hours: selectedHourOption?.label,
-        timeSlot: timeSlotLabel,
-        price: selectedHourOption?.price
-      }
+      franja_horaria: timeSlotLabel,
+      consent: true
     });
   };
 

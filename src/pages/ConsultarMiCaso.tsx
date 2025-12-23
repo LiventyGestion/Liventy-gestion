@@ -56,8 +56,13 @@ const ConsultarMiCaso = () => {
 
     try {
       await submitLead({
-        ...formData,
-        origen: "asesoramiento_legal"
+        source: 'contact_form',
+        page: '/consultar-mi-caso',
+        nombre: formData.nombre,
+        email: formData.email,
+        telefono: formData.telefono,
+        comentarios: formData.mensaje,
+        consent: formData.acepta_politica
       });
 
       setIsSubmitted(true);

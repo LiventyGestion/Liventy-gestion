@@ -71,13 +71,13 @@ const ContactFormSection = () => {
     }
 
     await submitLead({
-      origen: 'contacto_general',
+      source: 'contact_form',
+      page: window.location.pathname,
       nombre: data.name,
       email: data.email,
       telefono: data.phone,
-      mensaje: data.message,
-      acepta_politica: true, // Implied consent by submitting
-      payload: data
+      comentarios: data.message,
+      consent: true
     });
   };
 

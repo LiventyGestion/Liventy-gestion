@@ -91,20 +91,26 @@ const Contact = () => {
       const nombre = nameParts[0] || '';
       const apellidos = nameParts.slice(1).join(' ') || '';
 
+      // Map estado to estado_vivienda enum
+      let estadoVivienda: 'Reformado' | 'Buen estado' | 'A actualizar' | 'Obra nueva' | undefined;
+      if (data.estado === 'excelente') estadoVivienda = 'Reformado';
+      else if (data.estado === 'bueno') estadoVivienda = 'Buen estado';
+      else if (data.estado === 'reforma') estadoVivienda = 'A actualizar';
+
       await submitLead({
-        origen,
-        nombre,
-        apellidos,
+        source: isPropertyOwner ? 'owners_form' : 'contact_form',
+        page: '/contacto',
+        persona_tipo: isPropertyOwner ? 'propietario' : undefined,
+        nombre: `${nombre} ${apellidos}`.trim(),
         email: data.email,
         telefono: data.phone,
-        mensaje: data.message,
-        ubicacion: data.municipio && data.barrio ? `${data.municipio}, ${data.barrio}` : data.municipio,
-        tipo_propiedad: data.tipo === 'propietario' ? 'propiedad_existente' : undefined,
+        municipio: data.municipio,
+        barrio: data.barrio,
         m2: data.superficie ? parseFloat(data.superficie) : undefined,
         habitaciones: data.habitaciones ? parseInt(data.habitaciones) : undefined,
-        info_adicional: data.direccion ? `Dirección: ${data.direccion}${data.tipoAlquiler ? `, Tipo: ${data.tipoAlquiler}` : ''}${data.estado ? `, Estado: ${data.estado}` : ''}` : undefined,
-        acepta_politica: true, // Implied consent by form submission
-        payload: data
+        estado_vivienda: estadoVivienda,
+        comentarios: data.message + (data.direccion ? `. Dirección: ${data.direccion}` : '') + (data.tipoAlquiler ? `. Tipo: ${data.tipoAlquiler}` : ''),
+        consent: true
       });
 
     } catch (error) {

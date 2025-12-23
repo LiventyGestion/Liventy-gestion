@@ -52,11 +52,12 @@ const LeadMagnet = () => {
     }
 
     await submitLead({
-      origen: 'lead_magnet',
+      source: 'contact_form',
+      page: '/lead-magnet',
       nombre: sanitizedName,
       email: sanitizedEmail,
-      acepta_comercial: true, // Implied by download request
-      payload: { name: sanitizedName, email: sanitizedEmail }
+      comentarios: 'Descarga de guía gratuita',
+      consent: true
     });
   };
 
