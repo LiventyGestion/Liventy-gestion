@@ -4,10 +4,10 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const navItems = [
-  { label: "Propietarios", href: "/servicios/gestion-de-alquileres" },
+  { label: "Propietarios", href: "/propietarios" },
   { label: "Inquilinos", href: "/inquilinos" },
-  { label: "Precios", href: "/empezar-ahora" },
-  { label: "Recursos", href: "/herramientas" },
+  { label: "Precios", href: "/precios" },
+  { label: "Recursos", href: "/recursos" },
   { label: "Sobre", href: "/about" },
   { label: "Contacto", href: "/contact" },
 ];
