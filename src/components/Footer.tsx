@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Building2, Mail, Phone, MapPin, Instagram, Twitter, Facebook, Linkedin } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Twitter, Facebook, Linkedin } from "lucide-react";
 import teamTrust from "@/assets/team-trust.jpg";
 
 const Footer = () => {
@@ -57,95 +57,79 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Services */}
+          {/* Servicios */}
           <div>
             <h3 className="font-semibold mb-4 text-sm sm:text-base">Servicios</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link 
-                  to="/servicios/gestion-de-alquileres" 
+                  to="/propietarios" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Gestión de alquileres
+                  Para propietarios
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/servicios/alquiler-temporada" 
+                  to="/inquilinos" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Alquiler temporada
+                  Para inquilinos
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/servicios/alquiler-larga-duracion" 
+                  to="/precios" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Alquiler larga duración
+                  Precios
                 </Link>
               </li>
               <li>
                 <Link 
-                  to="/servicios/mantenimiento" 
+                  to="/recursos" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Mantenimiento
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  to="/servicios/asesoria-legal" 
-                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                >
-                  Asesoría legal
+                  Recursos
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Links */}
+          {/* Enlaces */}
           <div>
-            <h3 className="font-semibold mb-4 text-sm sm:text-base">Enlaces</h3>
+            <h3 className="font-semibold mb-4 text-sm sm:text-base">Empresa</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link 
                   to="/about" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Sobre Nosotros
+                  Sobre nosotros
                 </Link>
               </li>
-                <li>
-                  <Link 
-                    to="/blog" 
-                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                  >
-                    Liventy Insights
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/inquilinos" 
-                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                  >
-                    Para Inquilinos
-                  </Link>
-                </li>
-                <li>
-                  <Link 
-                    to="/contact" 
-                    className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
-                  >
-                    Contacto
-                  </Link>
-                </li>
+              <li>
+                <Link 
+                  to="/contact" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Contacto
+                </Link>
+              </li>
+              <li>
+                <Link 
+                  to="/faq" 
+                  className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
+                >
+                  Preguntas frecuentes
+                </Link>
+              </li>
               <li>
                 <Link 
                   to="/login" 
                   className="text-muted-foreground hover:text-primary transition-colors focus:outline-none focus:ring-2 focus:ring-ring rounded"
                 >
-                  Área de Clientes
+                  Área de clientes
                 </Link>
               </li>
             </ul>
