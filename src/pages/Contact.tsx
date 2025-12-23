@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -21,6 +22,7 @@ const contactSchema = z.object({
   email: z.string().email("Por favor, introduce un email válido"),
   phone: z.string().min(9, "El teléfono debe tener al menos 9 dígitos"),
   message: z.string().min(10, "El mensaje debe tener al menos 10 caracteres"),
+  consent: z.boolean().refine(val => val === true, "Debes aceptar la política de privacidad"),
   // Additional fields for property owners
   tipo: z.string().optional(),
   origen: z.string().optional(),
@@ -65,7 +67,8 @@ const Contact = () => {
     defaultValues: {
       tipo: urlTipo || '',
       origen: urlOrigen || '',
-      motivo: urlMotivo || ''
+      motivo: urlMotivo || '',
+      consent: false
     }
   });
 
@@ -110,7 +113,7 @@ const Contact = () => {
         habitaciones: data.habitaciones ? parseInt(data.habitaciones) : undefined,
         estado_vivienda: estadoVivienda,
         comentarios: data.message + (data.direccion ? `. Dirección: ${data.direccion}` : '') + (data.tipoAlquiler ? `. Tipo: ${data.tipoAlquiler}` : ''),
-        consent: true
+        consent: data.consent
       });
 
     } catch (error) {
@@ -397,6 +400,35 @@ const Contact = () => {
                         <input type="hidden" {...register("tipo")} />
                         <input type="hidden" {...register("origen")} />
                         <input type="hidden" {...register("motivo")} />
+
+                        {/* Consent Checkbox */}
+                        <div className="space-y-2">
+                          <div className="flex items-start space-x-3">
+                            <Checkbox
+                              id="consent"
+                              checked={watchedFields.consent}
+                              onCheckedChange={(checked) => setValue('consent', checked === true)}
+                              className="mt-1"
+                            />
+                            <Label htmlFor="consent" className="text-sm leading-relaxed cursor-pointer">
+                              He leído y acepto la{" "}
+                              <a 
+                                href="/politica-privacidad" 
+                                target="_blank"
+                                className="text-primary hover:underline"
+                              >
+                                política de privacidad
+                              </a>{" "}
+                              y consiento el tratamiento de mis datos. *
+                            </Label>
+                          </div>
+                          {errors.consent && (
+                            <p className="text-sm text-destructive flex items-center gap-1">
+                              <AlertCircle className="h-3 w-3" />
+                              {errors.consent.message}
+                            </p>
+                          )}
+                        </div>
                       </div>
 
                       <Button 
